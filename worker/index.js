@@ -14,6 +14,26 @@ const INDEX_KEY = '__index';
 const CV_TOTAL_KEY = 'cv:total';
 const CV_COUNTRIES_KEY = 'cv:countries';
 
+// Baseline security headers added to every response. CSP is intentionally
+// omitted — the inline scripts, styles and SVG in index.html need a
+// considered policy that's worth designing separately.
+const SECURITY_HEADERS = {
+  'Strict-Transport-Security': 'max-age=63072000; includeSubDomains; preload',
+  'Referrer-Policy': 'strict-origin-when-cross-origin',
+  'X-Content-Type-Options': 'nosniff',
+  'Permissions-Policy': 'interest-cohort=(), browsing-topics=(), geolocation=(), camera=(), microphone=(), payment=()',
+};
+
+function withSecurity(response) {
+  const headers = new Headers(response.headers);
+  for (const [k, v] of Object.entries(SECURITY_HEADERS)) headers.set(k, v);
+  return new Response(response.body, {
+    status: response.status,
+    statusText: response.statusText,
+    headers,
+  });
+}
+
 async function ipHash(ip, salt) {
   const data = new TextEncoder().encode(ip + '|' + salt);
   const digest = await crypto.subtle.digest('SHA-256', data);
@@ -122,7 +142,7 @@ const SITE_LIVE_DATE = '2025-01-01';
 
 // Calendar date in Eastern Time (America/New_York) as "YYYY-MM-DD". The day
 // counter and per-day KV keys both tick over at midnight ET so the site's
-// "Day N" aligns with Jason's local day instead of jumping forward at 20:00.
+// "Day N" aligns with the site owner's local day instead of jumping forward at 20:00.
 // en-CA's default format already yields YYYY-MM-DD with a zero-padded month.
 function etDateStr(d = new Date()) {
   return new Intl.DateTimeFormat('en-CA', {
@@ -306,6 +326,11 @@ const APEX_HOST = 'your-domain.example';
 
 export default {
   async fetch(request, env, ctx) {
+    return withSecurity(await handleRequest(request, env, ctx));
+  },
+};
+
+async function handleRequest(request, env, ctx) {
     const url = new URL(request.url);
 
     // Canonicalize host — 301 www.<apex> → <apex>. Without this, both hosts
@@ -378,5 +403,4 @@ export default {
     }
 
     return env.ASSETS.fetch(request);
-  },
-};
+}

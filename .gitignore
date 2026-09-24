@@ -6,7 +6,6 @@ node_modules/
 
 # Design-source archive (kept locally, not deployed)
 project/
-Jason Lin _standalone_.html
 
 # Local env / secrets
 .env

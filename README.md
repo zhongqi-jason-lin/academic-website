@@ -1,31 +1,26 @@
 # Academic site — template
 
-A zero-build static template for a personal academic website, wired for privacy-respecting visitor + CV-download tracking on Cloudflare Workers.
+A zero-build static template for a personal academic website: one hand-drawn "lab notebook" page, wired for privacy-respecting visitor + CV-download tracking on Cloudflare Workers.
 
-![Preview of the template deployed at zhongqilin.org](assets/preview.png?v=3)
+![Preview of the template](assets/preview.png?v=4)
 
-One live example deployed from this template: **[zhongqilin.org](https://zhongqilin.org)**.
+One live example deployed from this design: **[zhongqilin.org](https://zhongqilin.org)**.
 
 ## What you get
 
-- **Static HTML / CSS / JS** — no framework, no build step, no npm install to run the site.
-- **Cloudflare Worker** (`worker/index.js`) — serves the repo as static assets, plus three endpoints:
-  - `GET /api/visits` — per-city visit counts, used by the in-page world map
-  - `GET /api/cv-stats` — total CV downloads and per-country breakdown
-  - `POST /api/cv-download` — click-beacon fired from the CV link; the only reliable way to count CV downloads under Workers Static Assets (direct GETs for `/assets/<cv>.pdf` bypass the Worker).
+- **One static `index.html`**: no framework, no build step, no npm install to run the site. All content is plain HTML you edit in place; a small inline script handles the interactions.
+- **Notebook look**: graph-paper background with a margin rule, a taped snapshot portrait, ink-stroke dividers, Newsreader type, and card drawings in a shared ink palette that follows the theme.
+- **Cards that open two ways**: Currently (3 cards) and Papers (4 cards) keep one fixed size. Where a row holds every card, opening one unfolds its details sideways and folds its siblings into spines; on narrower screens the details open in a drawer under the card's row, animated with the View Transitions API. `x` / `Esc` close and return focus.
+- **Light/dark switch**: follows the OS by default; the choice is saved only while it differs from the OS, is applied before first paint (no flash), and cross-fades with a View Transition.
+- **Load intro**: the margin rule drops, blocks fade and sharpen into place in reading order, then the dividers draw. Runs once; off with `prefers-reduced-motion`.
+- **Responsive**: desktop, tablet and phone layouts; the layout reacts to the real space available (container queries), so wide scrollbars can't push cards off-screen.
+- **Self-hosted fonts** (Newsreader, EB Garamond italic; SIL Open Font License): visitors' browsers make no third-party requests.
+- **Cloudflare Worker** (`worker/index.js`): serves the repo as static assets, adds baseline security headers, 301-redirects `www` to your apex domain, and exposes:
+  - `POST /api/cv-download`: click-beacon fired from the "Download CV" link (direct GETs for `/assets/<cv>.pdf` bypass the Worker, so this is the reliable way to count CV downloads)
+  - `GET /api/cv-stats`: total CV downloads and per-country breakdown
+  - `GET /api/visits`, `GET /api/stats`: per-city visit counts (not shown on the page; there if you want them)
 - **Workers KV** storage for the counters, with 24h IP-hash dedup and bot filtering.
-- **Watercolor-style visitor map** — Pacific-centered world map drawn as hand-plotted polygon outlines (including Canada, Alaska, Russia — the tricky dateline-crossing pieces), with visitor cities rendered as soft blue blooms via SVG + CSS `mix-blend-mode`. No tile-server dependency, no external map library.
-- **SF-family typography** via the system font stack — no webfonts downloaded, fast first paint.
-- **OKLCH per-theme accent colors** with WCAG-AA contrast verified on both paper and dark backgrounds.
-- **Light/dark theme toggle** with View Transitions API crossfade, CSS-transition fallback, and **auto-follow-OS behavior** — toggling back to your OS preference *clears* the override so the site returns to auto-sync, and subsequent OS theme changes update the site live.
-- **Scroll-edge bloom** — a soft accent-color oval pulses once at the top/bottom when the reader hits a scroll limit, then fades out. Re-fires on every new edge arrival.
-- **Progressive-disclosure publications** — each card shows title + venue + authors by default; hover expands inline to reveal the abstract (desktop); mobile/touch shows the abstract statically so nothing's locked behind an unavailable hover gesture.
-- **Hand-drawn teaser schematics** — each publication gets an iconic SVG illustration that "paints itself in" via a staggered `stroke-dashoffset` reveal. Replays on hover (desktop), fires once on scroll-into-view and replays on tap (mobile) so the animation isn't locked behind a gesture the device can't perform.
-- **Current research section** — a three-card grid for the questions you're actively working on, sitting alongside Selected Works. Each card has its own SVG teaser (same `teaser.js` grammar as publications) and opens a focused modal popup on click — backdrop and Esc dismiss, body-scroll-lock with iOS-safe fixed-body workaround so the popup doesn't shift the page. Add, remove, or reorder `research[]` entries in `scripts/data.js`; the grid adapts.
-- **SEO / crawler-ready** — full Open Graph + Twitter Card (with 1200×630 branded card image), `@graph` JSON-LD with a `Person` + `ScholarlyArticle` nodes (the pattern Google Scholar prefers for author↔paper linking), a `<noscript>` shadow-content block that mirrors key content for non-JS crawlers (AI indexers, link-preview bots, Bing), `robots.txt`, and `sitemap.xml`.
-- **Mobile optimized** — dynamic viewport height, safe-area insets, dedicated breakpoints at ≤640 px and ≤380 px, stacked publication layout on narrow hall widths, blurb always expanded on touch. The long left-plate sections (Provenance, Talks, Toolkit) are click-to-expand disclosures at all viewports: Provenance opens by default everywhere, "Where I've shown my work" opens by default on desktop only (collapses on mobile/touch to keep the identity column tight), Toolkit defaults collapsed. Automatic hyphenation is disabled at mobile sizes so left-aligned body text wraps on whitespace rather than mid-word.
-
-![Watercolor-style visitor map](assets/map.png?v=2)
+- **SEO / crawler-ready**: Open Graph + Twitter Card, `@graph` JSON-LD with `Person` + `ScholarlyArticle` nodes (the pattern Google Scholar prefers for author↔paper linking), real favicon files, `robots.txt`, `sitemap.xml`. All content is in the HTML, so crawlers see it without running scripts.
 
 ## Quick start
 
@@ -45,23 +40,19 @@ npx wrangler dev
 
 ## Personalizing
 
-Almost everything you'll edit lives in **`scripts/data.js`**:
-- Name, role, email, social links
-- `headshot: 'assets/headshot.jpg'` — drop your photo into `assets/`, update the path if the extension differs
-- `cv: 'assets/your-cv.pdf'` — drop your CV at that path
-- `bio`, `interests`, `research`, `pubs`, `education`, `experience`, `talks`, `skills`
+Everything lives in **`index.html`**. Search for the placeholder text (`Jane`, `Example`, `your-`) to find each spot.
 
-Accented phrases in the bio are driven by `.replace()` calls in `scripts/v8_gallery.js` — match the strings to phrases in your `bio` text.
+1. **`<head>`**: `<title>`, `<meta name="description">`, `<meta name="author">`, `<link rel="canonical">`, the `og:*` / `twitter:*` block, and the JSON-LD `@graph` (keep the structure, swap names, URLs and DOIs).
+2. **Top links** (`<nav data-icons>`): the five `<a data-tx>` links. Rename or remove any; they are plain text links.
+3. **Hero**: the photo (`<img data-photo>`, points at `assets/headshot.svg`; drop in your own square image and update `src`/`alt`), the name (`<h1 data-name>`; text inside `<i>` gets the accent colour), and the tagline (`<p data-tagline>`).
+4. **Currently** (`<ul data-shelf="now">`): each `<li data-item>` is one card. On the card face: the drawing (the inline `<svg viewBox="0 0 360 225">`), the kind label, and the title (`<span data-t>`). In its details (`<div data-page>`): the question (`<p data-q>`) and a short paragraph (`<p data-body>`).
+5. **Papers** (`<ul data-shelf="pub">`): face title (`<span data-t>`), journal and year (in both `<span data-jy>` and the spine `<em>`), and in the details the full title (`<p data-ft>`), authors (`<p data-au>`, wrap your own name in `<b>`), summary (`<p data-sum>`) and link (`<a data-read href>`).
+6. **Footer**: the CV link (`href="/assets/your-cv.pdf"`; drop your PDF at that path) and the copyright line.
+7. Replace `assets/headshot.svg`, `assets/og-card.png` (1200×630 social card), `favicon.ico` and `assets/favicon-192.png`; update `robots.txt`, `sitemap.xml`, and `APEX_HOST` / `SITE_LIVE_DATE` in `worker/index.js`.
 
-Then edit the identity fields in **`index.html`**:
-- `<title>`, `<meta name="description">`, `<meta name="author">`, `<link rel="canonical">`
-- The `og:*` and `twitter:*` meta block (title, description, image, URL, site name)
-- The JSON-LD `@graph` (Person + ScholarlyArticle nodes) — keep the structure, swap names/URLs/DOIs
-- The `<noscript>` shadow-content block — keep it roughly in sync with `data.js` so crawlers see the same content as rendered users
+**Drawings**: each card's drawing is a 360×225 inline SVG. The placeholders use the page's ink palette through CSS variables (`--sk-ink`, `--sk-ink-soft`, `--sk-paper`, `--sk-sage`, `--sk-gold`, `--sk-sky`, `--sk-clay`, `--sk-rose`, `--sk-accent`), so a drawing that uses them switches with light/dark automatically. Any element with a `data-anim` attribute and a CSS animation keeps animating (paused under reduced motion).
 
-And replace the 1200×630 OG card at `assets/og-card.png` with one branded to your own name. The site works without a card — social link unfurls fall back to the favicon — but a proper card makes shared links look right.
-
-The visitor world map (`scripts/vmap.js`) is Pacific-centered by default — change `CENTER` at the top of the file to re-project around any other meridian.
+**Adding or removing cards**: the layout is sized for 3 Currently cards and 4 Papers (each row is 956 px wide: 3 × 308 + 2 × 16 = 4 × 227 + 3 × 16). To change the count, copy or delete a whole `<li data-item>` block, give a new card a unique `data-k` (and matching `id`s: `zl8p-f-<k>`, `zl8p-t-<k>`, `zl8p-d-<k>`), add the key to the `SHELVES` list in the script at the bottom, and add a `view-transition-name` line for it next to the others (search for `zl-f-now1`). A different count per row also means adjusting `--n`, `--face` and the 956 px breakpoint in the CSS.
 
 ## Deploying to Cloudflare
 
@@ -79,7 +70,7 @@ The visitor world map (`scripts/vmap.js`) is Pacific-centered by default — cha
 
 The visit / CV tracking is designed to be data-minimal:
 - **No raw IPs stored.** Dedup uses `SHA-256(ip + IP_SALT)` truncated to 64 bits, TTL'd to 24 h. After that window the hash is unrecoverable — there's no plaintext to correlate.
-- **Only `{city, country, lat, lon, count}`** is persisted per city. No user agents, no cookies, no fingerprinting, no third-party calls.
+- **Only `{city, country, lat, lon, count}`** is persisted per city. No user agents, no cookies, no fingerprinting. The page itself makes no third-party requests (fonts are self-hosted).
 - Edge geolocation (`request.cf`) is native to Cloudflare — visitor data never leaves their network.
 - Bot / verified-bot / Cloudflare-internal warmup traffic is filtered pre-log — see `isProbablyBot()` in `worker/index.js`. iCloud Private Relay users are admitted past the Cloudflare-AS bot gate by checking for a recognizable device-OS string in the UA.
 
@@ -87,20 +78,19 @@ The visit / CV tracking is designed to be data-minimal:
 
 ```
 .
-├── index.html              # Entry point — loads scripts/*.js in order
+├── index.html              # The whole page: content, CSS and the small interaction script
+├── favicon.ico
 ├── robots.txt              # Crawler policy + sitemap reference
 ├── sitemap.xml             # Single-URL sitemap (update <loc> for your domain)
 ├── assets/
 │   ├── headshot.svg        # Placeholder silhouette — replace
 │   ├── og-card.png         # 1200×630 social-preview card — replace with your own
+│   ├── favicon-192.png     # Replace with your own icon
+│   ├── fonts/              # Newsreader + EB Garamond italic (woff2) and their OFL texts
+│   ├── preview.png         # README screenshot
 │   └── your-cv.pdf         # Not committed — drop yours here
-├── scripts/
-│   ├── data.js             # ALL your content lives here
-│   ├── teaser.js           # SVG teasers for each publication and research card
-│   ├── vmap.js             # World map + /api/visits client
-│   └── v8_gallery.js       # Main renderer (CSS + DOM)
 ├── worker/
-│   └── index.js            # Cloudflare Worker — static + /api/*
+│   └── index.js            # Cloudflare Worker — static + /api/* + security headers
 ├── wrangler.jsonc          # Worker config (KV binding, assets dir)
 ├── .assetsignore           # Files excluded from the static-asset bundle
 └── LICENSE                 # MIT
@@ -108,4 +98,4 @@ The visit / CV tracking is designed to be data-minimal:
 
 ## License
 
-[MIT](LICENSE) 
+[MIT](LICENSE)
