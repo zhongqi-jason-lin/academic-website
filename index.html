@@ -754,7 +754,7 @@ html:not(.zl-vt-theme)::view-transition-new(*.zl-face){animation:none}
 <a data-ic="" data-tx="" href="https://scholar.google.com/citations?user=YOUR_ID" target="_blank" rel="noopener"><span data-long="">Google&nbsp;</span>Scholar</a>
 <a data-ic="" data-tx="" href="https://www.linkedin.com/in/your-linkedin-handle" target="_blank" rel="noopener">LinkedIn</a>
 <a data-ic="" data-tx="" href="https://github.com/your-github-handle" target="_blank" rel="noopener">GitHub</a>
-<a data-ic="" data-tx="" data-cv="" href="assets/your-cv.pdf" target="_blank" rel="noopener">CV</a>
+<a data-ic="" data-tx="" href="assets/your-cv.pdf" target="_blank" rel="noopener">CV</a>
 </nav>
 </header>
 
@@ -1006,9 +1006,6 @@ html:not(.zl-vt-theme)::view-transition-new(*.zl-face){animation:none}
   // into drawer mode, which moves the rise onto the card faces) can't replay it
   Promise.all(document.getAnimations().filter(a => /-(rise|rule)$/.test(a.animationName || '')).map(a => a.finished.catch(() => {})))
     .then(() => { R.dataset.intro = 'done'; });
-  // CV downloads are counted by the Worker from this beacon (direct PDF requests never reach it); every CV link
-  // (data-cv: the header's) sends it
-  if ('sendBeacon' in navigator) R.querySelectorAll('[data-cv]').forEach(cv => cv.addEventListener('click', () => { try { navigator.sendBeacon('/api/cv-download'); } catch (e) {} }));
   // a change of window width lays the cards out again at once. While the resize lasts, the cards' own transitions are
   // off, so they don't trail the window (a row running past its edge); a shelf that moves between spread and drawer
   // mode, or whose drawer grid changes its column count, is rendered again right away (not after the resize ends), so

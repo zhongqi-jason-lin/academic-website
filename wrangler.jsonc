@@ -7,30 +7,15 @@
   // Serve the repo root as static assets. Files listed in .assetsignore
   // (the worker code, wrangler config, etc.) are excluded from the bundle.
   //
-  // run_worker_first: every request invokes the Worker before the asset
-  // layer. Without this, Cloudflare Workers Static Assets serves matching
-  // files (including index.html) directly and the Worker is skipped
-  // entirely — which means logVisit() never runs for page loads and the
-  // self-hosted visitor counter undercounts by ~10–50×. With this
-  // enabled, the Worker logs each HTML GET and then falls through to
-  // env.ASSETS.fetch() for the actual content.
+  // run_worker_first: every request goes through the Worker before the asset
+  // layer, so every file gets the security headers and www redirects to the
+  // bare domain. Without it, Cloudflare serves matching files (index.html
+  // included) directly and the Worker only sees requests for missing files.
   "assets": {
     "directory": "./",
     "binding": "ASSETS",
     "run_worker_first": true
   },
-
-  // KV namespace for visitor / CV-download counters. Create one with
-  //   npx wrangler kv namespace create VISITS
-  // then paste the returned id below. The Worker exposes GET /api/visits
-  // and GET /api/cv-stats which read from this binding.
-  "kv_namespaces": [
-    { "binding": "VISITS", "id": "REPLACE_WITH_YOUR_KV_NAMESPACE_ID" }
-  ],
-
-  // 32-byte random salt for hashing visitor IPs. Generated once, never rotated
-  // (rotating would reset the dedup window). Set with: wrangler secret put IP_SALT
-  // Not committed — pulled from Cloudflare at runtime.
 
   "observability": { "enabled": true }
 }
