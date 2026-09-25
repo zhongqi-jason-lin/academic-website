@@ -55,7 +55,7 @@
 <p align="center">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset=".github/readme/numbers-dark.png">
-    <img src=".github/readme/numbers-light.png" width="880" alt="A first visit downloads 492 KB in 6 files, with 0 third-party requests and 6.6 KB of script. The median desktop home page in 2025 is 2,862 KB with 697 KB of JavaScript. Lighthouse on desktop: 100 for performance, accessibility, best practices and SEO.">
+    <img src=".github/readme/numbers-light.png" width="880" alt="A first visit downloads 492 KB in 6 files, with 0 third-party requests and 6.5 KB of script. The median desktop home page in 2025 is 2,862 KB with 697 KB of JavaScript. Lighthouse on desktop: 100 for performance, accessibility, best practices and SEO.">
   </picture>
 </p>
 
@@ -66,7 +66,7 @@
 | | This template | Median desktop home page, 2025 |
 |---|---:|---:|
 | Everything a first visit downloads | 492 KB | 2,862 KB |
-| JavaScript | 6.6 KB | 697 KB |
+| JavaScript | 6.5 KB | 697 KB |
 | Files | 6, all from your own site | |
 | Third-party requests | 0 | |
 
@@ -80,7 +80,7 @@ Measured on a first visit, with HTML, CSS and script gzip-compressed and fonts a
 <p align="center">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset=".github/readme/how-dark.png">
-    <img src=".github/readme/how-light.png" width="880" alt="A visitor loads your site: one HTML file with its fonts and paper, from any static host. Optionally, a Cloudflare Worker counts visits by city and CV downloads, with IP addresses hashed and forgotten after 24 hours.">
+    <img src=".github/readme/how-light.png" width="880" alt="You edit index.html and push it; any static host serves it, one HTML file with its fonts and paper; a visitor opens it on any device. No build step, no framework, no cookies, no third-party requests.">
   </picture>
 </p>
 
@@ -90,7 +90,7 @@ Measured on a first visit, with HTML, CSS and script gzip-compressed and fonts a
 2. **Make it yours.** Open `index.html` and replace the placeholders: search for `Jane`, `Example` and `your-`. Swap in your photo, links, projects and papers ([what goes where](#make-it-yours)).
 3. **Put it online.** In your copy, open **Settings → Pages** and choose **Deploy from a branch → `main` → `/ (root)`**. About a minute later it's live at `https://<you>.github.io/<repo>/`.
 
-That's all. For your own domain, or to count visits privately, see [Cloudflare](#optional-your-domain-and-private-counts-on-cloudflare).
+That's all. For your own domain, see [Cloudflare](#optional-your-own-domain-on-cloudflare).
 
 To preview on your computer first, run `python3 -m http.server` in the folder and open <http://localhost:8000>.
 
@@ -127,42 +127,28 @@ A different count per row also means adjusting `--n`, `--face` and the 956 px br
 Each card's drawing is an inline SVG with a 360×225 viewBox. The placeholders use the page's ink palette through CSS variables (`--sk-ink`, `--sk-ink-soft`, `--sk-paper`, `--sk-sage`, `--sk-gold`, `--sk-sky`, `--sk-clay`, `--sk-rose`, `--sk-accent`), so a drawing that uses them switches with light and dark by itself. Any part with a `data-anim` attribute and a CSS animation keeps moving; it pauses under reduced motion, while its card is folded, and during the load intro.
 </details>
 
-## Optional: your domain and private counts on Cloudflare
+## Optional: your own domain on Cloudflare
 
-GitHub Pages is enough to publish. Cloudflare adds your own domain and a small Worker (`worker/index.js`) that counts visits and CV downloads without cookies.
+GitHub Pages is enough to publish, and it takes a custom domain too (**Settings → Pages → Custom domain**). Cloudflare is the other option: a small Worker (`worker/index.js`) serves the same files with security headers and sends `www` to your bare domain.
 
 <details>
 <summary>Cloudflare setup</summary>
 <br>
 
-1. **Create a KV namespace** in the Cloudflare dashboard (**Storage & Databases → KV → Create**) and paste its id into `wrangler.jsonc`, replacing `REPLACE_WITH_YOUR_KV_NAMESPACE_ID`.
-2. **Connect the repository** (**Workers & Pages → Create → Connect to Git**). Each push to `main` then deploys.
-3. **Set the `IP_SALT` secret**, which makes the hashed visitor IPs unguessable:
-   ```bash
-   openssl rand -hex 32 | npx wrangler secret put IP_SALT
-   ```
-4. **Add your domain** under **Workers & Pages → your project → Settings → Domains & Routes**. If you serve both `example.com` and `www.example.com`, set `APEX_HOST` at the top of `worker/index.js` to `example.com`, and `www` will redirect to it. Set `SITE_LIVE_DATE` there too.
-5. **Optional: Google Search Console.** Uncomment the `google-site-verification` tag in `index.html`, paste your token, and submit `sitemap.xml`.
+1. **Connect the repository** (**Workers & Pages → Create → Connect to Git**). Each push to `main` then deploys.
+2. **Add your domain** under **Workers & Pages → your project → Settings → Domains & Routes**. If you serve both `example.com` and `www.example.com`, set `APEX_HOST` at the top of `worker/index.js` to `example.com`, and `www` will redirect to it.
+3. **Optional: Google Search Console.** Uncomment the `google-site-verification` tag in `index.html`, paste your token, and submit `sitemap.xml`.
 
-To run the whole thing locally, with the Worker and a simulated KV store: `npx wrangler dev`.
-
-The Worker serves the site with security headers and adds:
-
-| Endpoint | What it does |
-|---|---|
-| `POST /api/cv-download` | Counts a CV download (the CV link sends it) |
-| `GET /api/cv-stats` | Total CV downloads, by country |
-| `GET /api/visits`, `GET /api/stats` | Visit counts by city (not shown on the page) |
+To run it locally with the Worker: `npx wrangler dev`.
 </details>
 
 <details>
 <summary>Privacy</summary>
 <br>
 
-- **No raw IP addresses are stored.** Repeat visits are recognised by `SHA-256(ip + IP_SALT)`, cut to 64 bits and deleted after 24 hours; after that there is nothing left to link back to anyone.
-- **Only city, country, coordinates and a count** are kept for each city. No user agents, cookies or fingerprinting.
-- **The page itself calls no one else.** The fonts are self-hosted, and there are no analytics scripts or CDNs.
-- **Bots are filtered out** before anything is counted (see `isProbablyBot()` in `worker/index.js`).
+- **Nothing is tracked.** No cookies, no analytics, no visit or download counts.
+- **The page calls no one else.** The fonts are self-hosted, and there are no CDNs or third-party scripts.
+- **The Worker keeps nothing.** It adds headers and the `www` redirect, and stores no data.
 </details>
 
 <details>
@@ -180,7 +166,7 @@ The Worker serves the site with security headers and adds:
 │   └── fonts/          Newsreader and EB Garamond, self-hosted (SIL Open Font License)
 ├── favicon.ico
 ├── robots.txt, sitemap.xml
-├── worker/index.js     optional Cloudflare Worker: counts and security headers
+├── worker/index.js     optional Cloudflare Worker: security headers, www redirect
 ├── wrangler.jsonc      its configuration
 └── .github/readme/     the pictures on this page (not deployed)
 ```
