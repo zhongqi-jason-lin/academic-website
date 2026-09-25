@@ -1,101 +1,191 @@
-# Academic site — template
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset=".github/readme/hero-dark.gif">
+    <img src=".github/readme/hero-light.gif" width="880" alt="A notebook page loading: a blue margin rule drops, a taped photo, a name and a tagline rise into place, the research cards appear and their small drawings start to move">
+  </picture>
+</p>
 
-A zero-build static template for a personal academic website: one hand-drawn "lab notebook" page, wired for privacy-respecting visitor + CV-download tracking on Cloudflare Workers.
+<h1 align="center">Notebook</h1>
 
-![Preview of the template](assets/preview.png?v=4)
+<p align="center">
+  <b>A hand-drawn homepage for researchers.</b><br>
+  One HTML file&nbsp;·&nbsp;no build step&nbsp;·&nbsp;free to host&nbsp;·&nbsp;nothing that tracks your visitors
+</p>
 
-One live example deployed from this design: **[zhongqilin.org](https://zhongqilin.org)**.
+<p align="center">
+  <a href="https://zhongqilin.org"><b>See it live</b></a>&nbsp;&nbsp;·&nbsp;&nbsp;<a href="#set-up-in-three-steps"><b>Set up in three steps</b></a>&nbsp;&nbsp;·&nbsp;&nbsp;<a href="#make-it-yours">Make it yours</a>
+</p>
 
-## What you get
+<br>
 
-- **One static `index.html`**: no framework, no build step, no npm install to run the site. All content is plain HTML you edit in place; a small inline script handles the interactions.
-- **Notebook look**: graph-paper background with a margin rule, a taped snapshot portrait, ink-stroke dividers, Newsreader type, and card drawings in a shared ink palette that follows the theme.
-- **Cards that open two ways**: Currently (3 cards) and Papers (4 cards) keep one fixed size. Where a row holds every card, opening one unfolds its details sideways and folds its siblings into spines; on narrower screens the details open in a drawer under the card's row, animated with the View Transitions API. `x` / `Esc` close and return focus.
-- **Light/dark switch**: follows the OS by default; the choice is saved only while it differs from the OS, is applied before first paint (no flash), and cross-fades with a View Transition.
-- **Load intro**: the margin rule drops, blocks fade and sharpen into place in reading order, then the dividers draw. Runs once; off with `prefers-reduced-motion`.
-- **Responsive**: desktop, tablet and phone layouts; the layout reacts to the real space available (container queries), so wide scrollbars can't push cards off-screen.
-- **Self-hosted fonts** (Newsreader, EB Garamond italic; SIL Open Font License): visitors' browsers make no third-party requests.
-- **Cloudflare Worker** (`worker/index.js`): serves the repo as static assets, adds baseline security headers, 301-redirects `www` to your apex domain, and exposes:
-  - `POST /api/cv-download`: click-beacon fired from the "Download CV" link (direct GETs for `/assets/<cv>.pdf` bypass the Worker, so this is the reliable way to count CV downloads)
-  - `GET /api/cv-stats`: total CV downloads and per-country breakdown
-  - `GET /api/visits`, `GET /api/stats`: per-city visit counts (not shown on the page; there if you want them)
-- **Workers KV** storage for the counters, with 24h IP-hash dedup and bot filtering.
-- **SEO / crawler-ready**: Open Graph + Twitter Card, `@graph` JSON-LD with `Person` + `ScholarlyArticle` nodes (the pattern Google Scholar prefers for author↔paper linking), real favicon files, `robots.txt`, `sitemap.xml`. All content is in the HTML, so crawlers see it without running scripts.
+## Why it's nice
 
-## Quick start
+- **It feels made by hand.** Graph paper, a taped snapshot, ink dividers, and small drawings that quietly move.
+- **Your work, one click deep.** Each project and paper is a card. Open one and its story unfolds right beside it.
+- **Fast and private.** About half a megabyte, no framework, no cookies, not a single request to anyone else's server.
+- **Yours to edit.** Everything is plain HTML in one file. Nothing to install, nothing to learn.
 
-```bash
-# clone and serve the static layer
-git clone https://github.com/<you>/<your-fork>.git
-cd <your-fork>
-python3 -m http.server 8000
-# → http://localhost:8000
-```
+## See it in action
 
-For the full Worker (API endpoints + local KV simulation):
+<p align="center">
+  <img src=".github/readme/cards.gif" width="880" alt="Clicking a research card: its details slide out to the right while the other cards fold into narrow spines; then a paper card does the same">
+  <br>
+  <sub><b>Cards that unfold.</b> Open a card and its details slide out sideways while its neighbours fold into spines.</sub>
+</p>
 
-```bash
-npx wrangler dev
-```
+<table>
+  <tr>
+    <td width="40%" align="center" valign="top">
+      <img src=".github/readme/phone.gif" width="300" alt="On a phone: tapping a card opens its details in a drawer right under it, then the theme switch turns the page dark and back">
+    </td>
+    <td valign="top">
+      <h3>Made for phones</h3>
+      <p>On a small screen the details open in a drawer under the card, and the layout follows the space it really has, from a 320&nbsp;px phone to a 4K monitor.</p>
+      <h3>Light and dark</h3>
+      <p>It follows the reader's system setting. The switch in the corner flips it with a soft cross-fade.</p>
+      <img src=".github/readme/theme.gif" width="440" alt="The theme switch: the page cross-fades from light to dark and back">
+      <h3>Kind to every reader</h3>
+      <p>Keyboard and screen-reader friendly, and all motion stops for anyone who asks their system for less.</p>
+    </td>
+  </tr>
+</table>
 
-## Personalizing
+## By the numbers
 
-Everything lives in **`index.html`**. Search for the placeholder text (`Jane`, `Example`, `your-`) to find each spot.
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset=".github/readme/numbers-dark.png">
+    <img src=".github/readme/numbers-light.png" width="880" alt="A first visit downloads 492 KB in 6 files, with 0 third-party requests and 6.6 KB of script. The median desktop home page in 2025 is 2,862 KB with 697 KB of JavaScript. Lighthouse on desktop: 100 for performance, accessibility, best practices and SEO.">
+  </picture>
+</p>
 
-1. **`<head>`**: `<title>`, `<meta name="description">`, `<meta name="author">`, `<link rel="canonical">`, the `og:*` / `twitter:*` block, and the JSON-LD `@graph` (keep the structure, swap names, URLs and DOIs).
-2. **Top links** (`<nav data-icons>`): the five `<a data-tx>` links. Rename or remove any; they are plain text links.
-3. **Hero**: the photo (`<img data-photo>`, points at `assets/headshot.svg`; drop in your own square image and update `src`/`alt`), the name (`<h1 data-name>`; text inside `<i>` gets the accent colour), and the tagline (`<p data-tagline>`).
-4. **Currently** (`<ul data-shelf="now">`): each `<li data-item>` is one card. On the card face: the drawing (the inline `<svg viewBox="0 0 360 225">`), the kind label, and the title (`<span data-t>`). In its details (`<div data-page>`): the question (`<p data-q>`) and a short paragraph (`<p data-body>`).
-5. **Papers** (`<ul data-shelf="pub">`): face title (`<span data-t>`), journal and year (in both `<span data-jy>` and the spine `<em>`), and in the details the full title (`<p data-ft>`), authors (`<p data-au>`, wrap your own name in `<b>`), summary (`<p data-sum>`) and link (`<a data-read href>`).
-6. **Footer**: the CV link (`href="/assets/your-cv.pdf"`; drop your PDF at that path) and the copyright line.
-7. Replace `assets/headshot.svg`, `assets/og-card.png` (1200×630 social card), `favicon.ico` and `assets/favicon-192.png`; update `robots.txt`, `sitemap.xml`, and `APEX_HOST` / `SITE_LIVE_DATE` in `worker/index.js`.
+<details>
+<summary>The same numbers as a table</summary>
+<br>
 
-**Drawings**: each card's drawing is a 360×225 inline SVG. The placeholders use the page's ink palette through CSS variables (`--sk-ink`, `--sk-ink-soft`, `--sk-paper`, `--sk-sage`, `--sk-gold`, `--sk-sky`, `--sk-clay`, `--sk-rose`, `--sk-accent`), so a drawing that uses them switches with light/dark automatically. Any element with a `data-anim` attribute and a CSS animation keeps animating (paused under reduced motion).
+| | This template | Median desktop home page, 2025 |
+|---|---:|---:|
+| Everything a first visit downloads | 492 KB | 2,862 KB |
+| JavaScript | 6.6 KB | 697 KB |
+| Files | 6, all from your own site | |
+| Third-party requests | 0 | |
 
-**Adding or removing cards**: the layout is sized for 3 Currently cards and 4 Papers (each row is 956 px wide: 3 × 308 + 2 × 16 = 4 × 227 + 3 × 16). To change the count, copy or delete a whole `<li data-item>` block, give a new card a unique `data-k` (and matching `id`s: `zl8p-f-<k>`, `zl8p-t-<k>`, `zl8p-d-<k>`), add the key to the `SHELVES` list in the script at the bottom, and add a `view-transition-name` line for it next to the others (search for `zl-f-now1`). A different count per row also means adjusting `--n`, `--face` and the 956 px breakpoint in the CSS.
+Lighthouse 12 (desktop): Performance 100 · Accessibility 100 · Best practices 100 · SEO 100.
 
-## Deploying to Cloudflare
+Measured on a first visit, with HTML, CSS and script gzip-compressed and fonts and images as stored. The median comes from the [HTTP Archive Web Almanac 2025, Page Weight](https://almanac.httparchive.org/en/2025/page-weight).
+</details>
 
-1. Push your fork to GitHub.
-2. **Create a KV namespace** in the Cloudflare dashboard (`Storage & Databases → KV → Create`). Paste the namespace id into `wrangler.jsonc` under `kv_namespaces[0].id`, replacing `REPLACE_WITH_YOUR_KV_NAMESPACE_ID`.
-3. **Connect your GitHub repo to Workers Builds** (`Workers & Pages → Create → Connect to Git`). It'll run `npx wrangler deploy` on every push to `main`.
-4. **Set the `IP_SALT` secret** — used to hash visitor IPs so dedup is unguessable:
+## How it works
+
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset=".github/readme/how-dark.png">
+    <img src=".github/readme/how-light.png" width="880" alt="A visitor loads your site: one HTML file with its fonts and paper, from any static host. Optionally, a Cloudflare Worker counts visits by city and CV downloads, with IP addresses hashed and forgotten after 24 hours.">
+  </picture>
+</p>
+
+## Set up in three steps
+
+1. **Get your copy.** Click **Use this template** (or **Fork**) at the top of this page.
+2. **Make it yours.** Open `index.html` and replace the placeholders: search for `Jane`, `Example` and `your-`. Swap in your photo, links, projects and papers ([what goes where](#make-it-yours)).
+3. **Put it online.** In your copy, open **Settings → Pages** and choose **Deploy from a branch → `main` → `/ (root)`**. About a minute later it's live at `https://<you>.github.io/<repo>/`.
+
+That's all. For your own domain, or to count visits privately, see [Cloudflare](#optional-your-domain-and-private-counts-on-cloudflare).
+
+To preview on your computer first, run `python3 -m http.server` in the folder and open <http://localhost:8000>.
+
+## Make it yours
+
+Everything lives in **`index.html`**, in plain HTML.
+
+| What | Where |
+|---|---|
+| **Name, tagline, photo** | `<h1 data-name>` (text inside `<i>` turns blue), `<p data-tagline>`, and `<img data-photo>`. Put your square photo in `assets/` and point `src` at it. |
+| **Links** | `<nav data-icons>` at the top: Email, Scholar, LinkedIn, GitHub and CV. Put your CV at `assets/your-cv.pdf`. |
+| **Research cards** | `<ul data-shelf="now">`. Each `<li data-item>` is one card: a drawing, a kind label and a title, plus a question and a short paragraph in its details. |
+| **Papers** | `<ul data-shelf="pub">`. Each card has a short title, journal and year, and in its details the full title, authors (wrap your name in `<b>`), a summary and a link. |
+| **Search and sharing** | `<head>`: title, description, the `og:*` / `twitter:*` tags and the JSON-LD block. Replace `assets/og-card.png` (1200×630), `favicon.ico`, `assets/favicon-192.png`, `robots.txt` and `sitemap.xml`. |
+
+<details>
+<summary>Adding or removing cards</summary>
+<br>
+
+The rows are sized for 3 research cards and 4 papers. To change that:
+
+1. Copy or delete a whole `<li data-item>` block.
+2. Give a new card a unique `data-k` and matching ids (`zl8p-f-<k>`, `zl8p-t-<k>`, `zl8p-d-<k>`).
+3. Add the key to the `SHELVES` list in the script at the bottom.
+4. Add a `view-transition-name` line for it next to the others (search for `zl-f-now1`).
+
+A different count per row also means adjusting `--n`, `--face` and the 956 px breakpoint in the CSS.
+</details>
+
+<details>
+<summary>Drawings</summary>
+<br>
+
+Each card's drawing is an inline SVG with a 360×225 viewBox. The placeholders use the page's ink palette through CSS variables (`--sk-ink`, `--sk-ink-soft`, `--sk-paper`, `--sk-sage`, `--sk-gold`, `--sk-sky`, `--sk-clay`, `--sk-rose`, `--sk-accent`), so a drawing that uses them switches with light and dark by itself. Any part with a `data-anim` attribute and a CSS animation keeps moving; it pauses under reduced motion, while its card is folded, and during the load intro.
+</details>
+
+## Optional: your domain and private counts on Cloudflare
+
+GitHub Pages is enough to publish. Cloudflare adds your own domain and a small Worker (`worker/index.js`) that counts visits and CV downloads without cookies.
+
+<details>
+<summary>Cloudflare setup</summary>
+<br>
+
+1. **Create a KV namespace** in the Cloudflare dashboard (**Storage & Databases → KV → Create**) and paste its id into `wrangler.jsonc`, replacing `REPLACE_WITH_YOUR_KV_NAMESPACE_ID`.
+2. **Connect the repository** (**Workers & Pages → Create → Connect to Git**). Each push to `main` then deploys.
+3. **Set the `IP_SALT` secret**, which makes the hashed visitor IPs unguessable:
    ```bash
    openssl rand -hex 32 | npx wrangler secret put IP_SALT
    ```
-5. (Optional) **Add a custom domain** in `Workers & Pages → <project> → Settings → Domains & Routes`. Cloudflare auto-inserts DNS if the domain's zone is on Cloudflare DNS. If you'll serve from both apex and `www` (e.g. `example.com` and `www.example.com`), set `APEX_HOST` at the top of `worker/index.js` to your apex domain (no scheme, no `www`) — the Worker 301-redirects the `www` host to the apex so Search Console doesn't flag the duplicate as "Alternate page with proper canonical tag." Leave the constant empty/null to skip the redirect.
-6. **Register the site in Google Search Console** at <https://search.google.com/search-console>. Uncomment the `<meta name="google-site-verification">` tag in `index.html` and paste in the token, then submit `sitemap.xml`.
+4. **Add your domain** under **Workers & Pages → your project → Settings → Domains & Routes**. If you serve both `example.com` and `www.example.com`, set `APEX_HOST` at the top of `worker/index.js` to `example.com`, and `www` will redirect to it. Set `SITE_LIVE_DATE` there too.
+5. **Optional: Google Search Console.** Uncomment the `google-site-verification` tag in `index.html`, paste your token, and submit `sitemap.xml`.
 
-## Privacy posture
+To run the whole thing locally, with the Worker and a simulated KV store: `npx wrangler dev`.
 
-The visit / CV tracking is designed to be data-minimal:
-- **No raw IPs stored.** Dedup uses `SHA-256(ip + IP_SALT)` truncated to 64 bits, TTL'd to 24 h. After that window the hash is unrecoverable — there's no plaintext to correlate.
-- **Only `{city, country, lat, lon, count}`** is persisted per city. No user agents, no cookies, no fingerprinting. The page itself makes no third-party requests (fonts are self-hosted).
-- Edge geolocation (`request.cf`) is native to Cloudflare — visitor data never leaves their network.
-- Bot / verified-bot / Cloudflare-internal warmup traffic is filtered pre-log — see `isProbablyBot()` in `worker/index.js`. iCloud Private Relay users are admitted past the Cloudflare-AS bot gate by checking for a recognizable device-OS string in the UA.
+The Worker serves the site with security headers and adds:
 
-## File structure
+| Endpoint | What it does |
+|---|---|
+| `POST /api/cv-download` | Counts a CV download (the CV link sends it) |
+| `GET /api/cv-stats` | Total CV downloads, by country |
+| `GET /api/visits`, `GET /api/stats` | Visit counts by city (not shown on the page) |
+</details>
+
+<details>
+<summary>Privacy</summary>
+<br>
+
+- **No raw IP addresses are stored.** Repeat visits are recognised by `SHA-256(ip + IP_SALT)`, cut to 64 bits and deleted after 24 hours; after that there is nothing left to link back to anyone.
+- **Only city, country, coordinates and a count** are kept for each city. No user agents, cookies or fingerprinting.
+- **The page itself calls no one else.** The fonts are self-hosted, and there are no analytics scripts or CDNs.
+- **Bots are filtered out** before anything is counted (see `isProbablyBot()` in `worker/index.js`).
+</details>
+
+<details>
+<summary>What's in the box</summary>
+<br>
 
 ```
 .
-├── index.html              # The whole page: content, CSS and the small interaction script
-├── favicon.ico
-├── robots.txt              # Crawler policy + sitemap reference
-├── sitemap.xml             # Single-URL sitemap (update <loc> for your domain)
+├── index.html          the whole page: content, styles and a small script
 ├── assets/
-│   ├── headshot.svg        # Placeholder silhouette — replace
-│   ├── og-card.png         # 1200×630 social-preview card — replace with your own
-│   ├── favicon-192.png     # Replace with your own icon
-│   ├── fonts/              # Newsreader + EB Garamond italic (woff2) and their OFL texts
-│   ├── preview.png         # README screenshot
-│   └── your-cv.pdf         # Not committed — drop yours here
-├── worker/
-│   └── index.js            # Cloudflare Worker — static + /api/* + security headers
-├── wrangler.jsonc          # Worker config (KV binding, assets dir)
-├── .assetsignore           # Files excluded from the static-asset bundle
-└── LICENSE                 # MIT
+│   ├── headshot.svg    placeholder photo (replace)
+│   ├── og-card.png     1200×630 link-preview card (replace)
+│   ├── favicon-192.png site icon (replace)
+│   ├── tex-*.webp      the paper's grain
+│   └── fonts/          Newsreader and EB Garamond, self-hosted (SIL Open Font License)
+├── favicon.ico
+├── robots.txt, sitemap.xml
+├── worker/index.js     optional Cloudflare Worker: counts and security headers
+├── wrangler.jsonc      its configuration
+└── .github/readme/     the pictures on this page (not deployed)
 ```
+</details>
 
 ## License
 
-[MIT](LICENSE)
+[MIT](LICENSE). The fonts keep their own SIL Open Font License (texts in `assets/fonts/`).
