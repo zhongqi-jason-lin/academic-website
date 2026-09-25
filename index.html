@@ -11,8 +11,8 @@
 <meta name="theme-color" content="#F9F6EF" media="(prefers-color-scheme: light)"/>
 <meta name="theme-color" content="#171614" media="(prefers-color-scheme: dark)"/>
 <link rel="canonical" href="https://your-domain.example/"/>
-<link rel="icon" href="/favicon.ico" sizes="48x48"/>
-<link rel="icon" href="/assets/favicon-192.png" type="image/png" sizes="192x192"/>
+<link rel="icon" href="favicon.ico" sizes="48x48"/>
+<link rel="icon" href="assets/favicon-192.png" type="image/png" sizes="192x192"/>
 <link rel="apple-touch-icon" href="assets/favicon-192.png"/>
 <!-- Open Graph / social — use the 1200×630 branded card so link unfurls in Slack/LinkedIn/iMessage show a proper preview rather than a cropped headshot square. Replace assets/og-card.png with your own 1200×630 image; scripts/render-og-card.html is a ready-to-screenshot template that matches the site's aesthetic. -->
 <meta property="og:type" content="profile"/>
@@ -111,19 +111,24 @@
 }
 </script>
 <script>
-  // saved theme before first paint (as on the current site): a saved choice that matches the OS is dropped, so the page follows the OS again
+  // saved theme before first paint (as on the current site): a saved choice that matches the OS is dropped, so the page follows the OS again.
+  // The browser's toolbar color follows the saved theme too: both theme-color metas (one per OS scheme) take that
+  // theme's color, and each keeps its own in data-c for the page script, which puts it back when the page follows the OS again
   (function(){try{var t=localStorage.getItem('theme');if(t!=='light'&&t!=='dark')return;
     if((t==='dark')===matchMedia('(prefers-color-scheme: dark)').matches){localStorage.removeItem('theme');return}
-    document.documentElement.setAttribute('data-theme',t)}catch(e){}})();
+    document.documentElement.setAttribute('data-theme',t);
+    var m=document.querySelectorAll('meta[name="theme-color"][media]'),c,i;
+    for(i=0;i<m.length;i++)if(m[i].getAttribute('media').indexOf(t)>=0)c=m[i].content;
+    if(c)for(i=0;i<m.length;i++){m[i].setAttribute('data-c',m[i].content);m[i].content=c}}catch(e){}})();
 </script>
-<link rel="preload" href="/assets/fonts/newsreader-normal-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/newsreader-normal-latin.woff2" as="font" type="font/woff2" crossorigin>
 <style>
-@font-face {font-family: 'EB Garamond';font-style: italic;font-weight: 400;font-display: swap;src: url(/assets/fonts/eb-garamond-italic-latin-ext.woff2) format('woff2');unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;}
-@font-face {font-family: 'EB Garamond';font-style: italic;font-weight: 400;font-display: swap;src: url(/assets/fonts/eb-garamond-italic-latin.woff2) format('woff2');unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;}
-@font-face {font-family: 'Newsreader';font-style: italic;font-weight: 300 700;font-display: swap;src: url(/assets/fonts/newsreader-italic-latin-ext.woff2) format('woff2');unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;}
-@font-face {font-family: 'Newsreader';font-style: italic;font-weight: 300 700;font-display: swap;src: url(/assets/fonts/newsreader-italic-latin.woff2) format('woff2');unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;}
-@font-face {font-family: 'Newsreader';font-style: normal;font-weight: 300 700;font-display: swap;src: url(/assets/fonts/newsreader-normal-latin-ext.woff2) format('woff2');unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;}
-@font-face {font-family: 'Newsreader';font-style: normal;font-weight: 300 700;font-display: swap;src: url(/assets/fonts/newsreader-normal-latin.woff2) format('woff2');unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;}
+@font-face {font-family: 'EB Garamond';font-style: italic;font-weight: 400;font-display: swap;src: url(assets/fonts/eb-garamond-italic-latin-ext.woff2) format('woff2');unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;}
+@font-face {font-family: 'EB Garamond';font-style: italic;font-weight: 400;font-display: swap;src: url(assets/fonts/eb-garamond-italic-latin.woff2) format('woff2');unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;}
+@font-face {font-family: 'Newsreader';font-style: italic;font-weight: 300 700;font-display: swap;src: url(assets/fonts/newsreader-italic-latin-ext.woff2) format('woff2');unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;}
+@font-face {font-family: 'Newsreader';font-style: italic;font-weight: 300 700;font-display: swap;src: url(assets/fonts/newsreader-italic-latin.woff2) format('woff2');unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;}
+@font-face {font-family: 'Newsreader';font-style: normal;font-weight: 300 700;font-display: swap;src: url(assets/fonts/newsreader-normal-latin-ext.woff2) format('woff2');unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;}
+@font-face {font-family: 'Newsreader';font-style: normal;font-weight: 300 700;font-display: swap;src: url(assets/fonts/newsreader-normal-latin.woff2) format('woff2');unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;}
 </style>
 <style>
 body{margin:0}
@@ -135,6 +140,17 @@ body{margin:0}
 @media (prefers-color-scheme: dark){.zl8p[data-theme="system"][data-accent="gold"]{--accent:#D7B271;--orn:#D8B36A;--accent-soft:rgba(216,179,106,.45);--accent-faint:rgba(216,179,106,.16);--accent-wash:rgba(216,179,106,.08);--rule:rgba(216,180,110,.17);--rule2:rgba(216,180,110,.1)}}
 @supports (color: oklch(0% 0 0)){.zl8p{--accent:oklch(0.50 0.18 252)}.zl8p[data-theme="dark"]{--accent:oklch(0.72 0.12 205)}}
 @supports (color: oklch(0% 0 0)){@media (prefers-color-scheme: dark){.zl8p[data-theme="system"]{--accent:oklch(0.72 0.12 205)}}}
+/* ---------- round 9 · texture + motion ---------- */
+.zl8p{--tex-ink:#5c4424;--tex-mot:#9a7640;--tex-o:1;--laser:#6DBA72;--rbc:#B8607F}
+.zl8p[data-theme="dark"]{--tex-ink:#f3e6cc;--tex-mot:#000;--tex-o:.5;--laser:#8FDD95;--rbc:#E4A3BC}
+@media (prefers-color-scheme: dark){.zl8p[data-theme="system"]{--tex-ink:#f3e6cc;--tex-mot:#000;--tex-o:.5;--laser:#8FDD95;--rbc:#E4A3BC}}
+.zl8p [data-tex]{position:absolute;left:0;top:0;width:100%;height:100%;pointer-events:none;z-index:0;opacity:var(--tex-o)}
+.zl8p [data-tex] i{position:absolute;left:0;top:0;width:100%;height:100%;display:block;-webkit-mask-repeat:repeat;mask-repeat:repeat}
+.zl8p [data-tm]{background:var(--tex-mot);-webkit-mask-image:url(assets/tex-mottle.webp);mask-image:url(assets/tex-mottle.webp);-webkit-mask-size:1024px 1024px;mask-size:1024px 1024px}
+.zl8p [data-tt]{background:var(--tex-ink);-webkit-mask-image:url(assets/tex-tooth.webp);mask-image:url(assets/tex-tooth.webp);-webkit-mask-size:256px 256px;mask-size:256px 256px}
+.zl8p[data-texture="grain"] [data-tm]{display:none}.zl8p[data-texture="none"] [data-tex]{display:none}
+.zl8p{--sw-shadow:drop-shadow(0 1px 1px rgba(110,80,40,.1)) drop-shadow(0 4px 6px rgba(110,80,40,.17))}.zl8p[data-theme="dark"]{--sw-shadow:drop-shadow(0 1px 1px rgba(0,0,0,.45)) drop-shadow(0 5px 8px rgba(0,0,0,.5))}@media (prefers-color-scheme: dark){.zl8p[data-theme="system"]{--sw-shadow:drop-shadow(0 1px 1px rgba(0,0,0,.45)) drop-shadow(0 5px 8px rgba(0,0,0,.5))}}
+.zl8p [data-themesw] svg[data-swring]{fill:var(--card);filter:var(--sw-shadow)}
 .zl8p *,.zl8p *::before,.zl8p *::after{box-sizing:border-box}
 .zl8p a{color:inherit;text-decoration:none}
 .zl8p h1,.zl8p h2,.zl8p h3,.zl8p p,.zl8p ul,.zl8p li{margin:0;padding:0}
@@ -144,12 +160,10 @@ body{margin:0}
 .zl8p :focus:not(:focus-visible){outline:none}
 .zl8p ::selection{background:var(--accent-soft);color:var(--text)}
 .zl8p sup{font-size:.68em;line-height:0;vertical-align:.42em}
-.zl8p [data-grain]{position:absolute;left:0;top:0;width:100%;height:100%;pointer-events:none;z-index:0}
 .zl8p [data-z]{position:relative;z-index:1}
 .zl8p [data-icons]{display:flex;align-items:center;gap:2px;margin-right:-13px}
 .zl8p [data-ic]{position:relative;width:44px;height:44px;flex:none;display:grid;place-items:center;border-radius:50%;color:var(--muted);transition:color .2s}
 .zl8p [data-ic]::before{content:"";position:absolute;inset:6px;border-radius:50%;box-shadow:inset 0 0 0 1px var(--accent-soft);opacity:0;transition:opacity .2s}
-.zl8p [data-ic] svg{position:relative;width:18px;height:18px;fill:currentColor}
 .zl8p [data-ic]:hover,.zl8p [data-ic]:focus-visible{color:var(--accent)}
 .zl8p [data-ic]:hover::before,.zl8p [data-ic]:focus-visible::before{opacity:1}
 .zl8p [data-ic]:focus-visible{outline-offset:-2px;border-radius:50%}
@@ -159,8 +173,6 @@ body{margin:0}
 .zl8p [data-name] i{font-style:normal;color:var(--accent);font-weight:500}
 .zl8p [data-tagline]{font:400 18px/1.4 'Newsreader',Georgia,serif;color:var(--text2)}
 .zl8p [data-div]{display:flex;align-items:center;justify-content:center;gap:12px}
-.zl8p [data-ln]{display:block;width:60px;height:1px;background:linear-gradient(90deg,transparent,var(--orn))}
-.zl8p [data-ln][data-r]{background:linear-gradient(90deg,var(--orn),transparent)}
 .zl8p [data-div] svg{display:block;flex:none}
 .zl8p [data-sec]{display:grid;grid-template-columns:152px 956px;column-gap:28px;padding:0 72px}
 .zl8p [data-label]{display:flex;flex-direction:column;gap:5px;padding-top:2px}
@@ -168,9 +180,13 @@ body{margin:0}
 .zl8p [data-label] p{font:italic 400 14.5px/1.35 'Newsreader',Georgia,serif;color:var(--muted)}
 /* ---------- shelf & spread ---------- */
 .zl8p [data-shelf]{display:flex;gap:var(--gap);height:var(--rowh);min-width:0;align-items:stretch;--page:calc((var(--n) - 1) * (var(--face) - var(--spine)))}
-.zl8p [data-shelf="now"]{--n:3;--spine:48px;--gap:16px;--face:308px;--rowh:294px}
-.zl8p [data-shelf="pub"]{--n:4;--spine:44px;--gap:16px;--face:227px;--rowh:239px}
-.zl8p [data-item]{position:relative;flex:none;width:var(--face);height:100%;display:flex;overflow:hidden;overflow:clip;border:1.5px solid var(--rule);border-radius:10px;background:var(--card);box-shadow:var(--shadow);transition:width .42s var(--ease),transform .3s var(--ease),box-shadow .3s,border-color .3s}
+/* row height: the drawing (360:225 over the face) plus the caption, whose part is in em (101.5px / 97.125px at the
+   shelf's 16px) so it grows with a text-only zoom: 294px and 239px on the desktop board */
+.zl8p [data-shelf="now"]{--n:3;--spine:48px;--gap:16px;--face:308px;--rowh:calc(var(--face)*.625 + 101.5em / 16)}
+.zl8p [data-shelf="pub"]{--n:4;--spine:44px;--gap:16px;--face:227px;--rowh:calc(var(--face)*.625 + 97.125em / 16)}
+/* the cards' widths add up to the row at rest and in a spread; flexing lets them absorb any shortfall when a second
+   card opens before the first has finished (interrupted width transitions no longer add up) */
+.zl8p [data-item]{position:relative;flex:1 1 auto;min-width:0;width:var(--face);height:100%;display:flex;overflow:hidden;overflow:clip;border:1.5px solid var(--rule);border-radius:10px;background:var(--card);box-shadow:var(--shadow);transition:width .42s var(--ease),transform .3s var(--ease),box-shadow .3s,border-color .3s}
 .zl8p [data-item][data-side="l"]{flex-direction:row-reverse}
 .zl8p [data-item][data-state="open"]{width:calc(var(--face) + var(--page));border-color:var(--accent-soft);box-shadow:var(--shadow-lg)}
 .zl8p [data-item][data-state="spine"]{width:var(--spine)}
@@ -183,12 +199,10 @@ body{margin:0}
 .zl8p [data-shelf="pub"] [data-cap]{justify-content:space-between;gap:8px;margin:0 6px 0 7px;padding:10px 0 21px}
 .zl8p [data-kind]{display:flex;align-items:center;gap:7px;font:500 11.5px/1 'Newsreader',Georgia,serif;letter-spacing:.16em;text-transform:uppercase;color:var(--accent)}
 .zl8p [data-kind]>svg{width:11px;height:11px;flex:none}
-.zl8p [data-t]{display:block;font:600 20px/1.15 'Newsreader',Georgia,serif;color:var(--text);text-wrap:balance;font-variant-numeric:lining-nums}
+.zl8p [data-t]{display:block;font:600 20px/1.15 'Newsreader',Georgia,serif;color:var(--text);font-variant-numeric:lining-nums}
 .zl8p [data-shelf="pub"] [data-t]{font-size:16px;line-height:1.2;letter-spacing:-.006em}
 .zl8p [data-jy]{display:flex;align-items:center;gap:6px;font:400 13.5px/1.2 'Newsreader',Georgia,serif;color:var(--muted)}
 .zl8p [data-jy] i{color:var(--text2)}
-.zl8p [data-state="spine"] [data-corner]{opacity:0}
-.zl8p [data-corner]{position:absolute;width:13px;height:13px;pointer-events:none;opacity:.5;transition:opacity .2s}
 /* spine */
 .zl8p [data-spine]{position:absolute;top:0;bottom:0;left:0;width:calc(var(--spine) - 3px);display:flex;flex-direction:column;align-items:center;gap:10px;padding:16px 0;opacity:0;pointer-events:none;transition:opacity .2s linear}
 .zl8p [data-side="l"] [data-spine]{left:auto;right:0}
@@ -214,14 +228,14 @@ body{margin:0}
 .zl8p [data-x] svg{width:10px;height:10px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round}
 .zl8p [data-x]:hover,.zl8p [data-x]:focus-visible{color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent-soft)}
 .zl8p [data-x]:focus-visible{outline-offset:2px;border-radius:50%}
-.zl8p [data-q]{font:italic 500 20px/1.25 'Newsreader',Georgia,serif;color:var(--text);text-wrap:balance}
+.zl8p [data-q]{font:italic 500 20px/1.25 'Newsreader',Georgia,serif;color:var(--text)}
 .zl8p [data-tick]{width:28px;height:1px;flex:none;background:var(--accent-soft)}
-.zl8p [data-body]{font:400 16px/1.55 'Newsreader',Georgia,serif;color:var(--text2);text-wrap:pretty}
-.zl8p [data-ft]{font:600 17.5px/1.2 'Newsreader',Georgia,serif;color:var(--text);text-wrap:balance;font-variant-numeric:lining-nums}
+.zl8p [data-body]{font:400 16px/1.55 'Newsreader',Georgia,serif;color:var(--text2)}
+.zl8p [data-ft]{font:600 17.5px/1.2 'Newsreader',Georgia,serif;color:var(--text);font-variant-numeric:lining-nums}
 .zl8p [data-au]{font:400 13px/1.38 'Newsreader',Georgia,serif;color:var(--muted)}
 .zl8p [data-au] span{white-space:nowrap}
 .zl8p [data-au] b{font-weight:700;color:var(--text)}
-.zl8p [data-sum]{font:400 14.5px/1.45 'Newsreader',Georgia,serif;color:var(--text2);text-wrap:pretty}
+.zl8p [data-sum]{font:400 14.5px/1.45 'Newsreader',Georgia,serif;color:var(--text2)}
 .zl8p [data-read]{margin-top:auto;position:relative;display:inline-flex;align-self:flex-start;align-items:center;gap:6px;min-height:24px;font:500 14px/1 'Newsreader',Georgia,serif;color:var(--accent);text-decoration:underline;text-decoration-color:var(--accent-faint);text-underline-offset:4px}
 .zl8p [data-read]::before{content:"";position:absolute;inset:-12px -8px}
 .zl8p [data-read] svg{width:10px;height:10px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
@@ -246,22 +260,19 @@ body{margin:0}
 .zl8p [data-face]:focus-visible{outline:none}
 @supports not selector(:has(*)){.zl8p [data-face]:focus-visible{outline:2px solid var(--accent);outline-offset:-4px}}
 /* footer */
-.zl8p [data-fl]{position:relative;height:28px;display:flex;align-items:center;gap:7px;font:400 15px/1 'Newsreader',Georgia,serif;color:var(--text2);transition:color .2s}
-.zl8p [data-fl]::before{content:"";position:absolute;inset:-8px -10px}
-.zl8p [data-fl] svg{width:11px;height:11px;flex:none;fill:none;stroke:var(--accent);stroke-width:1.4;stroke-linecap:round;stroke-linejoin:round}
-.zl8p [data-fl]:hover,.zl8p [data-fl]:focus-visible{color:var(--text);text-decoration:underline;text-decoration-color:var(--orn);text-decoration-thickness:1px;text-underline-offset:5px}
 .zl8p [data-copy]{font:400 13.5px/1 'Newsreader',Georgia,serif;color:var(--muted)}
-/* cartoons: play on hover / keyboard focus only */
-.zl8p [data-state="spine"] [data-anim]{animation-name:none !important}
+/* a card folding to a spine pauses its cartoon, which keeps its pose while the face fades out (removing the
+   animations snapped every moving part back to its start pose mid-fade) */
+.zl8p [data-state="spine"] [data-anim]{animation-play-state:paused !important}
 /* motion off + reduced motion */
 .zl8p[data-motion="off"] [data-anim]{animation-play-state:paused !important}
-.zl8p[data-motion="off"] :is([data-item],[data-page],[data-spine],[data-faceinner],[data-chev],[data-corner]){transition:none !important}
+.zl8p[data-motion="off"] :is([data-item],[data-page],[data-spine],[data-faceinner],[data-chev]){transition:none !important}
 .zl8p[data-motion="off"] [data-item]{transform:none !important}
-@media (prefers-reduced-motion: reduce){.zl8p [data-anim]{animation-play-state:paused !important}.zl8p :is([data-item],[data-page],[data-spine],[data-faceinner],[data-chev],[data-corner]){transition:none !important}.zl8p [data-item]{transform:none !important}}
+@media (prefers-reduced-motion: reduce){.zl8p [data-anim]{animation-play-state:paused !important}.zl8p :is([data-item],[data-page],[data-spine],[data-faceinner],[data-chev]){transition:none !important}.zl8p [data-item]{transform:none !important}}
 /* ---------- round 6 · NotebookPage ---------- */
-.zl8p{--tape:rgba(0,99,196,.13);--tape-edge:rgba(0,99,196,.22);--gridc:rgba(0,99,196,.075);--marg:rgba(0,99,196,.32)}
-.zl8p[data-theme="dark"]{--tape:rgba(52,192,219,.16);--tape-edge:rgba(52,192,219,.26);--gridc:rgba(160,210,225,.055);--marg:rgba(52,192,219,.3)}
-@media (prefers-color-scheme: dark){.zl8p[data-theme="system"]{--tape:rgba(52,192,219,.16);--tape-edge:rgba(52,192,219,.26);--gridc:rgba(160,210,225,.055);--marg:rgba(52,192,219,.3)}}
+.zl8p{--tape:rgba(0,99,196,.13);--tape-edge:rgba(0,99,196,.22);--gridc:rgba(0,99,196,.075);--marg:rgba(0,99,196,.32);--print:var(--card)}
+.zl8p[data-theme="dark"]{--tape:rgba(52,192,219,.16);--tape-edge:rgba(52,192,219,.26);--gridc:rgba(160,210,225,.055);--marg:rgba(52,192,219,.3);--print:#B3AB9D}
+@media (prefers-color-scheme: dark){.zl8p[data-theme="system"]{--tape:rgba(52,192,219,.16);--tape-edge:rgba(52,192,219,.26);--gridc:rgba(160,210,225,.055);--marg:rgba(52,192,219,.3);--print:#B3AB9D}}
 .zl8p [data-grid]{position:absolute;inset:0;pointer-events:none;z-index:0;background-image:linear-gradient(var(--gridc) 1px,transparent 1px),linear-gradient(90deg,var(--gridc) 1px,transparent 1px);background-size:24px 24px;background-position:-1px 11px}
 .zl8p [data-margin]{position:absolute;top:0;bottom:0;left:47px;width:4px;pointer-events:none;z-index:0;border-left:1px solid var(--marg);border-right:1px solid var(--marg);opacity:.75}
 /* type */
@@ -272,7 +283,7 @@ body{margin:0}
 .zl8p [data-label] p{font-size:13.5px}
 .zl8p [data-kind]{font-size:10.5px;letter-spacing:.14em;font-weight:500}
 .zl8p [data-t]{font-weight:500;font-size:19px;line-height:1.2;letter-spacing:-.008em}
-.zl8p [data-shelf="pub"] [data-t]{font-size:14px;line-height:1.24;letter-spacing:-.014em}
+.zl8p [data-shelf="pub"] [data-t]{font-size:15.5px;line-height:1.22;letter-spacing:-.01em}
 .zl8p [data-jy]{font-size:12.5px}
 .zl8p [data-spine] em{font-size:10.5px}
 .zl8p [data-shelf="pub"] [data-spine] em{font-size:12.5px}
@@ -282,24 +293,22 @@ body{margin:0}
 .zl8p [data-au]{font-size:12px}
 .zl8p [data-sum]{font-size:13.5px}
 .zl8p [data-read]{font-size:13px}
-.zl8p [data-fl]{font-size:14px}
 .zl8p [data-copy]{font-size:12.5px}
 /* index cards */
 .zl8p [data-item]{border-radius:3px}
-/* taped snapshot */
-.zl8p [data-snap]{position:absolute;left:11px;top:13px;width:102px;height:102px;padding:5px;background:var(--card);border-radius:1px;box-shadow:0 0 0 1px var(--rule2),0 1px 2px rgba(60,40,20,.08),0 7px 16px -7px rgba(80,60,30,.38);transform:rotate(-2.6deg)}
-.zl8p[data-theme="dark"] [data-snap]{box-shadow:0 0 0 1px var(--rule2),0 7px 16px -6px rgba(0,0,0,.7)}
-@media (prefers-color-scheme: dark){.zl8p[data-theme="system"] [data-snap]{box-shadow:0 0 0 1px var(--rule2),0 7px 16px -6px rgba(0,0,0,.7)}}
+/* taped snapshot (a print on photo paper: --print; light photo paper in dark mode too) */
+.zl8p [data-snap]{position:absolute;left:11px;top:13px;width:102px;height:102px;padding:5px;background:var(--print);border-radius:1px;box-shadow:0 0 0 1px var(--rule2),0 1px 2px rgba(60,40,20,.08),0 7px 16px -7px rgba(80,60,30,.38);transform:rotate(-2.6deg)}
+.zl8p[data-theme="dark"] [data-snap]{box-shadow:0 0 0 1px rgba(0,0,0,.35),0 7px 16px -6px rgba(0,0,0,.7)}
+@media (prefers-color-scheme: dark){.zl8p[data-theme="system"] [data-snap]{box-shadow:0 0 0 1px rgba(0,0,0,.35),0 7px 16px -6px rgba(0,0,0,.7)}}
 .zl8p [data-snap] [data-photo]{position:static;width:92px;height:92px;border-radius:0;box-shadow:none}
 .zl8p [data-tape]{position:absolute;left:34px;top:4px;width:56px;height:17px;transform:rotate(4deg)}
 /* inked strokes: drawn once on load, static afterwards */
 .zl8p [data-pen]{display:block;overflow:visible}
-.zl8p [data-draw]{stroke-dasharray:1;stroke-dashoffset:0;animation:zl8p-ink 1.5s cubic-bezier(.45,.05,.3,1) .35s both}
+.zl8p [data-draw]{stroke-dasharray:1 2;stroke-dashoffset:0;animation:zl8p-ink 1.5s cubic-bezier(.45,.05,.3,1) .35s both}
 @keyframes zl8p-ink{from{stroke-dashoffset:1}to{stroke-dashoffset:0}}
-.zl8p[data-motion="off"] [data-draw]{animation:none}
+.zl8p[data-motion="off"] [data-draw]{animation-duration:0s;animation-delay:0s}   /* drawn at once; keeps the animation, so turning motion back on later doesn't redraw it */
 @media (prefers-reduced-motion: reduce){.zl8p [data-draw]{animation:none}}
 /* hand-inked icons: stroked, no rings; hover = a short ink underline */
-.zl8p [data-ic] svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
 .zl8p [data-ic]::before{inset:auto 12px 7px;height:1.5px;border-radius:1px;box-shadow:none;background:var(--accent)}
 .zl8p [data-ic]:focus-visible{border-radius:6px}
 .zl8p [data-chev]{box-shadow:none !important}
@@ -310,9 +319,11 @@ body{margin:0}
 /* spine mark: a ticked box */
 .zl8p [data-sdot]{border-radius:1.5px;transform:rotate(-5deg)}
 .zl8p [data-sdot]::after{border-radius:0;inset:2.4px}
-.zl8p [data-icons][data-at="hero"]{margin:-2px 0 -10px -13px;gap:0}
+/* landmarks: the hero, the tagline row, the dividers and both sections are the page's <main>, which is display:contents,
+   so they stay items of the root's flex column; rules that reach them as the root's children step through it with
+   :where(main), which adds nothing to a selector's specificity */
 /* hero: snapshot above the name, both centred; tagline on its own row below */
-.zl8p > #zl8p-top{flex-direction:column;gap:4px}
+.zl8p > :where(main) > #zl8p-top{flex-direction:column;gap:4px}
 .zl8p [data-name]{text-align:center}
 /* snapshot at 1.15x the Round 8 size (152 -> 175 box, 118 -> 136 photo) */
 .zl8p [data-portrait]{width:175px;height:175px}
@@ -320,31 +331,33 @@ body{margin:0}
 .zl8p [data-snap] [data-photo]{width:136px;height:136px}
 .zl8p [data-tape]{left:54px;top:5px;width:71px;height:22px}
 .zl8p [data-name]{font-size:46px}
-.zl8p [data-tagrow] [data-tagline]{font-size:26px;line-height:1.35;letter-spacing:-.005em;text-align:center;text-wrap:balance}
+/* every text wraps plainly, each line filling before the next starts (text-wrap: balance on the titles, questions and
+   tagline, and pretty on the running text, broke lines early and left a title's first line short) */
+.zl8p [data-tagrow] [data-tagline]{font-size:26px;line-height:1.35;letter-spacing:-.005em;text-align:center}
 /* links: words in the top-right corner (floating over the hero's top padding on the desktop board); on hover or focus
-   a wiggly ink line draws in under the word, left to right. "Download CV" uses the same line. */
+   a wiggly ink line draws in under the word, left to right. */
 .zl8p > header{position:absolute;top:0;left:0;right:0;z-index:2}
 .zl8p [data-icons]{gap:24px;margin-right:0}
 .zl8p [data-ic][data-tx]{width:auto;height:44px;display:inline-flex;align-items:center;border-radius:0;font-size:14px;letter-spacing:.01em;color:var(--text2);white-space:nowrap}
 .zl8p [data-ic][data-tx]::before{content:none}
-.zl8p [data-tx]::after,.zl8p [data-fl]::after{content:"";position:absolute;left:0;right:0;bottom:8px;height:6px;background:var(--accent);
+.zl8p [data-tx]::after{content:"";position:absolute;left:0;right:0;bottom:8px;height:6px;background:var(--accent);
     -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='6'%3E%3Cpath d='M-6 3Q-3 5.2 0 3T6 3T12 3T18 3' fill='none' stroke='%23000' stroke-width='1.4'/%3E%3C/svg%3E") repeat-x 0 0/12px 6px;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='6'%3E%3Cpath d='M-6 3Q-3 5.2 0 3T6 3T12 3T18 3' fill='none' stroke='%23000' stroke-width='1.4'/%3E%3C/svg%3E") repeat-x 0 0/12px 6px;clip-path:inset(0 100% 0 0);transition:clip-path .4s cubic-bezier(.45,.05,.3,1)}
-.zl8p [data-fl]::after{bottom:2px}
-.zl8p [data-fl]{margin-bottom:4px}   /* keeps the line with "Download CV", clear of the copyright */
-.zl8p [data-tx]:hover,.zl8p [data-tx]:focus-visible,.zl8p [data-fl]:hover,.zl8p [data-fl]:focus-visible{color:var(--text);text-decoration:none}
-.zl8p [data-tx]:hover::after,.zl8p [data-tx]:focus-visible::after,.zl8p [data-fl]:hover::after,.zl8p [data-fl]:focus-visible::after{clip-path:inset(0 0 0 0)}
+.zl8p [data-tx]:hover,.zl8p [data-tx]:focus-visible{color:var(--text);text-decoration:none}
+.zl8p [data-tx]:hover::after,.zl8p [data-tx]:focus-visible::after{clip-path:inset(0 0 0 0)}
 .zl8p [data-tx]:focus-visible{outline-offset:2px;border-radius:2px}
-.zl8p[data-motion="off"] :is([data-tx],[data-fl])::after{transition:none}
-@media (prefers-reduced-motion: reduce){.zl8p :is([data-tx],[data-fl])::after{transition:none}}
-/* cards: one fixed size at rest at every window width (Currently 308x294, Papers 227x239: set in the base template).
+.zl8p[data-motion="off"] [data-tx]::after{transition:none}
+@media (prefers-reduced-motion: reduce){.zl8p [data-tx]::after{transition:none}}
+/* cards: the designed size on the desktop board (Currently 308x294, Papers 227x239: set in the base template); below
+   1280px the live page's responsive layer lets them fill the row.
    This artboard shows the desktop behavior, Shelf & Spread: the opened card unfolds its details sideways and its
    siblings fold to spines, so the row keeps its width. Where a row can't hold that (narrow windows), the live page's
    responsive layer switches the shelf to drawers instead (details open under the card's row). */
-/* details: running text is justified (hyphenated where the language is known); headings and author lists stay ragged */
+/* details: running text is justified in the desktop spread only (hyphenated where the language is known); headings and
+   author lists stay ragged */
 .zl8p [data-page] :is([data-body],[data-sum]){text-align:justify;-webkit-hyphens:auto;hyphens:auto;hyphenate-limit-chars:6 3 3}
 /* theme switch: a round card-coloured button with an inked ring; shows the sun in light, the moon in dark */
-.zl8p [data-themesw]{position:absolute;right:18px;bottom:16px;z-index:150;width:40px;height:40px;padding:0;border:0;border-radius:50%;background:var(--card);
-    color:var(--muted);cursor:pointer;box-shadow:var(--shadow);-webkit-tap-highlight-color:transparent;transition:color .2s}
+.zl8p [data-themesw]{position:absolute;right:18px;bottom:16px;z-index:150;width:40px;height:40px;padding:0;border:0;border-radius:50%;background:none;
+    color:var(--muted);cursor:pointer;box-shadow:none;-webkit-tap-highlight-color:transparent;transition:color .2s}
 .zl8p [data-themesw]::before{content:"";position:absolute;inset:-4px;border-radius:50%}
 .zl8p [data-themesw] svg{position:absolute;fill:none;stroke:currentColor;stroke-linecap:round;stroke-linejoin:round;pointer-events:none}
 .zl8p [data-swring]{left:0;top:0;width:100%;height:100%;stroke:var(--rule) !important;stroke-width:1.5;transition:stroke .2s}
@@ -356,15 +369,26 @@ body{margin:0}
 .zl8p[data-theme="system"] [data-sun]{opacity:0;transform:rotate(40deg) scale(.8)}
 .zl8p[data-theme="system"] [data-moon]{opacity:1;transform:none}
 }
-.zl8p [data-themesw]:hover,.zl8p [data-themesw]:focus-visible{color:var(--accent)}
-.zl8p [data-themesw]:hover [data-swring],.zl8p [data-themesw]:focus-visible [data-swring]{stroke:var(--accent-soft) !important}
+.zl8p [data-themesw]:focus-visible{color:var(--accent)}
+.zl8p [data-themesw]:focus-visible [data-swring]{stroke:var(--accent-soft) !important}
+@media (hover: hover){.zl8p [data-themesw]:hover{color:var(--accent)}.zl8p [data-themesw]:hover [data-swring]{stroke:var(--accent-soft) !important}}
 .zl8p [data-themesw]:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
 .zl8p[data-motion="off"] [data-themesw] svg{transition:none}
 @media (prefers-reduced-motion: reduce){.zl8p [data-themesw] svg{transition:none}}
-/* type scale: 46 name · 26 lead (tagline, section labels) · 19 Currently titles + questions · 14 paper titles, card text,
-   links · 12 meta (journal/year, authors, copyright) · 11 small caps (kind + spine labels) */
+/* type scale: 46 name · 26 lead (tagline, section labels) · 19 Currently titles + questions · 15.5 paper titles · 14 card
+   text, links · 12 meta (journal/year, authors, copyright) · 11 small caps (kind + spine labels) */
 .zl8p [data-label] h2{font-size:26px;letter-spacing:-.01em}
 .zl8p [data-label] p{font-size:14px}
+/* the Currently label on the desktop board: the affiliation starts its own line in the narrow label column, so no middle
+   dot is left hanging at a line end (narrower windows set the label beside the heading, where it reads inline, dot and
+   all: responsive layer) */
+.zl8p [data-label] [data-sep]{display:none}
+.zl8p [data-label] [data-l2]{display:block}
+/* one center line down the page: the card column's. The hero, the tagline row (their inline paddings: 72 + 180px on
+   the left) and both dividers are centered on the cards, not on the whole board: their boxes start past the label
+   column (152px + 28px gap), which sits to the left like a note in the margin. Narrower windows keep one line too
+   (responsive layer). */
+.zl8p > :where(main) > [data-tagrow] + [data-div],.zl8p > :where(main) > [data-sec] + [data-div]{padding-left:180px}
 .zl8p [data-kind]{font-size:11px}
 .zl8p [data-spine] em{font-size:11px}
 .zl8p [data-shelf="pub"] [data-spine] em{font-size:12px}
@@ -375,39 +399,48 @@ body{margin:0}
 .zl8p [data-au]{font-size:12px;line-height:1.4}
 .zl8p [data-sum]{font-size:14px;line-height:1.45}
 .zl8p [data-read]{font-size:14px}
-.zl8p [data-fl]{font-size:14px}
 .zl8p [data-copy]{font-size:12px}
 /* card order in the page-load intro */
-.zl8p [data-shelf] > [data-item]{--d:1s}
-.zl8p [data-shelf="now"] > [data-item]:nth-child(2){--d:1.08s}
-.zl8p [data-shelf="now"] > [data-item]:nth-child(3){--d:1.16s}
-.zl8p [data-shelf="pub"] > [data-item]:nth-child(1){--d:1.32s}
-.zl8p [data-shelf="pub"] > [data-item]:nth-child(2){--d:1.4s}
-.zl8p [data-shelf="pub"] > [data-item]:nth-child(3){--d:1.48s}
-.zl8p [data-shelf="pub"] > [data-item]:nth-child(4){--d:1.56s}
-/* page-load intro, strictly serial: 1) margin rule drops from rest, clearly speeding up (quartic ease-in) 0.05-0.7s;
-   2) panels rise in reading order 0.7-2.15s; 3) the two ink dividers draw 2.15-3.3s.
-   Runs once (the live page marks it done so a layout change can't replay it); skipped when motion is off or reduced.
-   Blocks fade, rise and come into focus (blur 6px -> sharp). */
+.zl8p [data-shelf] > [data-item]{--d:.57s}
+.zl8p [data-shelf="now"] > [data-item]:nth-child(2){--d:.63s}
+.zl8p [data-shelf="now"] > [data-item]:nth-child(3){--d:.69s}
+.zl8p [data-shelf="pub"] > [data-item]:nth-child(1){--d:.81s}
+.zl8p [data-shelf="pub"] > [data-item]:nth-child(2){--d:.87s}
+.zl8p [data-shelf="pub"] > [data-item]:nth-child(3){--d:.93s}
+.zl8p [data-shelf="pub"] > [data-item]:nth-child(4){--d:.99s}
+/* page-load intro, in serial order, each step overlapping the end of the one before: 1) margin rule drops from rest,
+   clearly speeding up (quartic ease-in) 0.05-0.5s; 2) panels rise in reading order 0.35-1.65s; 3) the two ink dividers
+   draw 1.35-2.15s. The card drawings hold their pose while they rise and start moving once the intro is done.
+   Runs once (the live page marks it running, then done, so a layout change can't replay it; the hold is keyed on
+   "running", so the artboards, which never mark it, keep their drawings moving); skipped when motion is off or reduced.
+   Blocks fade, rise and come into focus (blur 3px -> sharp). */
 @keyframes zl8p-rule{from{transform:scaleY(0)}to{transform:scaleY(1)}}
-@keyframes zl8p-rise{from{opacity:0;translate:0 10px;filter:blur(6px)}to{opacity:1;translate:0 0;filter:none}}   /* ends on filter:none: no lasting filter */
+@keyframes zl8p-rise{from{opacity:0;translate:0 10px;filter:blur(3px)}to{opacity:1;translate:0 0;filter:none}}   /* ends on filter:none: no lasting filter */
 @media (prefers-reduced-motion: no-preference){
-.zl8p[data-motion="on"]:not([data-intro="done"]) > [data-margin]{transform-origin:50% 0;animation:zl8p-rule .65s cubic-bezier(.5,0,.75,0) .05s both}
-.zl8p[data-motion="on"]:not([data-intro="done"]) > #zl8p-top,.zl8p[data-motion="on"]:not([data-intro="done"]) > header{animation:zl8p-rise .7s var(--ease) 0.7s both}
-.zl8p[data-motion="on"]:not([data-intro="done"]) > [data-tagrow]{animation:zl8p-rise .7s var(--ease) 0.82s both}
-.zl8p[data-motion="on"]:not([data-intro="done"]) [data-label]{animation:zl8p-rise .7s var(--ease) 0.94s both}
-.zl8p[data-motion="on"]:not([data-intro="done"]) [data-shelf] > [data-item]{animation:zl8p-rise .7s var(--ease) var(--d) both}
-.zl8p[data-motion="on"]:not([data-intro="done"]) section[aria-labelledby="zl8p-papers"] [data-label]{animation-delay:1.26s}
-.zl8p[data-motion="on"]:not([data-intro="done"]) > footer,.zl8p[data-motion="on"]:not([data-intro="done"]) > [data-themesw]{animation:zl8p-rise .7s var(--ease) 1.65s both}
-.zl8p[data-motion="on"] [data-div] [data-draw]{animation-duration:1s;animation-delay:2.15s}
-.zl8p[data-motion="on"] section[aria-labelledby="zl8p-now"] ~ [data-div] [data-draw]{animation-delay:2.3s}
+.zl8p[data-motion="on"]:not([data-intro="done"]) > [data-margin]{transform-origin:50% 0;animation:zl8p-rule .45s cubic-bezier(.5,0,.75,0) .05s both}
+.zl8p[data-motion="on"]:not([data-intro="done"]) > :where(main) > #zl8p-top,.zl8p[data-motion="on"]:not([data-intro="done"]) > header{animation:zl8p-rise .6s var(--ease) .35s both}
+.zl8p[data-motion="on"]:not([data-intro="done"]) > :where(main) > [data-tagrow]{animation:zl8p-rise .6s var(--ease) .43s both}
+.zl8p[data-motion="on"]:not([data-intro="done"]) [data-label]{animation:zl8p-rise .6s var(--ease) .51s both}
+.zl8p[data-motion="on"]:not([data-intro="done"]) [data-shelf] > [data-item]{animation:zl8p-rise .6s var(--ease) var(--d) both}
+.zl8p[data-motion="on"]:not([data-intro="done"]) section[aria-labelledby="zl8p-papers"] [data-label]{animation-delay:.75s}
+.zl8p[data-motion="on"]:not([data-intro="done"]) > footer,.zl8p[data-motion="on"]:not([data-intro="done"]) > [data-themesw]{animation:zl8p-rise .6s var(--ease) 1.05s both}
+.zl8p[data-intro="run"] [data-anim]{animation-play-state:paused !important}
+.zl8p[data-motion="on"] [data-div] [data-draw]{animation-duration:.7s;animation-delay:1.35s}
+.zl8p[data-motion="on"] section[aria-labelledby="zl8p-now"] ~ [data-div] [data-draw]{animation-delay:1.45s}
 }
+/* the placeholder drawings' motion (template_drawings.py) */
+@keyframes zl8p-tpl-search{0%,100%{transform:translate(0,0)}25%{transform:translate(-34px,9px)}50%{transform:translate(0,0)}75%{transform:translate(30px,-7px)}}@keyframes zl8p-tpl-found{0%,42%,58%,100%{transform:scale(1)}50%{transform:scale(1.5)}}@keyframes zl8p-tpl-draw{0%,62%{stroke-dashoffset:0;opacity:1}70%{stroke-dashoffset:0;opacity:0}71%{stroke-dashoffset:1;opacity:0}72%{stroke-dashoffset:1;opacity:1}100%{stroke-dashoffset:0;opacity:1}}@keyframes zl8p-tpl-blink{0%,100%{opacity:1}50%{opacity:.3}}@keyframes zl8p-tpl-nudge{0%,100%{transform:translateX(0)}50%{transform:translateX(3px)}}@keyframes zl8p-tpl-pop{0%,20%,100%{transform:scale(1)}10%{transform:scale(1.45)}}@keyframes zl8p-tpl-type{0%,66%{transform:scaleX(1);opacity:1}72%{transform:scaleX(1);opacity:0}74%{transform:scaleX(0);opacity:1}94%,100%{transform:scaleX(1);opacity:1}}@keyframes zl8p-tpl-shift{0%,100%{transform:translate(0,0)}50%{transform:translate(3px,-2px)}}@keyframes zl8p-tpl-breathe{0%,100%{transform:scaleY(1)}50%{transform:scaleY(.84)}}@keyframes zl8p-tpl-jostle{0%,100%{transform:translate(0,0) rotate(0)}30%{transform:translate(.9px,-.7px) rotate(2.2deg)}65%{transform:translate(-.7px,.6px) rotate(-1.6deg)}}
+/* papers: ink and labels on the desktop board (round 10; see build_r9.py) */
+.zl8p [data-shelf="pub"]{--ink-k:1.28;--lab-k:1.18}
 </style>
-<style>html{background-color:#F9F6EF;color-scheme:light}@media (prefers-color-scheme: dark){html:not([data-theme="light"]){background-color:#171614;color-scheme:dark}}html[data-theme="dark"]{background-color:#171614;color-scheme:dark}html.zl-vt-theme *{transition:none !important}body{margin:0}.zl8p{margin:0 auto;height:auto !important;min-height:100vh}.zl8p > footer{margin-top:auto}html{background-image:linear-gradient(rgba(0,99,196,.075) 1px,transparent 1px),linear-gradient(90deg,rgba(0,99,196,.075) 1px,transparent 1px);background-size:24px 24px;background-position:center 11px;background-attachment:fixed}@media (prefers-color-scheme: dark){html:not([data-theme="light"]){background-image:linear-gradient(rgba(160,210,225,.055) 1px,transparent 1px),linear-gradient(90deg,rgba(160,210,225,.055) 1px,transparent 1px)}}html[data-theme="dark"]{background-image:linear-gradient(rgba(160,210,225,.055) 1px,transparent 1px),linear-gradient(90deg,rgba(160,210,225,.055) 1px,transparent 1px)}.zl8p{background:transparent !important}.zl8p [data-grid]{display:none}</style>
+<style>html{background-color:#F9F6EF;color-scheme:light}@media (prefers-color-scheme: dark){html:not([data-theme="light"]){background-color:#171614;color-scheme:dark}}html[data-theme="dark"]{background-color:#171614;color-scheme:dark}html.zl-vt-theme *{transition:none !important}body{margin:0}.zl8p{margin:0 auto;height:auto !important;min-height:100vh}body{position:relative;background-color:#F9F6EF}[data-paper]{position:absolute;inset:0;z-index:0;pointer-events:none;background-size:24px 24px;background-position:calc(max(0px,(100% + 24px) / 2 - 730px) - 1px) 11px;background-position:calc(round(down,max(0px,(100% + 24px) / 2 - 730px),1px) - 1px) 11px;background-image:linear-gradient(rgba(0,99,196,.075) 1px,transparent 1px),linear-gradient(90deg,rgba(0,99,196,.075) 1px,transparent 1px)}@media (prefers-color-scheme: dark){html:not([data-theme="light"]) body{background-color:#171614}html:not([data-theme="light"]) [data-paper]{background-image:linear-gradient(rgba(160,210,225,.055) 1px,transparent 1px),linear-gradient(90deg,rgba(160,210,225,.055) 1px,transparent 1px)}}html[data-theme="dark"] body{background-color:#171614}html[data-theme="dark"] [data-paper]{background-image:linear-gradient(rgba(160,210,225,.055) 1px,transparent 1px),linear-gradient(90deg,rgba(160,210,225,.055) 1px,transparent 1px)}.zl8p{background:transparent !important}.zl8p [data-grid]{display:none}[data-paper] > div{position:absolute;inset:0;opacity:1}[data-paper] i{position:absolute;inset:0;display:block;-webkit-mask-repeat:repeat;mask-repeat:repeat}[data-pm]{background-image:linear-gradient(#9a7640,#9a7640);-webkit-mask-image:url(assets/tex-mottle.webp);mask-image:url(assets/tex-mottle.webp);-webkit-mask-size:1024px 1024px;mask-size:1024px 1024px}[data-pt]{background-image:linear-gradient(#5c4424,#5c4424);-webkit-mask-image:url(assets/tex-tooth.webp);mask-image:url(assets/tex-tooth.webp);-webkit-mask-size:256px 256px;mask-size:256px 256px}@media (prefers-color-scheme: dark){html:not([data-theme="light"]) [data-paper] > div{opacity:.5}html:not([data-theme="light"]) [data-pm]{background-image:linear-gradient(#000,#000)}html:not([data-theme="light"]) [data-pt]{background-image:linear-gradient(#f3e6cc,#f3e6cc)}}html[data-theme="dark"] [data-paper] > div{opacity:.5}html[data-theme="dark"] [data-pm]{background-image:linear-gradient(#000,#000)}html[data-theme="dark"] [data-pt]{background-image:linear-gradient(#f3e6cc,#f3e6cc)}.zl8p [data-tex]{display:none}</style>
 <style>/* Notebook page: responsive layer for the live page (the canvas artboard is the 1280px desktop reference).
    `.R` is replaced with the artboard's root class at export time.
-   Cards never change size at rest (Currently 308x294, Papers 227x239 — set in the page CSS): windows only change how
-   many cards sit in a row and the spacing around them.
+   The hero, the tagline row, the dividers and both sections are the page's <main> (display:contents, so they stay items
+   of the root's flex column): rules that reach them as the root's children step through it with `> :where(main) >`,
+   which adds nothing to a selector's specificity.
+   Cards keep their designed size on the desktop board (>= 1280px: Currently 308x294, Papers 227x239 — set in the page
+   CSS). Below 1280px they fill the row: the cards in a row share its width (round 10, at the end of this file).
    Opening a card, chosen by the room the shelf has (a container query on its section, so scrollbars count):
      row holds every card of the shelf (>= 956px: 3 x 308 + 2 x 16 = 4 x 227 + 3 x 16)
                spread   the card unfolds its details sideways and its siblings fold to spines (the artboard's behavior,
@@ -415,8 +448,8 @@ body{margin:0}
      narrower  drawer   the card stays put and its details open in a drawer under the card's row (animated by a View
                         Transition in the page script)
    Page layout tiers:
-     >= 1280px  desktop  designed layout, labels in the left column (72px side margins keep all text clear of the
-                         margin rule at 47px)
+     >= 1280px  desktop  designed layout, labels in the left column (72px side margins, 64.5px beside a classic
+                         scrollbar, keep all text clear of the margin rule at 47px)
      700-1279px tablet   labels above the cards
      < 700px    phone    hero stacked; the drawer uses the full content width */
 
@@ -424,41 +457,84 @@ body{margin:0}
 .zl8p{width:100% !important;max-width:1280px}
 .zl8p [data-sec]{container:zl-sec / inline-size}
 .zl8p [data-face]{-webkit-tap-highlight-color:transparent}
-/* theme switch: pinned to the window's bottom-right corner, clear of the iOS home indicator (as on the current site) */
-.zl8p [data-themesw]{position:fixed;right:max(16px,env(safe-area-inset-right));bottom:max(16px,env(safe-area-inset-bottom))}
-@media (max-width:699px){ .zl8p [data-themesw]{width:36px;height:36px;right:max(12px,env(safe-area-inset-right));bottom:max(12px,env(safe-area-inset-bottom))} }
+/* theme switch: pinned to the window's bottom-right corner, clear of the iOS home indicator (as on the current site).
+   At the end of the page it sits on the copyright line, its sun or moon level with the ©: the footer's bottom padding
+   reaches up to the switch's middle (--sw-mid above the window's bottom), and the copyright ends there, at the middle
+   of its capitals (.625em above the bottom of its 1em line in Newsreader). Where the page is shorter than the window,
+   the footer ends above the window's bottom, and the page script lifts the switch by that gap (--sw-lift). */
+.zl8p{--sw-size:40px;--sw-inset:max(16px,env(safe-area-inset-bottom));--sw-mid:calc(var(--sw-inset) + var(--sw-size) / 2)}
+.zl8p [data-themesw]{position:fixed;right:max(16px,env(safe-area-inset-right));bottom:calc(var(--sw-inset) + var(--sw-lift,0px));width:var(--sw-size);height:var(--sw-size)}
+@media (max-width:699px){
+  .zl8p{--sw-size:36px;--sw-inset:max(12px,env(safe-area-inset-bottom))}
+  .zl8p [data-themesw]{right:max(12px,env(safe-area-inset-right))}
+}
+.zl8p > footer{padding-bottom:var(--sw-mid) !important}
+.zl8p [data-copy]{margin-bottom:-.625em}
 
+/* desktop board: the content (152px label column + 28px gap + 956px of cards = 1136px) is centered in the width the
+   page really has, so both side margins match and the link row ends flush with the cards: 72px in a 1280px window,
+   64.5px where a classic scrollbar (Windows) takes 15px of a 1280-1294px window. The hero's top room is the same at
+   every desktop height (the short-window steps below only tighten it). */
+@media (min-width:1280px){
+  .zl8p > header,.zl8p > :where(main) > #zl8p-top,.zl8p > :where(main) > [data-tagrow],.zl8p > :where(main) > [data-sec],.zl8p > footer{
+      padding-left:max(57px,calc((100% - 1136px) / 2)) !important;padding-right:max(57px,calc((100% - 1136px) / 2)) !important}
+  .zl8p > :where(main) > #zl8p-top{padding-top:20px !important}
+  /* one center line: the hero and the tagline row are centered on the card column (their boxes start past the 152px
+     label column and its 28px gap), like both dividers (page CSS) */
+  .zl8p > :where(main) > #zl8p-top,.zl8p > :where(main) > [data-tagrow]{padding-left:calc(max(57px,calc((100% - 1136px) / 2)) + 180px) !important}
+  /* ... and that line is the window's center wherever the window is wide enough (1460px and up): the page's left edge
+     sits at half the window less 730px (72px padding + 152px labels + 28px gap + half of the 956px card row), so the
+     labels hang to the left like notes in the margin; narrower desktop windows start the page at their left edge, as
+     close to centered as the label column allows. Whole pixels, like the paper grid's phase (export_preview.py). */
+  .zl8p{margin-left:max(0px,calc(50% - 730px));margin-left:max(0px,round(down,50% - 730px,1px));margin-right:auto}
+  /* a heading enlarged by a text-only zoom breaks inside the 152px label column instead of running into the cards
+     (at 100% every word fits, so nothing changes) */
+  .zl8p [data-label] h2{overflow-wrap:break-word}
+}
 /* shorter desktop windows (laptops, 1080p monitors): tighter vertical rhythm so more of the page fits */
 @media (min-width:1280px) and (max-height:1000px){
-  .zl8p > #zl8p-top{padding-top:20px !important}
-  .zl8p > [data-tagrow]{padding-top:12px !important}
-  .zl8p > [data-div],.zl8p > [data-sec]{padding-top:18px !important}
+  .zl8p > :where(main) > [data-tagrow]{padding-top:12px !important}
+  .zl8p > :where(main) > [data-div],.zl8p > :where(main) > [data-sec]{padding-top:18px !important}
   .zl8p > footer{padding-top:14px !important}
+}
+/* short laptop windows (1366x657, 1280x680 once the browser's toolbars are in): the photo shrinks and the gaps
+   tighten (the name and tagline keep their sizes), so the whole Currently row, drawings and card titles, is in view
+   without scrolling */
+@media (min-width:1280px) and (max-height:760px){
+  .zl8p > :where(main) > #zl8p-top{padding-top:4px !important;gap:22px !important}
+  .zl8p [data-portrait]{zoom:.78}
+  .zl8p > :where(main) > [data-tagrow]{padding-top:8px !important}
+  .zl8p > :where(main) > [data-div],.zl8p > :where(main) > [data-sec]{padding-top:14px !important}
 }
 
 /* ---------- tablet + phone ---------- */
 @media (max-width:1279px){
   .zl8p > header{position:relative;height:auto !important;padding:10px 40px 0 64px !important}
-  .zl8p > #zl8p-top{padding:6px 40px 0 !important}
-  .zl8p > [data-tagrow]{padding:14px 40px 0 !important}
+  .zl8p > :where(main) > #zl8p-top{padding:6px 40px 0 64px !important}   /* the sections' side paddings: one center line with the cards */
+  .zl8p > :where(main) > [data-tagrow]{padding:14px 40px 0 64px !important}
   .zl8p [data-sec]{grid-template-columns:minmax(0,1fr);row-gap:14px;padding:0 40px 0 64px}
-  .zl8p [data-label]{flex-direction:row;align-items:baseline;gap:14px;padding-top:0}
-  .zl8p > footer{padding:24px 40px 18px 64px !important}
+  .zl8p [data-label]{flex-direction:row;flex-wrap:wrap;align-items:baseline;gap:2px 14px;padding-top:0}
+  .zl8p [data-label] h2{flex:none}   /* the heading keeps one line; a subtitle that no longer fits beside it drops below */
+  /* 24px above the copyright line, so at the bottom of the page the theme switch on that line (16-56px from the
+     window's bottom) is clear of the last card's corner */
+  .zl8p > footer{padding:24px 40px var(--sw-mid) 64px !important}
 }
 
 /* ---------- phone ---------- */
 @media (max-width:699px){
   .zl8p [data-margin]{left:10px}
-  .zl8p > header{padding:6px 12px 0 24px !important}
-  .zl8p [data-icons]{flex-wrap:wrap;justify-content:flex-end;column-gap:12px}
+  /* the link row ends where the cards do (16px from the edge); the tagline is centered on the page's axis, with the
+     photo, the name and the first divider */
+  .zl8p > header{padding:6px 16px 0 24px !important}
+  .zl8p [data-icons]{flex-wrap:wrap;justify-content:flex-end;column-gap:12px;row-gap:0}   /* if the links ever wrap, the second row sits right under the first */
   .zl8p [data-ic][data-tx]{height:36px;font-size:13px}
   .zl8p [data-tx]::after{bottom:4px}
-  .zl8p > #zl8p-top{padding:4px 20px 0 !important}
+  .zl8p > :where(main) > #zl8p-top{padding:4px 10px 0 22px !important}   /* centered 6px right, on the cards (28 - 16px), with room for the name */
   .zl8p [data-name]{font-size:34px}
-  .zl8p > [data-tagrow]{padding:12px 20px 0 28px !important}
+  .zl8p > :where(main) > [data-tagrow]{padding:12px 10px 0 22px !important}
   .zl8p [data-tagrow] [data-tagline]{font-size:19px}
   .zl8p [data-sec]{padding:0 16px 0 28px;row-gap:12px}
-  .zl8p > footer{padding:22px 16px 18px 28px !important}
+  .zl8p > footer{padding:22px 16px var(--sw-mid) 28px !important}
 }
 /* narrow phones: "Scholar" alone keeps the links on one row */
 @media (max-width:379px){ .zl8p [data-tx] [data-long]{display:none} }
@@ -466,11 +542,14 @@ body{margin:0}
 /* ---------- drawer mode: the shelf's row can't hold every card ----------
    Each <li> is display:contents, so its face (the card) and its details are both items of the shelf grid; the page
    script puts the open card's details in the grid row right under the card's row. Siblings of the open card stay
-   ordinary cards (the page script never folds them to spines here). */
+   ordinary cards (the page script never folds them to spines here). The cards fill the row: --cols cards share its
+   width, and the cards of a row stretch to the tallest one. */
 @container zl-sec (width < 956px){
-  .zl8p [data-shelf]{display:grid;height:auto;gap:var(--gap);align-items:start;grid-template-columns:repeat(auto-fill,var(--face))}
+  .zl8p [data-shelf]{display:grid;height:auto;gap:var(--gap);align-items:stretch;grid-template-columns:repeat(var(--cols),minmax(0,1fr))}
+  .zl8p [data-shelf="now"]{--cols:3}
+  .zl8p [data-shelf="pub"]{--cols:4}
   .zl8p [data-item],.zl8p [data-item][data-side],.zl8p [data-item][data-state]{display:contents}
-  .zl8p [data-h]{position:relative;width:auto;height:var(--rowh);border:1.5px solid var(--rule);border-radius:3px;background:var(--card);box-shadow:var(--shadow);
+  .zl8p [data-h]{position:relative;width:auto;height:auto;border:1.5px solid var(--rule);border-radius:3px;background:var(--card);box-shadow:var(--shadow);
       overflow:hidden;overflow:clip;transition:border-color .3s,box-shadow .3s,transform .3s var(--ease)}
   .zl8p [data-state="open"] [data-h]{border-color:var(--accent-soft);box-shadow:var(--shadow-lg)}
   .zl8p [data-spine]{display:none}
@@ -481,19 +560,37 @@ body{margin:0}
   .zl8p [data-item][data-state="open"] [data-page],
   .zl8p [data-side="l"][data-state="open"] [data-page]{grid-column:1 / -1;grid-row:2;width:auto;min-height:0;visibility:visible;opacity:1;transform:none;
       border:1.5px solid var(--accent-soft);border-radius:3px;background:var(--card);box-shadow:var(--shadow-lg);padding:18px 26px 20px}
-  .zl8p [data-page] [data-body],.zl8p [data-page] [data-sum],.zl8p [data-page] [data-au]{max-width:72ch}
+  /* details text: a size up from the desktop spread's, ragged, in a comfortable measure (hyphenation stays on). The
+     heading leads it and shares its column (about 496px): a paper's title a size above its summary, the authors a step
+     below it, and the question (19px) in the same measure */
+  .zl8p [data-page] :is([data-body],[data-sum]){font-size:15.5px;line-height:1.55;max-width:32em;text-align:start}
+  .zl8p [data-page] [data-ft]{font-size:17px;line-height:1.25;max-width:29em}
+  .zl8p [data-page] [data-q]{max-width:26em}
+  .zl8p [data-page] [data-au]{font-size:13px;max-width:38em}
   /* the load intro rises the card itself (the <li> has no box here) */
   .zl8p [data-shelf] > [data-item] > [data-h]{animation:inherit}
-  .zl8p[data-motion="off"] [data-h]{transition:none}
+  /* still page: no hover lift either (as in the spread) */
+  .zl8p[data-motion="off"] [data-h]{transition:none;transform:none !important}
   @media (prefers-reduced-motion: reduce){ .zl8p [data-h]{transition:none} }
   @media (hover:hover) and (pointer:fine){
     .zl8p [data-item]:not([data-state="open"]) [data-h]:hover{transform:translateY(-3px);border-color:var(--accent-soft);box-shadow:var(--shadow-lg)}
     .zl8p [data-item]:not([data-state="open"]) [data-h]:hover [data-chev]{opacity:1;transform:translateX(2px)}
   }
 }
-/* when only one paper fits per row (< 2 x 227 + 16 = 470px, i.e. phones), papers take the Currently card size */
+/* cards per row in drawer mode: Currently 3, or 1 below 580px (a row of 2 would leave the third card alone); Papers 4,
+   2 below 884px (four papers need 209px each to keep the longest journal line on one line), 1 below 470px */
+@container zl-sec (width < 884px){
+  .zl8p [data-shelf="pub"]{--cols:2}
+  /* papers two or one to a row are at least as wide as the desktop board's 227px: their captions take the Currently
+     cards' inset (the tight one is for the four-up rows) */
+  .zl8p [data-shelf="pub"] [data-cap]{margin:0 12px;padding:10px 2px 21px}
+}
+@container zl-sec (width < 580px){ .zl8p [data-shelf="now"]{--cols:1} }
+/* one paper per row (phones): the papers are as wide as the Currently cards, and their titles and journal lines grow */
 @container zl-sec (width < 470px){
-  .zl8p [data-shelf="pub"]{--face:308px;--rowh:294px}
+  .zl8p [data-shelf="pub"]{--cols:1}
+  .zl8p [data-shelf="pub"] [data-t]{font-size:17px;line-height:1.2}
+  .zl8p [data-shelf="pub"] [data-jy]{font-size:13px}
 }
 /* phone: the drawer uses the full content width */
 @container zl-sec (width < 956px){
@@ -509,13 +606,16 @@ body{margin:0}
    appears unrolls downward and one that goes rolls back up, both in step with the blocks below; when the open card
    changes within a row the drawer's content cross-fades in place. (Names are inert while no transition runs.) */
 .zl8p > header{view-transition-name:zl-links}
-.zl8p > #zl8p-top{view-transition-name:zl-hero}
-.zl8p > [data-tagrow]{view-transition-name:zl-tag}
-.zl8p > [data-tagrow] + [data-div]{view-transition-name:zl-div-1}
+.zl8p > :where(main) > #zl8p-top{view-transition-name:zl-hero}
+.zl8p > :where(main) > [data-tagrow]{view-transition-name:zl-tag}
+.zl8p > :where(main) > [data-tagrow] + [data-div]{view-transition-name:zl-div-1}
 .zl8p section[aria-labelledby="zl8p-now"] [data-label]{view-transition-name:zl-l-now}
-.zl8p > section[aria-labelledby="zl8p-now"] + [data-div]{view-transition-name:zl-div-2}
+.zl8p > :where(main) > section[aria-labelledby="zl8p-now"] + [data-div]{view-transition-name:zl-div-2}
 .zl8p section[aria-labelledby="zl8p-papers"] [data-label]{view-transition-name:zl-l-pub}
 .zl8p > footer{view-transition-name:zl-foot}
+/* the theme switch is its own group: fixed and on top (z-index 150), it stays above the cards and drawers it floats
+   over on phones and tablets (in the root snapshot it went under their groups until the transition ended) */
+.zl8p [data-themesw]{view-transition-name:zl-sw}
 .zl8p [data-k="now1"] [data-h]{view-transition-name:zl-f-now1}
 .zl8p [data-k="now2"] [data-h]{view-transition-name:zl-f-now2}
 .zl8p [data-k="now3"] [data-h]{view-transition-name:zl-f-now3}
@@ -532,48 +632,158 @@ body{margin:0}
     height:0;min-height:0;padding:0;border:0;box-shadow:none;overflow:hidden;visibility:visible;opacity:1;transform:none}
 ::view-transition-group(*){animation-duration:.42s;animation-timing-function:cubic-bezier(.2,.7,.2,1)}
 ::view-transition-image-pair(*.zl-drawer){overflow:clip}
+/* the card faces keep their size in a drawer transition, so they only move: no cross-fade, which laid a frozen snapshot
+   over the live face and doubled its moving cartoon (the Biology trace showed twice). The theme switch still fades them. */
+.zl8p [data-h]{view-transition-class:zl-face}
+html:not(.zl-vt-theme)::view-transition-old(*.zl-face){display:none}
+html:not(.zl-vt-theme)::view-transition-new(*.zl-face){animation:none}
+
+/* while the page is still (reduced motion: the root's data-motion="off"), nothing on it transitions (the cards already
+   don't; hover colors change at once too): a transition still running as a card opened or closed (e.g. a link's hover
+   color fading as the pointer left it) left Chromium unable to start the next View Transition, freezing the page until
+   the transition timed out 4 s later */
+.zl8p[data-motion="off"] *,.zl8p[data-motion="off"] ::before,.zl8p[data-motion="off"] ::after{transition:none !important}
+/* theme switch: the icon answers the pointer and keyboard focus. Light: the sun's disc takes a gold wash and its rays
+   turn and lengthen. Dark: the moon takes a moonlight-gold wash and tips back, and its star twinkles. Washes only where the
+   device really hovers (a tap would leave them stuck on phones) or on keyboard focus; movement only when motion is on
+   and the visitor has not asked for reduced motion. The paths turn about their own drawing's centre. */
+.zl8p [data-sun] path,.zl8p [data-moon] path{transform-box:view-box;transform-origin:12px 12px;transition:transform .55s var(--ease),fill .3s ease}
+.zl8p [data-moon] path:nth-child(2){transform-origin:17.1px 5.6px}
+/* the wash: the drawings' light gold (--sk-gold); in dark mode, where that token is the drawings' muted ochre, a pale
+   moonlight gold of its own */
+.zl8p[data-theme="dark"]{--sw-wash:#E8CD8A}
+@media (prefers-color-scheme:dark){ .zl8p[data-theme="system"]{--sw-wash:#E8CD8A} }
+.zl8p [data-themesw]:focus-visible [data-sun] path:first-child{fill:var(--sw-wash,var(--sk-gold))}
+.zl8p [data-themesw]:focus-visible [data-moon] path:first-child{fill:var(--sw-wash,var(--sk-gold))}
+@media (hover:hover){
+  .zl8p [data-themesw]:hover [data-sun] path:first-child{fill:var(--sw-wash,var(--sk-gold))}
+  .zl8p [data-themesw]:hover [data-moon] path:first-child{fill:var(--sw-wash,var(--sk-gold))}
+}
+@media (prefers-reduced-motion:no-preference){
+  .zl8p[data-motion="on"] [data-themesw]:focus-visible [data-sun] path:nth-child(2){transform:rotate(45deg) scale(1.14)}
+  .zl8p[data-motion="on"] [data-themesw]:focus-visible [data-moon] path:first-child{transform:rotate(-16deg)}
+  .zl8p[data-motion="on"] [data-themesw]:focus-visible [data-moon] path:nth-child(2){animation:zl-sw-twinkle 1.4s ease-in-out infinite}
+}
+@media (hover:hover) and (prefers-reduced-motion:no-preference){
+  .zl8p[data-motion="on"] [data-themesw]:hover [data-sun] path:nth-child(2){transform:rotate(45deg) scale(1.14)}
+  .zl8p[data-motion="on"] [data-themesw]:hover [data-moon] path:first-child{transform:rotate(-16deg)}
+  .zl8p[data-motion="on"] [data-themesw]:hover [data-moon] path:nth-child(2){animation:zl-sw-twinkle 1.4s ease-in-out infinite}
+}
+@keyframes zl-sw-twinkle{0%,100%{transform:scale(1) rotate(0)}50%{transform:scale(1.5) rotate(45deg)}}
+
+/* card kickers (✱ BIOLOGY →): centre the asterisk and the arrow on the small caps. Flex centres the icons' boxes on
+   the line box, but Newsreader's capitals sit ~1.5 px above its centre, so both icons are lifted by that much. The
+   arrow's box is 11 px like the asterisk's (was 12 px) so both land on the same sub-pixel phase: at 12 px the arrow
+   rendered 1 px higher or lower depending on where the text above made the row fall. */
+.zl8p [data-kind]>svg{translate:0 -1.5px}
+.zl8p [data-kind] [data-chev]{translate:0 -1.5px}
+.zl8p [data-kind] [data-chev] svg{width:11px;height:11px}
+
+/* ---------- round 10: header, hero, label ---------- */
+/* the Currently label and the dividers are set for the desktop board in the page CSS: the affiliation starts its own
+   line in the 152px label column, and both dividers are centered over the cards (the page's one center line).
+   Narrower windows set the label beside the heading, where it reads inline again, middle dot and all; the cards span
+   the section's content box there, so each divider's box starts where the difference of the section's side paddings
+   puts its center on theirs (tablet 64 - 40px, phone 28 - 16px), like the hero and tagline rows above. */
+@media (max-width:1279px){
+  .zl8p [data-label] :is([data-sep],[data-l2]){display:inline}
+  .zl8p > :where(main) > [data-tagrow] + [data-div],.zl8p > :where(main) > [data-sec] + [data-div]{padding-left:24px}
+}
+@media (max-width:699px){ .zl8p > :where(main) > [data-tagrow] + [data-div],.zl8p > :where(main) > [data-sec] + [data-div]{padding-left:12px} }
+
+/* ---------- round 10: fluid cards, paper type and ink ---------- */
+/* side-opening range below the desktop board (sections 956-1175px wide, i.e. windows 1060-1279px): the cards fill the
+   row. A spread (the open card, its siblings' spines and the gaps) is n faces + (n - 1) gaps wide, so it fills the row
+   too. 100cqw is the section's content width, which the shelf spans (its nearest container: the shelf itself only
+   becomes one on phones). Row height: the drawing (360:225 over the face) plus the caption, as on the desktop board
+   (the caption's part in em, 102px / 97px at the shelf's 16px, so it grows with a text-only zoom).
+   The spread's page grows with the faces, so its running text keeps the desktop board's measure (36em, about 80
+   characters a line; justified, as there) and the author list stops at the same right edge; the page's rest stays blank. */
+@media (max-width:1279px){
+  @container zl-sec (width >= 956px){
+    .zl8p [data-shelf="now"]{--face:calc((100cqw - 2*var(--gap))/3);--rowh:calc(var(--face)*.625 + 102em / 16)}
+    .zl8p [data-shelf="pub"]{--face:calc((100cqw - 3*var(--gap))/4);--rowh:calc(var(--face)*.625 + 97em / 16)}
+    .zl8p [data-page] :is([data-body],[data-sum]){max-width:36em}
+    .zl8p [data-page] [data-au]{max-width:42em}
+  }
+}
+/* two papers per row (470-883px): a paper card is much wider than tall there, so its drawing keeps a set height of 140px
+   (centered by the viewBox's default fit) instead of growing with the card and outweighing the Currently cards; where
+   those sit three to a row and their drawings are shorter than that (sections under 713px), the papers' drawings match
+   theirs (a Currently card's drawing: its inner width, (100cqw - 2 gaps of 16px) / 3 - 3px, times 225/360) */
+@container zl-sec (470px <= width < 884px){
+  .zl8p [data-shelf="pub"] [data-faceinner]>svg{aspect-ratio:auto;height:140px}
+}
+@container zl-sec (580px <= width < 884px){
+  .zl8p [data-shelf="pub"] [data-faceinner]>svg{height:min(140px,((100cqw - 32px)/3 - 3px)*.625)}
+}
+/* paper drawings' ink: stroke widths x --ink-k, label sizes x --lab-k (build_r9.py's ink pass; the desktop board's
+   1.28 / 1.18 are set in the page CSS). Wherever papers sit four to a row (the desktop board, the spread range, the
+   widest drawers) they draw at .73 of the Currently cards' scale, so the desktop values hold there. Beside three
+   Currently cards to a row the two-up papers draw at 1 to .8 of their scale: a little extra ink, and labels a size up
+   so they stay 10px or more on the smallest drawings. Beside one Currently card to a row (470-579px) the Currently
+   drawings grow to 1.3-1.6x while the papers stay at .62x: the papers take as much extra ink as their small details
+   allow (1.45; 1.6 clogged them and closed the dashes), which still leaves them lighter (.55-.7 of the Currently
+   ink). One to a row they draw at the Currently cards' own scale. */
+@container zl-sec (470px <= width < 580px){ .zl8p [data-shelf="pub"]{--ink-k:1.45} }
+@container zl-sec (580px <= width < 884px){ .zl8p [data-shelf="pub"]{--ink-k:1.1;--lab-k:1.25} }
+@container zl-sec (width < 470px){ .zl8p [data-shelf="pub"]{--ink-k:1;--lab-k:1} }
+/* Currently drawings' ink (the same pass): three to a row in a drawer (sections 580-955px) the cards are 183-308px wide
+   against the desktop board's 308, so the drawings draw at .6 to 1 of their desktop scale and their lines thinned
+   toward hairlines. Below .9 of it (sections under 864px) they take extra ink in two steps, which brings them back to
+   about .8-1 of their desktop weight and keeps them a little heavier than the papers beside them, as on the desktop
+   board; one to a row they are wider than on the desktop board and draw as designed. */
+@container zl-sec (580px <= width < 700px){ .zl8p [data-shelf="now"]{--ink-k:1.35} }
+@container zl-sec (700px <= width < 864px){ .zl8p [data-shelf="now"]{--ink-k:1.2} }
+/* Currently titles, a step down from 19px where the cards are under 277px wide (19px titles need that to keep to two
+   lines): three to a row (sections 580-863px, i.e. windows about 624-967px) 17.5px, so no title runs to four lines and
+   more of them keep to two; one to a row on the narrowest phones (sections under 277px: a 320px window) 18.5px */
+@container zl-sec (580px <= width < 864px){ .zl8p [data-shelf="now"] [data-t]{font-size:17.5px} }
+@container zl-sec (width < 277px){ .zl8p [data-shelf="now"] [data-t]{font-size:18.5px} }
 </style>
 </head>
 <body>
-<div class="zl8p" data-theme="system" data-accent="blue" data-motion="on" style="width:1280px;height:1113px;box-sizing:border-box;position:relative;overflow:hidden;display:flex;flex-direction:column;background:var(--bg);color:var(--text);font-family:'Newsreader',Georgia,serif"><script>(function(r){var t=document.documentElement.getAttribute("data-theme");if(t)r.setAttribute("data-theme",t)})(document.currentScript.parentNode)</script>
+<div data-paper="" aria-hidden="true"><div><i data-pm=""></i><i data-pt=""></i></div></div>
+<div class="zl8p" data-theme="system" data-accent="blue" data-motion="on" data-texture="paper" style="width:1280px;height:1113px;box-sizing:border-box;position:relative;overflow:hidden;display:flex;flex-direction:column;background:var(--bg);color:var(--text);font-family:'Newsreader',Georgia,serif"><script>(function(r){var h=document.documentElement,t=h.getAttribute("data-theme");if(t)r.setAttribute("data-theme",t);if(matchMedia("(prefers-reduced-motion: reduce)").matches)r.setAttribute("data-motion","off");r.setAttribute("data-intro","run")})(document.currentScript.parentNode)</script>
 
-<div data-grid="" aria-hidden="true"></div><div data-margin="" aria-hidden="true"></div>
+<div data-grid="" aria-hidden="true"></div><div data-tex="" aria-hidden="true"><i data-tm=""></i><i data-tt=""></i></div><div data-margin="" aria-hidden="true"></div>
 
 <header data-z="" style="height:60px;flex:none;padding:0 72px;display:flex;align-items:center;justify-content:flex-end">
 <nav aria-label="Links" data-icons="">
-<a data-ic="" data-tx="" href="mailto:jane.example@your-institution.edu">Email</a>
-<a data-ic="" data-tx="" href="https://scholar.google.com/citations?user=YOUR_ID"><span data-long="">Google&nbsp;</span>Scholar</a>
-<a data-ic="" data-tx="" href="https://www.linkedin.com/in/your-linkedin-handle">LinkedIn</a>
-<a data-ic="" data-tx="" href="https://github.com/your-github-handle">GitHub</a>
-<a data-ic="" data-tx="" href="https://your-lab.example.org/">Your Lab</a>
+<a data-ic="" data-tx="" href="mailto:jane.example@your-institution.edu" target="_blank" rel="noopener">Email</a>
+<a data-ic="" data-tx="" href="https://scholar.google.com/citations?user=YOUR_ID" target="_blank" rel="noopener"><span data-long="">Google&nbsp;</span>Scholar</a>
+<a data-ic="" data-tx="" href="https://www.linkedin.com/in/your-linkedin-handle" target="_blank" rel="noopener">LinkedIn</a>
+<a data-ic="" data-tx="" href="https://github.com/your-github-handle" target="_blank" rel="noopener">GitHub</a>
+<a data-ic="" data-tx="" data-cv="" href="assets/your-cv.pdf" target="_blank" rel="noopener">CV</a>
 </nav>
 </header>
 
-<section data-z="" id="zl8p-top" aria-label="Introduction" style="flex:none;display:flex;align-items:center;justify-content:center;gap:28px;padding:6px 72px 0">
-<div data-portrait=""><span data-snap=""><img data-photo="" src="/assets/headshot.svg" alt="Portrait of Jane Q. Example" width="96" height="96"></span><svg data-tape="" viewBox="0 0 60 18" aria-hidden="true"><path d="M2.4 1.6L57.6 .8L56.2 3.9L58.4 6.6L56.6 9.6L58.6 12.8L57 17.2L1.8 17.6L3.2 14.3L1.2 11.4L3 8.2L1 5.2Z" style="fill:var(--tape);stroke:var(--tape-edge);stroke-width:.7;stroke-linejoin:round"></path></svg></div>
+<main style="display:contents">
+<section data-z="" id="zl8p-top" aria-label="Introduction" style="flex:none;display:flex;align-items:center;justify-content:center;gap:28px;padding:6px 72px 0 252px">
+<div data-portrait=""><span data-snap=""><img data-photo="" src="assets/headshot.svg" alt="Portrait of Jane Q. Example" width="96" height="96"></span><svg data-tape="" viewBox="0 0 60 18" aria-hidden="true"><path d="M2.4 1.6L57.6 .8L56.2 3.9L58.4 6.6L56.6 9.6L58.6 12.8L57 17.2L1.8 17.6L3.2 14.3L1.2 11.4L3 8.2L1 5.2Z" style="fill:var(--tape);stroke:var(--tape-edge);stroke-width:.7;stroke-linejoin:round"></path></svg></div>
 <div style="display:flex;flex-direction:column;gap:8px">
 <h1 data-name="">Jane <i>“Q.”</i> Example</h1>
 </div>
 </section>
-<div data-z="" data-tagrow="" style="flex:none;display:flex;justify-content:center;padding:12px 72px 0"><p data-tagline="">One line about what you study and how you work.</p></div>
+<div data-z="" data-tagrow="" style="flex:none;display:flex;justify-content:center;padding:12px 72px 0 252px"><p data-tagline="">One line about what you study and how you work.</p></div>
 
 <div data-z="" data-div="" aria-hidden="true" style="flex:none;padding-top:28px"><svg data-pen="" viewBox="0 0 150 12" width="150" height="12"><path data-draw="" pathLength="1" d="M2 7.2C12 3.1 21 10.4 33 6.6S55 3.2 67 6.9S90 10.2 102 5.9S126 3.6 138 6.8C142 7.9 145 7.6 148 6.1" style="fill:none;stroke:var(--orn);stroke-width:1.45;stroke-linecap:round;stroke-linejoin:round"></path></svg></div>
 
 <section data-z="" data-sec="" aria-labelledby="zl8p-now" style="flex:none;padding-top:28px">
-<div data-label=""><h2 id="zl8p-now">Currently</h2><p>PhD · Example Lab, Example University</p></div>
+<div data-label=""><h2 id="zl8p-now">Current research</h2><p>PhD candidate <span data-sep="" aria-hidden="true">·</span> <span data-l2="">Example&nbsp;Lab, Example&nbsp;University</span></p></div>
 <ul data-shelf="now">
-<li data-item="" data-k="now1" data-side="r" data-state="rest" data-play="">
-<h3 data-h=""><button type="button" id="zl8p-f-now1" data-face="" tabindex="0" aria-expanded="false" aria-controls="zl8p-d-now1"><span data-faceinner=""><svg viewBox="0 0 360 225" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><path d="M34.0 208.0Q180.6 207.5 326.0 208.0" style="stroke: var(--sk-ink-soft); fill: none; stroke-linecap: round; stroke-width: 1.1"></path><path d="M75.2 150.0C75.2 152.9 73.0 155.4 70.0 155.4C67.0 155.4 64.8 152.8 64.8 150.0C64.8 147.2 67.2 145.0 70.0 145.0C72.8 145.0 75.2 147.1 75.2 150.0Z" style="fill: var(--sk-sage); stroke: var(--sk-ink); stroke-width: 1.2"></path><path d="M101.2 128.0C101.2 130.9 98.8 133.0 96.0 133.0C93.2 133.0 90.8 130.9 90.8 128.0C90.8 125.1 93.0 122.6 96.0 122.6C99.0 122.6 101.2 125.1 101.2 128.0Z" style="fill: var(--sk-sage); stroke: var(--sk-ink); stroke-width: 1.2"></path><path d="M125.2 170.0C125.2 172.9 123.0 175.4 120.0 175.4C117.0 175.4 114.8 172.9 114.8 170.0C114.8 167.1 117.2 165.0 120.0 165.0C122.8 165.0 125.2 167.1 125.2 170.0Z" style="fill: var(--sk-sage); stroke: var(--sk-ink); stroke-width: 1.2"></path><path d="M155.2 140.0C155.2 142.9 152.8 145.0 150.0 145.0C147.2 145.0 144.8 142.9 144.8 140.0C144.8 137.1 147.0 134.6 150.0 134.6C153.0 134.6 155.2 137.1 155.2 140.0Z" style="fill: var(--sk-sage); stroke: var(--sk-ink); stroke-width: 1.2"></path><path d="M181.2 176.0C181.2 178.9 179.0 181.4 176.0 181.4C173.0 181.4 170.8 178.9 170.8 176.0C170.8 173.1 173.2 171.0 176.0 171.0C178.8 171.0 181.2 173.1 181.2 176.0Z" style="fill: var(--sk-sage); stroke: var(--sk-ink); stroke-width: 1.2"></path><path d="M209.2 132.0C209.2 134.9 206.8 137.0 204.0 137.0C201.2 137.0 198.8 134.9 198.8 132.0C198.8 129.1 201.0 126.6 204.0 126.6C207.0 126.6 209.2 129.1 209.2 132.0Z" style="fill: var(--sk-sage); stroke: var(--sk-ink); stroke-width: 1.2"></path><path d="M237.2 162.0C237.2 164.8 235.0 167.4 232.0 167.4C229.0 167.4 226.8 164.9 226.8 162.0C226.8 159.1 229.2 157.0 232.0 157.0C234.8 157.0 237.2 159.2 237.2 162.0Z" style="fill: var(--sk-sage); stroke: var(--sk-ink); stroke-width: 1.2"></path><path d="M263.3 124.0C263.3 126.9 260.8 129.0 258.0 129.0C255.2 129.0 252.8 126.9 252.8 124.0C252.8 121.1 255.0 118.6 258.0 118.6C261.0 118.6 263.3 121.1 263.3 124.0Z" style="fill: var(--sk-sage); stroke: var(--sk-ink); stroke-width: 1.2"></path><path d="M289.1 158.0C289.1 160.8 287.0 163.4 284.0 163.4C281.0 163.4 278.8 160.9 278.8 158.0C278.8 155.1 281.2 153.0 284.0 153.0C286.8 153.0 289.1 155.2 289.1 158.0Z" style="fill: var(--sk-sage); stroke: var(--sk-ink); stroke-width: 1.2"></path><path d="M115.3 96.0C115.3 98.9 112.8 101.0 110.0 101.0C107.2 101.0 104.8 98.9 104.8 96.0C104.8 93.1 107.0 90.6 110.0 90.6C113.0 90.6 115.3 93.1 115.3 96.0Z" style="fill: var(--sk-sage); stroke: var(--sk-ink); stroke-width: 1.2"></path><path d="M235.1 96.0C235.1 98.8 233.0 101.4 230.0 101.4C227.0 101.4 224.8 98.9 224.8 96.0C224.8 93.1 227.2 91.0 230.0 91.0C232.8 91.0 235.1 93.2 235.1 96.0Z" style="fill: var(--sk-sage); stroke: var(--sk-ink); stroke-width: 1.2"></path><path d="M305.3 188.0C305.3 190.9 302.8 193.0 300.0 193.0C297.2 193.0 294.8 190.9 294.8 188.0C294.8 185.1 297.0 182.6 300.0 182.6C303.0 182.6 305.3 185.1 305.3 188.0Z" style="fill: var(--sk-sage); stroke: var(--sk-ink); stroke-width: 1.2"></path><path d="M193.1 118.0C193.1 121.9 189.7 124.8 186.0 124.8C182.3 124.8 179.0 121.9 179.0 118.0C179.0 114.1 182.0 110.8 186.0 110.8C190.0 110.8 193.1 114.1 193.1 118.0Z" style="fill: var(--sk-clay); stroke: var(--sk-ink); stroke-width: 1.3"></path><path d="M223.9 118.0C223.9 138.9 207.7 157.3 186.0 157.3C164.3 157.3 148.2 138.9 148.2 118.0C148.2 97.1 165.7 81.3 186.0 81.3C206.3 81.3 223.9 97.1 223.9 118.0Z" style="fill: var(--sk-paper); fill-opacity: .35; stroke: var(--sk-ink); stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.7"></path><path d="M218.1 118.0C218.1 135.8 203.1 148.9 186.0 148.9C168.9 148.9 153.9 135.8 153.9 118.0C153.9 100.2 167.7 84.9 186.0 84.9C204.3 84.9 218.1 100.2 218.1 118.0Z" style="stroke: var(--sk-ink-soft); fill: none; stroke-linecap: round; stroke-width: 1.1"></path><path d="M213.0 145.0Q230.7 166.3 250.0 186.0" style="stroke: var(--sk-ink); fill: none; stroke-linecap: round; stroke-width: 7"></path><path d="M213.0 145.0Q230.7 166.3 250.0 186.0" style="stroke: var(--sk-gold); fill: none; stroke-linecap: round; stroke-width: 3.6"></path></svg><span data-cap=""><span data-kind=""><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M6 1.4V10.6M2 3.7L10 8.3M10 3.7L2 8.3" style="fill:none;stroke:var(--orn);stroke-width:1.35;stroke-linecap:round"></path></svg>Question<span data-chev="" aria-hidden="true"><svg viewBox="0 0 12 12"><path d="M1.4 6.2c2.9-.3 5.8-.3 8.7-.1M7 3.1c1.1 1 2.2 2 3.2 3c-1 1-2.1 2-3.2 3.1"></path></svg></span></span><span data-t="" id="zl8p-t-now1">A short title for your central question</span></span></span><span data-spine="" aria-hidden="true"><span data-sdot=""></span><em>Question</em></span></button></h3>
+<li data-item="" data-k="now1" data-side="r" data-state="rest">
+<h3 data-h=""><button type="button" id="zl8p-f-now1" data-face="" tabindex="0" aria-expanded="false" aria-controls="zl8p-d-now1"><span data-faceinner=""><svg viewBox="0 0 360 225" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><path d="M34.0 208.0Q180.6 207.5 326.0 208.0" style="stroke: var(--sk-ink-soft); fill: none; stroke-linecap: round; stroke-width: 1.1"></path><path d="M75.2 150.0C75.2 152.9 73.0 155.4 70.0 155.4C67.0 155.4 64.8 152.8 64.8 150.0C64.8 147.2 67.2 145.0 70.0 145.0C72.8 145.0 75.2 147.1 75.2 150.0Z" style="fill: var(--sk-sage); stroke: var(--sk-ink); stroke-width: 1.2"></path><path d="M101.2 128.0C101.2 130.9 98.8 133.0 96.0 133.0C93.2 133.0 90.8 130.9 90.8 128.0C90.8 125.1 93.0 122.6 96.0 122.6C99.0 122.6 101.2 125.1 101.2 128.0Z" style="fill: var(--sk-sage); stroke: var(--sk-ink); stroke-width: 1.2"></path><path d="M125.2 170.0C125.2 172.9 123.0 175.4 120.0 175.4C117.0 175.4 114.8 172.9 114.8 170.0C114.8 167.1 117.2 165.0 120.0 165.0C122.8 165.0 125.2 167.1 125.2 170.0Z" style="fill: var(--sk-sage); stroke: var(--sk-ink); stroke-width: 1.2"></path><path d="M155.2 140.0C155.2 142.9 152.8 145.0 150.0 145.0C147.2 145.0 144.8 142.9 144.8 140.0C144.8 137.1 147.0 134.6 150.0 134.6C153.0 134.6 155.2 137.1 155.2 140.0Z" style="fill: var(--sk-sage); stroke: var(--sk-ink); stroke-width: 1.2"></path><path d="M181.2 176.0C181.2 178.9 179.0 181.4 176.0 181.4C173.0 181.4 170.8 178.9 170.8 176.0C170.8 173.1 173.2 171.0 176.0 171.0C178.8 171.0 181.2 173.1 181.2 176.0Z" style="fill: var(--sk-sage); stroke: var(--sk-ink); stroke-width: 1.2"></path><path d="M209.2 132.0C209.2 134.9 206.8 137.0 204.0 137.0C201.2 137.0 198.8 134.9 198.8 132.0C198.8 129.1 201.0 126.6 204.0 126.6C207.0 126.6 209.2 129.1 209.2 132.0Z" style="fill: var(--sk-sage); stroke: var(--sk-ink); stroke-width: 1.2"></path><path d="M237.2 162.0C237.2 164.8 235.0 167.4 232.0 167.4C229.0 167.4 226.8 164.9 226.8 162.0C226.8 159.1 229.2 157.0 232.0 157.0C234.8 157.0 237.2 159.2 237.2 162.0Z" style="fill: var(--sk-sage); stroke: var(--sk-ink); stroke-width: 1.2"></path><path d="M263.3 124.0C263.3 126.9 260.8 129.0 258.0 129.0C255.2 129.0 252.8 126.9 252.8 124.0C252.8 121.1 255.0 118.6 258.0 118.6C261.0 118.6 263.3 121.1 263.3 124.0Z" style="fill: var(--sk-sage); stroke: var(--sk-ink); stroke-width: 1.2"></path><path d="M289.1 158.0C289.1 160.8 287.0 163.4 284.0 163.4C281.0 163.4 278.8 160.9 278.8 158.0C278.8 155.1 281.2 153.0 284.0 153.0C286.8 153.0 289.1 155.2 289.1 158.0Z" style="fill: var(--sk-sage); stroke: var(--sk-ink); stroke-width: 1.2"></path><path d="M115.3 96.0C115.3 98.9 112.8 101.0 110.0 101.0C107.2 101.0 104.8 98.9 104.8 96.0C104.8 93.1 107.0 90.6 110.0 90.6C113.0 90.6 115.3 93.1 115.3 96.0Z" style="fill: var(--sk-sage); stroke: var(--sk-ink); stroke-width: 1.2"></path><path d="M235.1 96.0C235.1 98.8 233.0 101.4 230.0 101.4C227.0 101.4 224.8 98.9 224.8 96.0C224.8 93.1 227.2 91.0 230.0 91.0C232.8 91.0 235.1 93.2 235.1 96.0Z" style="fill: var(--sk-sage); stroke: var(--sk-ink); stroke-width: 1.2"></path><path d="M305.3 188.0C305.3 190.9 302.8 193.0 300.0 193.0C297.2 193.0 294.8 190.9 294.8 188.0C294.8 185.1 297.0 182.6 300.0 182.6C303.0 182.6 305.3 185.1 305.3 188.0Z" style="fill: var(--sk-sage); stroke: var(--sk-ink); stroke-width: 1.2"></path><g data-anim="" style="animation: zl8p-tpl-found 6s ease-in-out infinite; transform-box: fill-box; transform-origin: center"><path d="M193.1 118.0C193.1 121.9 189.7 124.8 186.0 124.8C182.3 124.8 179.0 121.9 179.0 118.0C179.0 114.1 182.0 110.8 186.0 110.8C190.0 110.8 193.1 114.1 193.1 118.0Z" style="fill: var(--sk-clay); stroke: var(--sk-ink); stroke-width: 1.3"></path></g><g data-anim="" style="animation: zl8p-tpl-search 6s ease-in-out infinite; transform-box: fill-box; transform-origin: center"><path d="M223.9 118.0C223.9 138.9 207.7 157.3 186.0 157.3C164.3 157.3 148.2 138.9 148.2 118.0C148.2 97.1 165.7 81.3 186.0 81.3C206.3 81.3 223.9 97.1 223.9 118.0Z" style="fill: var(--sk-paper); fill-opacity: .35; stroke: var(--sk-ink); stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.7"></path><path d="M218.1 118.0C218.1 135.8 203.1 148.9 186.0 148.9C168.9 148.9 153.9 135.8 153.9 118.0C153.9 100.2 167.7 84.9 186.0 84.9C204.3 84.9 218.1 100.2 218.1 118.0Z" style="stroke: var(--sk-ink-soft); fill: none; stroke-linecap: round; stroke-width: 1.1"></path><path d="M213.0 145.0Q230.7 166.3 250.0 186.0" style="stroke: var(--sk-ink); fill: none; stroke-linecap: round; stroke-width: 7"></path><path d="M213.0 145.0Q230.7 166.3 250.0 186.0" style="stroke: var(--sk-gold); fill: none; stroke-linecap: round; stroke-width: 3.6"></path></g></svg><span data-cap=""><span data-kind=""><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M6 1.4V10.6M2 3.7L10 8.3M10 3.7L2 8.3" style="fill:none;stroke:var(--orn);stroke-width:1.35;stroke-linecap:round"></path></svg>Question<span data-chev="" aria-hidden="true"><svg viewBox="0 0 12 12"><path d="M1.4 6.2c2.9-.3 5.8-.3 8.7-.1M7 3.1c1.1 1 2.2 2 3.2 3c-1 1-2.1 2-3.2 3.1"></path></svg></span></span><span data-t="" id="zl8p-t-now1">A short title for your central question</span></span></span><span data-spine="" aria-hidden="true"><span data-sdot=""></span><em>Question</em></span></button></h3>
 <div data-page="" id="zl8p-d-now1" role="region" aria-labelledby="zl8p-t-now1"><div data-ph=""><p data-q="">What is the one question this line of work sets out to answer?</p><button type="button" data-x="" aria-label="Close details"><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M1.8 1.9c2.1 2 4.2 4.1 6.3 6.3M8.2 1.7c-2.1 2.1-4.2 4.3-6.4 6.5"></path></svg></button></div><span data-tick="" aria-hidden="true"></span><p data-body="">Two or three sentences in plain language: what is known, what is missing, and how you are going about it. Readers open this card because the title caught their eye, so lead with why it matters.</p></div>
 
 </li>
-<li data-item="" data-k="now2" data-side="r" data-state="rest" data-play="">
-<h3 data-h=""><button type="button" id="zl8p-f-now2" data-face="" tabindex="0" aria-expanded="false" aria-controls="zl8p-d-now2"><span data-faceinner=""><svg viewBox="0 0 360 225" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><path d="M34.0 208.0Q180.6 207.5 326.0 208.0" style="stroke: var(--sk-ink-soft); fill: none; stroke-linecap: round; stroke-width: 1.1"></path><path d="M44.0 92.0Q79.2 91.6 114.0 92.0Q113.6 127.0 114.0 162.0Q79.0 161.3 44.0 162.0Q43.2 127.0 44.0 92.0Z" style="fill: var(--sk-sky); fill-opacity: .55; stroke: var(--sk-ink); stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.7"></path><path d="M146.0 92.0Q180.2 92.8 216.0 92.0Q215.6 127.0 216.0 162.0Q181.0 162.0 146.0 162.0Q146.3 127.0 146.0 92.0Z" style="fill: var(--sk-sage); fill-opacity: .55; stroke: var(--sk-ink); stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.7"></path><path d="M248.0 92.0Q283.6 91.5 318.0 92.0Q318.8 127.0 318.0 162.0Q283.0 162.7 248.0 162.0Q248.5 127.0 248.0 92.0Z" style="fill: var(--sk-gold); fill-opacity: .55; stroke: var(--sk-ink); stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.7"></path><path d="M118.0 127.0Q128.3 127.6 140.0 127.0M133 121Q137 124 140 127Q137 130 133 133" style="stroke: var(--sk-ink); fill: none; stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.7"></path><path d="M220.0 127.0Q231.0 127.2 242.0 127.0M235 121Q239 124 242 127Q239 130 235 133" style="stroke: var(--sk-ink); fill: none; stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.7"></path><path d="M65.4 110.0C65.4 111.9 63.9 113.5 62.0 113.5C60.1 113.5 58.6 111.9 58.6 110.0C58.6 108.1 60.2 106.7 62.0 106.7C63.8 106.7 65.4 108.1 65.4 110.0Z" style="fill: var(--sk-ink)"></path><path d="M77.4 110.0C77.4 111.9 75.8 113.3 74.0 113.3C72.2 113.3 70.6 111.9 70.6 110.0C70.6 108.1 72.1 106.5 74.0 106.5C75.9 106.5 77.4 108.1 77.4 110.0Z" style="fill: var(--sk-ink)"></path><path d="M89.4 110.0C89.4 111.9 87.9 113.5 86.0 113.5C84.1 113.5 82.6 111.9 82.6 110.0C82.6 108.1 84.2 106.7 86.0 106.7C87.8 106.7 89.4 108.1 89.4 110.0Z" style="fill: var(--sk-ink)"></path><path d="M65.4 126.0C65.4 127.9 63.8 129.3 62.0 129.3C60.2 129.3 58.6 127.9 58.6 126.0C58.6 124.1 60.1 122.5 62.0 122.5C63.9 122.5 65.4 124.1 65.4 126.0Z" style="fill: var(--sk-ink)"></path><path d="M77.4 126.0C77.4 127.9 75.9 129.5 74.0 129.5C72.1 129.5 70.6 127.9 70.6 126.0C70.6 124.1 72.2 122.7 74.0 122.7C75.8 122.7 77.4 124.1 77.4 126.0Z" style="fill: var(--sk-ink)"></path><path d="M89.4 126.0C89.4 127.9 87.8 129.3 86.0 129.3C84.2 129.3 82.6 127.9 82.6 126.0C82.6 124.1 84.1 122.5 86.0 122.5C87.9 122.5 89.4 124.1 89.4 126.0Z" style="fill: var(--sk-ink)"></path><path d="M65.4 142.0C65.4 143.9 63.9 145.5 62.0 145.5C60.1 145.5 58.6 143.9 58.6 142.0C58.6 140.1 60.2 138.7 62.0 138.7C63.8 138.7 65.4 140.1 65.4 142.0Z" style="fill: var(--sk-ink)"></path><path d="M77.4 142.0C77.4 143.9 75.8 145.3 74.0 145.3C72.2 145.3 70.6 143.9 70.6 142.0C70.6 140.1 72.1 138.5 74.0 138.5C75.9 138.5 77.4 140.1 77.4 142.0Z" style="fill: var(--sk-ink)"></path><path d="M89.4 142.0C89.4 143.9 87.9 145.5 86.0 145.5C84.1 145.5 82.6 143.9 82.6 142.0C82.6 140.1 84.2 138.7 86.0 138.7C87.8 138.7 89.4 140.1 89.4 142.0Z" style="fill: var(--sk-ink)"></path><path d="M156 136Q164 112 172 128T188 122T204 118" style="stroke: var(--sk-ink); fill: none; stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.7"></path><path d="M262 128L274 142L298 110" style="stroke: var(--sk-ink); fill: none; stroke-linecap: round; stroke-linejoin: round; stroke-width: 2.2"></path></svg><span data-cap=""><span data-kind=""><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M6 1.4V10.6M2 3.7L10 8.3M10 3.7L2 8.3" style="fill:none;stroke:var(--orn);stroke-width:1.35;stroke-linecap:round"></path></svg>Method<span data-chev="" aria-hidden="true"><svg viewBox="0 0 12 12"><path d="M1.4 6.2c2.9-.3 5.8-.3 8.7-.1M7 3.1c1.1 1 2.2 2 3.2 3c-1 1-2.1 2-3.2 3.1"></path></svg></span></span><span data-t="" id="zl8p-t-now2">The method or technique you are building</span></span></span><span data-spine="" aria-hidden="true"><span data-sdot=""></span><em>Method</em></span></button></h3>
+<li data-item="" data-k="now2" data-side="r" data-state="rest">
+<h3 data-h=""><button type="button" id="zl8p-f-now2" data-face="" tabindex="0" aria-expanded="false" aria-controls="zl8p-d-now2"><span data-faceinner=""><svg viewBox="0 0 360 225" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><path d="M34.0 208.0Q180.6 207.5 326.0 208.0" style="stroke: var(--sk-ink-soft); fill: none; stroke-linecap: round; stroke-width: 1.1"></path><path d="M44.0 92.0Q79.2 91.6 114.0 92.0Q113.6 127.0 114.0 162.0Q79.0 161.3 44.0 162.0Q43.2 127.0 44.0 92.0Z" style="fill: var(--sk-sky); fill-opacity: .55; stroke: var(--sk-ink); stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.7"></path><path d="M146.0 92.0Q180.2 92.8 216.0 92.0Q215.6 127.0 216.0 162.0Q181.0 162.0 146.0 162.0Q146.3 127.0 146.0 92.0Z" style="fill: var(--sk-sage); fill-opacity: .55; stroke: var(--sk-ink); stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.7"></path><path d="M248.0 92.0Q283.6 91.5 318.0 92.0Q318.8 127.0 318.0 162.0Q283.0 162.7 248.0 162.0Q248.5 127.0 248.0 92.0Z" style="fill: var(--sk-gold); fill-opacity: .55; stroke: var(--sk-ink); stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.7"></path><g data-anim="" style="animation: zl8p-tpl-nudge 1.6s ease-in-out infinite; transform-box: fill-box; transform-origin: center"><path d="M118.0 127.0Q128.3 127.6 140.0 127.0M133 121Q137 124 140 127Q137 130 133 133" style="stroke: var(--sk-ink); fill: none; stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.7"></path></g><g data-anim="" style="animation: zl8p-tpl-nudge 1.6s ease-in-out .4s infinite; transform-box: fill-box; transform-origin: center"><path d="M220.0 127.0Q231.0 127.2 242.0 127.0M235 121Q239 124 242 127Q239 130 235 133" style="stroke: var(--sk-ink); fill: none; stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.7"></path></g><g data-anim="" style="animation: zl8p-tpl-blink 1.8s ease-in-out 0.0s infinite; transform-box: fill-box; transform-origin: center"><path d="M65.4 110.0C65.4 111.9 63.9 113.5 62.0 113.5C60.1 113.5 58.6 111.9 58.6 110.0C58.6 108.1 60.2 106.7 62.0 106.7C63.8 106.7 65.4 108.1 65.4 110.0Z" style="fill: var(--sk-ink)"></path></g><g data-anim="" style="animation: zl8p-tpl-blink 1.8s ease-in-out 0.2s infinite; transform-box: fill-box; transform-origin: center"><path d="M77.4 110.0C77.4 111.9 75.8 113.3 74.0 113.3C72.2 113.3 70.6 111.9 70.6 110.0C70.6 108.1 72.1 106.5 74.0 106.5C75.9 106.5 77.4 108.1 77.4 110.0Z" style="fill: var(--sk-ink)"></path></g><g data-anim="" style="animation: zl8p-tpl-blink 1.8s ease-in-out 0.4s infinite; transform-box: fill-box; transform-origin: center"><path d="M89.4 110.0C89.4 111.9 87.9 113.5 86.0 113.5C84.1 113.5 82.6 111.9 82.6 110.0C82.6 108.1 84.2 106.7 86.0 106.7C87.8 106.7 89.4 108.1 89.4 110.0Z" style="fill: var(--sk-ink)"></path></g><g data-anim="" style="animation: zl8p-tpl-blink 1.8s ease-in-out 0.6s infinite; transform-box: fill-box; transform-origin: center"><path d="M65.4 126.0C65.4 127.9 63.8 129.3 62.0 129.3C60.2 129.3 58.6 127.9 58.6 126.0C58.6 124.1 60.1 122.5 62.0 122.5C63.9 122.5 65.4 124.1 65.4 126.0Z" style="fill: var(--sk-ink)"></path></g><g data-anim="" style="animation: zl8p-tpl-blink 1.8s ease-in-out 0.8s infinite; transform-box: fill-box; transform-origin: center"><path d="M77.4 126.0C77.4 127.9 75.9 129.5 74.0 129.5C72.1 129.5 70.6 127.9 70.6 126.0C70.6 124.1 72.2 122.7 74.0 122.7C75.8 122.7 77.4 124.1 77.4 126.0Z" style="fill: var(--sk-ink)"></path></g><g data-anim="" style="animation: zl8p-tpl-blink 1.8s ease-in-out 1.0s infinite; transform-box: fill-box; transform-origin: center"><path d="M89.4 126.0C89.4 127.9 87.8 129.3 86.0 129.3C84.2 129.3 82.6 127.9 82.6 126.0C82.6 124.1 84.1 122.5 86.0 122.5C87.9 122.5 89.4 124.1 89.4 126.0Z" style="fill: var(--sk-ink)"></path></g><g data-anim="" style="animation: zl8p-tpl-blink 1.8s ease-in-out 1.2s infinite; transform-box: fill-box; transform-origin: center"><path d="M65.4 142.0C65.4 143.9 63.9 145.5 62.0 145.5C60.1 145.5 58.6 143.9 58.6 142.0C58.6 140.1 60.2 138.7 62.0 138.7C63.8 138.7 65.4 140.1 65.4 142.0Z" style="fill: var(--sk-ink)"></path></g><g data-anim="" style="animation: zl8p-tpl-blink 1.8s ease-in-out 1.4s infinite; transform-box: fill-box; transform-origin: center"><path d="M77.4 142.0C77.4 143.9 75.8 145.3 74.0 145.3C72.2 145.3 70.6 143.9 70.6 142.0C70.6 140.1 72.1 138.5 74.0 138.5C75.9 138.5 77.4 140.1 77.4 142.0Z" style="fill: var(--sk-ink)"></path></g><g data-anim="" style="animation: zl8p-tpl-blink 1.8s ease-in-out 1.6s infinite; transform-box: fill-box; transform-origin: center"><path d="M89.4 142.0C89.4 143.9 87.9 145.5 86.0 145.5C84.1 145.5 82.6 143.9 82.6 142.0C82.6 140.1 84.2 138.7 86.0 138.7C87.8 138.7 89.4 140.1 89.4 142.0Z" style="fill: var(--sk-ink)"></path></g><path d="M156 136Q164 112 172 128T188 122T204 118" style="stroke: var(--sk-ink); fill: none; stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.7; stroke-dasharray: 1 1; animation: zl8p-tpl-draw 4.8s ease-in-out infinite" pathLength="1" data-anim=""></path><path d="M262 128L274 142L298 110" style="stroke: var(--sk-ink); fill: none; stroke-linecap: round; stroke-linejoin: round; stroke-width: 2.2; stroke-dasharray: 1 1; animation: zl8p-tpl-draw 4.8s ease-in-out .9s infinite" pathLength="1" data-anim=""></path></svg><span data-cap=""><span data-kind=""><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M6 1.4V10.6M2 3.7L10 8.3M10 3.7L2 8.3" style="fill:none;stroke:var(--orn);stroke-width:1.35;stroke-linecap:round"></path></svg>Method<span data-chev="" aria-hidden="true"><svg viewBox="0 0 12 12"><path d="M1.4 6.2c2.9-.3 5.8-.3 8.7-.1M7 3.1c1.1 1 2.2 2 3.2 3c-1 1-2.1 2-3.2 3.1"></path></svg></span></span><span data-t="" id="zl8p-t-now2">The method or technique you are building</span></span></span><span data-spine="" aria-hidden="true"><span data-sdot=""></span><em>Method</em></span></button></h3>
 <div data-page="" id="zl8p-d-now2" role="region" aria-labelledby="zl8p-t-now2"><div data-ph=""><p data-q="">What does this approach make possible that was not possible before?</p><button type="button" data-x="" aria-label="Close details"><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M1.8 1.9c2.1 2 4.2 4.1 6.3 6.3M8.2 1.7c-2.1 2.1-4.2 4.3-6.4 6.5"></path></svg></button></div><span data-tick="" aria-hidden="true"></span><p data-body="">Describe the method at the level a curious colleague from a neighbouring field could follow: what it measures, at what scale, and what it lets you see that other approaches miss.</p></div>
 
 </li>
-<li data-item="" data-k="now3" data-side="l" data-state="rest" data-play="">
-<h3 data-h=""><button type="button" id="zl8p-f-now3" data-face="" tabindex="0" aria-expanded="false" aria-controls="zl8p-d-now3"><span data-faceinner=""><svg viewBox="0 0 360 225" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><path d="M34.0 208.0Q180.6 207.5 326.0 208.0" style="stroke: var(--sk-ink-soft); fill: none; stroke-linecap: round; stroke-width: 1.1"></path><path d="M64.0 60.0Q63.9 125.0 64.0 190.0M64.0 190.0Q181.6 190.3 300.0 190.0" style="stroke: var(--sk-ink); fill: none; stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.7"></path><path d="M60.0 80.0Q64.2 79.6 68.0 80.0" style="stroke: var(--sk-ink-soft); fill: none; stroke-linecap: round; stroke-width: 1.1"></path><path d="M60.0 120.0Q63.9 120.0 68.0 120.0" style="stroke: var(--sk-ink-soft); fill: none; stroke-linecap: round; stroke-width: 1.1"></path><path d="M60.0 160.0Q63.6 160.3 68.0 160.0" style="stroke: var(--sk-ink-soft); fill: none; stroke-linecap: round; stroke-width: 1.1"></path><path d="M72 176Q110 170 140 146T204 110T292 74" style="stroke: var(--sk-accent); fill: none; stroke-linecap: round; stroke-width: 2"></path><path d="M72 182Q120 180 160 168T232 150T292 142" style="stroke: var(--sk-clay); fill: none; stroke-linecap: round; stroke-width: 2"></path><path d="M100.2 170.0C100.2 172.3 98.4 174.3 96.0 174.3C93.6 174.3 91.8 172.3 91.8 170.0C91.8 167.7 93.8 165.9 96.0 165.9C98.2 165.9 100.2 167.7 100.2 170.0Z" style="fill: var(--sk-paper); stroke: var(--sk-accent); stroke-width: 1.5"></path><path d="M144.2 146.0C144.2 148.3 142.2 150.1 140.0 150.1C137.8 150.1 135.8 148.3 135.8 146.0C135.8 143.7 137.6 141.7 140.0 141.7C142.4 141.7 144.2 143.7 144.2 146.0Z" style="fill: var(--sk-paper); stroke: var(--sk-accent); stroke-width: 1.5"></path><path d="M184.2 124.0C184.2 126.3 182.4 128.3 180.0 128.3C177.6 128.3 175.8 126.3 175.8 124.0C175.8 121.7 177.8 119.9 180.0 119.9C182.2 119.9 184.2 121.7 184.2 124.0Z" style="fill: var(--sk-paper); stroke: var(--sk-accent); stroke-width: 1.5"></path><path d="M224.2 102.0C224.2 104.3 222.2 106.1 220.0 106.1C217.8 106.1 215.8 104.3 215.8 102.0C215.8 99.7 217.6 97.7 220.0 97.7C222.4 97.7 224.2 99.7 224.2 102.0Z" style="fill: var(--sk-paper); stroke: var(--sk-accent); stroke-width: 1.5"></path><path d="M266.2 84.0C266.2 86.3 264.4 88.3 262.0 88.3C259.6 88.3 257.8 86.3 257.8 84.0C257.8 81.7 259.8 79.9 262.0 79.9C264.2 79.9 266.2 81.7 266.2 84.0Z" style="fill: var(--sk-paper); stroke: var(--sk-accent); stroke-width: 1.5"></path></svg><span data-cap=""><span data-kind=""><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M6 1.4V10.6M2 3.7L10 8.3M10 3.7L2 8.3" style="fill:none;stroke:var(--orn);stroke-width:1.35;stroke-linecap:round"></path></svg>Tools<span data-chev="" aria-hidden="true"><svg viewBox="0 0 12 12"><path d="M1.4 6.2c2.9-.3 5.8-.3 8.7-.1M7 3.1c1.1 1 2.2 2 3.2 3c-1 1-2.1 2-3.2 3.1"></path></svg></span></span><span data-t="" id="zl8p-t-now3">The data and tools that support the work</span></span></span><span data-spine="" aria-hidden="true"><span data-sdot=""></span><em>Tools</em></span></button></h3>
+<li data-item="" data-k="now3" data-side="l" data-state="rest">
+<h3 data-h=""><button type="button" id="zl8p-f-now3" data-face="" tabindex="0" aria-expanded="false" aria-controls="zl8p-d-now3"><span data-faceinner=""><svg viewBox="0 0 360 225" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><path d="M34.0 208.0Q180.6 207.5 326.0 208.0" style="stroke: var(--sk-ink-soft); fill: none; stroke-linecap: round; stroke-width: 1.1"></path><path d="M64.0 60.0Q63.9 125.0 64.0 190.0M64.0 190.0Q181.6 190.3 300.0 190.0" style="stroke: var(--sk-ink); fill: none; stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.7"></path><path d="M60.0 80.0Q64.2 79.6 68.0 80.0" style="stroke: var(--sk-ink-soft); fill: none; stroke-linecap: round; stroke-width: 1.1"></path><path d="M60.0 120.0Q63.9 120.0 68.0 120.0" style="stroke: var(--sk-ink-soft); fill: none; stroke-linecap: round; stroke-width: 1.1"></path><path d="M60.0 160.0Q63.6 160.3 68.0 160.0" style="stroke: var(--sk-ink-soft); fill: none; stroke-linecap: round; stroke-width: 1.1"></path><path d="M72 176Q110 170 140 146T204 110T292 74" style="stroke: var(--sk-accent); fill: none; stroke-linecap: round; stroke-width: 2; stroke-dasharray: 1 1; animation: zl8p-tpl-draw 5.4s ease-in-out infinite" pathLength="1" data-anim=""></path><path d="M72 182Q120 180 160 168T232 150T292 142" style="stroke: var(--sk-clay); fill: none; stroke-linecap: round; stroke-width: 2"></path><g data-anim="" style="animation: zl8p-tpl-pop 2.7s ease-in-out 0.00s infinite; transform-box: fill-box; transform-origin: center"><path d="M100.2 170.0C100.2 172.3 98.4 174.3 96.0 174.3C93.6 174.3 91.8 172.3 91.8 170.0C91.8 167.7 93.8 165.9 96.0 165.9C98.2 165.9 100.2 167.7 100.2 170.0Z" style="fill: var(--sk-paper); stroke: var(--sk-accent); stroke-width: 1.5"></path></g><g data-anim="" style="animation: zl8p-tpl-pop 2.7s ease-in-out 0.22s infinite; transform-box: fill-box; transform-origin: center"><path d="M144.2 146.0C144.2 148.3 142.2 150.1 140.0 150.1C137.8 150.1 135.8 148.3 135.8 146.0C135.8 143.7 137.6 141.7 140.0 141.7C142.4 141.7 144.2 143.7 144.2 146.0Z" style="fill: var(--sk-paper); stroke: var(--sk-accent); stroke-width: 1.5"></path></g><g data-anim="" style="animation: zl8p-tpl-pop 2.7s ease-in-out 0.44s infinite; transform-box: fill-box; transform-origin: center"><path d="M184.2 124.0C184.2 126.3 182.4 128.3 180.0 128.3C177.6 128.3 175.8 126.3 175.8 124.0C175.8 121.7 177.8 119.9 180.0 119.9C182.2 119.9 184.2 121.7 184.2 124.0Z" style="fill: var(--sk-paper); stroke: var(--sk-accent); stroke-width: 1.5"></path></g><g data-anim="" style="animation: zl8p-tpl-pop 2.7s ease-in-out 0.66s infinite; transform-box: fill-box; transform-origin: center"><path d="M224.2 102.0C224.2 104.3 222.2 106.1 220.0 106.1C217.8 106.1 215.8 104.3 215.8 102.0C215.8 99.7 217.6 97.7 220.0 97.7C222.4 97.7 224.2 99.7 224.2 102.0Z" style="fill: var(--sk-paper); stroke: var(--sk-accent); stroke-width: 1.5"></path></g><g data-anim="" style="animation: zl8p-tpl-pop 2.7s ease-in-out 0.88s infinite; transform-box: fill-box; transform-origin: center"><path d="M266.2 84.0C266.2 86.3 264.4 88.3 262.0 88.3C259.6 88.3 257.8 86.3 257.8 84.0C257.8 81.7 259.8 79.9 262.0 79.9C264.2 79.9 266.2 81.7 266.2 84.0Z" style="fill: var(--sk-paper); stroke: var(--sk-accent); stroke-width: 1.5"></path></g></svg><span data-cap=""><span data-kind=""><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M6 1.4V10.6M2 3.7L10 8.3M10 3.7L2 8.3" style="fill:none;stroke:var(--orn);stroke-width:1.35;stroke-linecap:round"></path></svg>Tools<span data-chev="" aria-hidden="true"><svg viewBox="0 0 12 12"><path d="M1.4 6.2c2.9-.3 5.8-.3 8.7-.1M7 3.1c1.1 1 2.2 2 3.2 3c-1 1-2.1 2-3.2 3.1"></path></svg></span></span><span data-t="" id="zl8p-t-now3">The data and tools that support the work</span></span></span><span data-spine="" aria-hidden="true"><span data-sdot=""></span><em>Tools</em></span></button></h3>
 <div data-page="" id="zl8p-d-now3" role="region" aria-labelledby="zl8p-t-now3"><div data-ph=""><p data-q="">How do you keep the work organized, reproducible, and shareable?</p><button type="button" data-x="" aria-label="Close details"><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M1.8 1.9c2.1 2 4.2 4.1 6.3 6.3M8.2 1.7c-2.1 2.1-4.2 4.3-6.4 6.5"></path></svg></button></div><span data-tick="" aria-hidden="true"></span><p data-body="">A short note on the pipelines, datasets, or software you build or rely on. If there is a public repository or dataset, this is a good place to say so.</p></div>
 
 </li>
@@ -583,49 +793,93 @@ body{margin:0}
 <div data-z="" data-div="" aria-hidden="true" style="flex:none;padding-top:28px"><svg data-pen="" viewBox="0 0 150 12" width="150" height="12"><path data-draw="" pathLength="1" d="M2 7.2C12 3.1 21 10.4 33 6.6S55 3.2 67 6.9S90 10.2 102 5.9S126 3.6 138 6.8C142 7.9 145 7.6 148 6.1" style="fill:none;stroke:var(--orn);stroke-width:1.45;stroke-linecap:round;stroke-linejoin:round"></path></svg></div>
 
 <section data-z="" data-sec="" aria-labelledby="zl8p-papers" style="flex:none;padding-top:28px">
-<div data-label=""><h2 id="zl8p-papers">Papers</h2><p>Selected</p></div>
+<div data-label=""><h2 id="zl8p-papers">Publications</h2></div>
 <ul data-shelf="pub">
-<li data-item="" data-k="pub1" data-side="r" data-state="rest" data-play="">
-<h3 data-h=""><button type="button" id="zl8p-f-pub1" data-face="" tabindex="0" aria-expanded="false" aria-controls="zl8p-d-pub1"><span data-faceinner=""><svg viewBox="0 0 360 225" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><path d="M34.0 208.0Q180.6 207.5 326.0 208.0" style="stroke: var(--sk-ink-soft); fill: none; stroke-linecap: round; stroke-width: 1.1"></path><path d="M118.0 50.0Q183.6 50.3 250.0 50.0Q249.2 125.0 250.0 200.0Q184.0 199.2 118.0 200.0Q117.4 125.0 118.0 50.0Z" style="fill: var(--sk-paper); stroke: var(--sk-ink); stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.7"></path><path d="M108.0 60.0Q173.4 60.7 240.0 60.0Q240.0 135.0 240.0 210.0Q174.0 210.3 108.0 210.0Q108.6 135.0 108.0 60.0Z" style="fill: var(--sk-paper); stroke: var(--sk-ink); stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.7"></path><path d="M122.0 80.0Q174.2 79.6 226.0 80.0" style="stroke: var(--sk-ink-soft); fill: none; stroke-linecap: round; stroke-width: 1.1"></path><path d="M122.0 92.0Q173.9 92.0 226.0 92.0" style="stroke: var(--sk-ink-soft); fill: none; stroke-linecap: round; stroke-width: 1.1"></path><path d="M122.0 104.0Q164.6 104.3 208.0 104.0" style="stroke: var(--sk-ink-soft); fill: none; stroke-linecap: round; stroke-width: 1.1"></path><path d="M122.0 118.0Q157.3 117.9 192.0 118.0Q192.8 141.0 192.0 164.0Q157.0 164.8 122.0 164.0Q122.7 141.0 122.0 118.0Z" style="fill: var(--sk-sky); fill-opacity: .6; stroke: var(--sk-ink); stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.3"></path><path d="M128 156L144 138L158 150L172 130L186 144" style="stroke: var(--sk-ink); fill: none; stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.3"></path><path d="M200.0 126.0Q212.2 126.8 226.0 126.0" style="stroke: var(--sk-ink-soft); fill: none; stroke-linecap: round; stroke-width: 1.1"></path><path d="M200.0 138.0Q212.2 138.8 226.0 138.0" style="stroke: var(--sk-ink-soft); fill: none; stroke-linecap: round; stroke-width: 1.1"></path><path d="M200.0 150.0Q212.4 150.7 226.0 150.0" style="stroke: var(--sk-ink-soft); fill: none; stroke-linecap: round; stroke-width: 1.1"></path><path d="M122.0 178.0Q174.3 177.9 226.0 178.0" style="stroke: var(--sk-ink-soft); fill: none; stroke-linecap: round; stroke-width: 1.1"></path><path d="M122.0 190.0Q174.6 189.5 226.0 190.0" style="stroke: var(--sk-ink-soft); fill: none; stroke-linecap: round; stroke-width: 1.1"></path></svg><span data-cap=""><span data-t="" id="zl8p-t-pub1">A one-line takeaway readers will remember</span><span data-jy=""><span><i>Journal Name</i> · 2026</span><span data-chev="" aria-hidden="true"><svg viewBox="0 0 12 12"><path d="M1.4 6.2c2.9-.3 5.8-.3 8.7-.1M7 3.1c1.1 1 2.2 2 3.2 3c-1 1-2.1 2-3.2 3.1"></path></svg></span></span></span></span><span data-spine="" aria-hidden="true"><span data-sdot=""></span><em><i>Journal Name</i> · 2026</em></span></button></h3>
-<div data-page="" id="zl8p-d-pub1" role="region" aria-labelledby="zl8p-t-pub1"><div data-ph=""><p data-ft="">Full title of your most recent paper, exactly as published</p><button type="button" data-x="" aria-label="Close details"><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M1.8 1.9c2.1 2 4.2 4.1 6.3 6.3M8.2 1.7c-2.1 2.1-4.2 4.3-6.4 6.5"></path></svg></button></div><p data-au=""><span>Author A</span>, <span>Author B</span>, <span><b>Example JQ</b></span>, <span>Author C</span>, <span>Senior Author</span></p><p data-sum="">One or two sentences on what the paper found and why it matters, in plain language.</p><a data-read="" href="https://doi.org/10.xxxx/example1">Read the paper<svg viewBox="0 0 10 10" aria-hidden="true"><path d="M2.2 7.9c1.8-1.9 3.7-3.7 5.6-5.6M3.6 2.1c1.4-.1 2.8-.1 4.3 0c.1 1.4 .1 2.8 0 4.2"></path></svg></a></div>
+<li data-item="" data-k="pub1" data-side="r" data-state="rest">
+<h3 data-h=""><button type="button" id="zl8p-f-pub1" data-face="" tabindex="0" aria-expanded="false" aria-controls="zl8p-d-pub1"><span data-faceinner=""><svg viewBox="0 0 360 225" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><path d="M34.0 208.0Q180.6 207.5 326.0 208.0" style="stroke: var(--sk-ink-soft); fill: none; stroke-linecap: round; stroke-width: 1.1"></path><g data-anim="" style="animation: zl8p-tpl-shift 4.4s ease-in-out infinite; transform-box: fill-box; transform-origin: center"><path d="M118.0 50.0Q183.6 50.3 250.0 50.0Q249.2 125.0 250.0 200.0Q184.0 199.2 118.0 200.0Q117.4 125.0 118.0 50.0Z" style="fill: var(--sk-paper); stroke: var(--sk-ink); stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.7"></path></g><path d="M108.0 60.0Q173.4 60.7 240.0 60.0Q240.0 135.0 240.0 210.0Q174.0 210.3 108.0 210.0Q108.6 135.0 108.0 60.0Z" style="fill: var(--sk-paper); stroke: var(--sk-ink); stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.7"></path><path d="M122.0 118.0Q157.3 117.9 192.0 118.0Q192.8 141.0 192.0 164.0Q157.0 164.8 122.0 164.0Q122.7 141.0 122.0 118.0Z" style="fill: var(--sk-sky); fill-opacity: .6; stroke: var(--sk-ink); stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.3"></path><path d="M128 156L144 138L158 150L172 130L186 144" style="stroke: var(--sk-ink); fill: none; stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.3; stroke-dasharray: 1 1; animation: zl8p-tpl-draw 6s ease-in-out .6s infinite" pathLength="1" data-anim=""></path><g data-anim="" style="animation: zl8p-tpl-type 6s ease-out 0.00s infinite; transform-box: fill-box; transform-origin: left center"><path d="M122.0 80.0Q174.2 79.6 226.0 80.0" style="stroke: var(--sk-ink-soft); fill: none; stroke-linecap: round; stroke-width: 1.1"></path></g><g data-anim="" style="animation: zl8p-tpl-type 6s ease-out 0.14s infinite; transform-box: fill-box; transform-origin: left center"><path d="M122.0 92.0Q173.9 92.0 226.0 92.0" style="stroke: var(--sk-ink-soft); fill: none; stroke-linecap: round; stroke-width: 1.1"></path></g><g data-anim="" style="animation: zl8p-tpl-type 6s ease-out 0.28s infinite; transform-box: fill-box; transform-origin: left center"><path d="M122.0 104.0Q164.6 104.3 208.0 104.0" style="stroke: var(--sk-ink-soft); fill: none; stroke-linecap: round; stroke-width: 1.1"></path></g><g data-anim="" style="animation: zl8p-tpl-type 6s ease-out 0.42s infinite; transform-box: fill-box; transform-origin: left center"><path d="M200.0 126.0Q212.2 126.8 226.0 126.0" style="stroke: var(--sk-ink-soft); fill: none; stroke-linecap: round; stroke-width: 1.1"></path></g><g data-anim="" style="animation: zl8p-tpl-type 6s ease-out 0.56s infinite; transform-box: fill-box; transform-origin: left center"><path d="M200.0 138.0Q212.2 138.8 226.0 138.0" style="stroke: var(--sk-ink-soft); fill: none; stroke-linecap: round; stroke-width: 1.1"></path></g><g data-anim="" style="animation: zl8p-tpl-type 6s ease-out 0.70s infinite; transform-box: fill-box; transform-origin: left center"><path d="M200.0 150.0Q212.4 150.7 226.0 150.0" style="stroke: var(--sk-ink-soft); fill: none; stroke-linecap: round; stroke-width: 1.1"></path></g><g data-anim="" style="animation: zl8p-tpl-type 6s ease-out 0.84s infinite; transform-box: fill-box; transform-origin: left center"><path d="M122.0 178.0Q174.3 177.9 226.0 178.0" style="stroke: var(--sk-ink-soft); fill: none; stroke-linecap: round; stroke-width: 1.1"></path></g><g data-anim="" style="animation: zl8p-tpl-type 6s ease-out 0.98s infinite; transform-box: fill-box; transform-origin: left center"><path d="M122.0 190.0Q174.6 189.5 226.0 190.0" style="stroke: var(--sk-ink-soft); fill: none; stroke-linecap: round; stroke-width: 1.1"></path></g></svg><span data-cap=""><span data-t="" id="zl8p-t-pub1">A one-line takeaway readers will remember</span><span data-jy=""><span><i>Journal Name</i> · 2026</span><span data-chev="" aria-hidden="true"><svg viewBox="0 0 12 12"><path d="M1.4 6.2c2.9-.3 5.8-.3 8.7-.1M7 3.1c1.1 1 2.2 2 3.2 3c-1 1-2.1 2-3.2 3.1"></path></svg></span></span></span></span><span data-spine="" aria-hidden="true"><span data-sdot=""></span><em><i>Journal Name</i> · 2026</em></span></button></h3>
+<div data-page="" id="zl8p-d-pub1" role="region" aria-labelledby="zl8p-t-pub1"><div data-ph=""><p data-ft="">Full title of your most recent paper, exactly as published</p><button type="button" data-x="" aria-label="Close details"><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M1.8 1.9c2.1 2 4.2 4.1 6.3 6.3M8.2 1.7c-2.1 2.1-4.2 4.3-6.4 6.5"></path></svg></button></div><p data-au=""><span>Author A</span>, <span>Author B</span>, <span><b>Example JQ</b></span>, <span>Author C</span>, <span>Senior Author</span></p><p data-sum="">One or two sentences on what the paper found and why it matters, in plain language.</p><a data-read="" href="https://doi.org/10.xxxx/example1" target="_blank" rel="noopener">Read the paper<svg viewBox="0 0 10 10" aria-hidden="true"><path d="M2.2 7.9c1.8-1.9 3.7-3.7 5.6-5.6M3.6 2.1c1.4-.1 2.8-.1 4.3 0c.1 1.4 .1 2.8 0 4.2"></path></svg></a></div>
 
 </li>
-<li data-item="" data-k="pub2" data-side="r" data-state="rest" data-play="">
-<h3 data-h=""><button type="button" id="zl8p-f-pub2" data-face="" tabindex="0" aria-expanded="false" aria-controls="zl8p-d-pub2"><span data-faceinner=""><svg viewBox="0 0 360 225" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><path d="M34.0 208.0Q180.6 207.5 326.0 208.0" style="stroke: var(--sk-ink-soft); fill: none; stroke-linecap: round; stroke-width: 1.1"></path><path d="M80.0 120.0Q110.2 99.6 140.0 80.0" style="stroke: var(--sk-ink-soft); fill: none; stroke-linecap: round; stroke-width: 1.1"></path><path d="M80.0 120.0Q114.9 140.0 150.0 160.0" style="stroke: var(--sk-ink-soft); fill: none; stroke-linecap: round; stroke-width: 1.1"></path><path d="M140.0 80.0Q176.6 96.3 214.0 112.0" style="stroke: var(--sk-ink-soft); fill: none; stroke-linecap: round; stroke-width: 1.1"></path><path d="M150.0 160.0Q181.3 136.6 214.0 112.0" style="stroke: var(--sk-ink-soft); fill: none; stroke-linecap: round; stroke-width: 1.1"></path><path d="M214.0 112.0Q241.2 91.8 270.0 70.0" style="stroke: var(--sk-ink-soft); fill: none; stroke-linecap: round; stroke-width: 1.1"></path><path d="M214.0 112.0Q247.2 137.8 282.0 162.0" style="stroke: var(--sk-ink-soft); fill: none; stroke-linecap: round; stroke-width: 1.1"></path><path d="M150.0 160.0Q177.4 173.7 206.0 186.0" style="stroke: var(--sk-ink-soft); fill: none; stroke-linecap: round; stroke-width: 1.1"></path><path d="M206.0 186.0Q243.6 174.5 282.0 162.0" style="stroke: var(--sk-ink-soft); fill: none; stroke-linecap: round; stroke-width: 1.1"></path><path d="M140.0 80.0Q205.0 75.2 270.0 70.0" style="stroke: var(--sk-ink-soft); fill: none; stroke-linecap: round; stroke-width: 1.1"></path><path d="M90.0 120.0C90.0 125.5 85.7 130.3 80.0 130.3C74.3 130.3 70.1 125.5 70.1 120.0C70.1 114.5 74.7 110.3 80.0 110.3C85.3 110.3 90.0 114.5 90.0 120.0Z" style="fill: var(--sk-sage); stroke: var(--sk-ink); stroke-width: 1.5"></path><path d="M150.0 80.0C150.0 85.5 145.3 89.7 140.0 89.7C134.7 89.7 129.9 85.6 129.9 80.0C129.9 74.4 134.3 69.7 140.0 69.7C145.7 69.7 150.0 74.5 150.0 80.0Z" style="fill: var(--sk-gold); stroke: var(--sk-ink); stroke-width: 1.5"></path><path d="M160.0 160.0C160.0 165.5 155.7 170.3 150.0 170.3C144.3 170.3 140.1 165.5 140.1 160.0C140.1 154.5 144.7 150.3 150.0 150.3C155.3 150.3 160.0 154.5 160.0 160.0Z" style="fill: var(--sk-sky); stroke: var(--sk-ink); stroke-width: 1.5"></path><path d="M227.1 112.0C227.1 119.2 220.9 124.5 214.0 124.5C207.1 124.5 200.9 119.2 200.9 112.0C200.9 104.8 206.6 98.6 214.0 98.6C221.4 98.6 227.1 104.8 227.1 112.0Z" style="fill: var(--sk-clay); stroke: var(--sk-ink); stroke-width: 1.5"></path><path d="M279.9 70.0C279.9 75.5 275.7 80.3 270.0 80.3C264.3 80.3 260.0 75.5 260.0 70.0C260.0 64.5 264.7 60.3 270.0 60.3C275.3 60.3 279.9 64.5 279.9 70.0Z" style="fill: var(--sk-sage); stroke: var(--sk-ink); stroke-width: 1.5"></path><path d="M292.1 162.0C292.1 167.6 287.3 171.7 282.0 171.7C276.7 171.7 272.0 167.5 272.0 162.0C272.0 156.5 276.3 151.7 282.0 151.7C287.7 151.7 292.1 156.4 292.1 162.0Z" style="fill: var(--sk-rose); stroke: var(--sk-ink); stroke-width: 1.5"></path><path d="M215.9 186.0C215.9 191.5 211.7 196.3 206.0 196.3C200.3 196.3 196.0 191.5 196.0 186.0C196.0 180.5 200.7 176.3 206.0 176.3C211.3 176.3 215.9 180.5 215.9 186.0Z" style="fill: var(--sk-gold); stroke: var(--sk-ink); stroke-width: 1.5"></path></svg><span data-cap=""><span data-t="" id="zl8p-t-pub2">What this paper showed, in a few words</span><span data-jy=""><span><i>Another Journal</i> · 2024</span><span data-chev="" aria-hidden="true"><svg viewBox="0 0 12 12"><path d="M1.4 6.2c2.9-.3 5.8-.3 8.7-.1M7 3.1c1.1 1 2.2 2 3.2 3c-1 1-2.1 2-3.2 3.1"></path></svg></span></span></span></span><span data-spine="" aria-hidden="true"><span data-sdot=""></span><em><i>Another Journal</i> · 2024</em></span></button></h3>
-<div data-page="" id="zl8p-d-pub2" role="region" aria-labelledby="zl8p-t-pub2"><div data-ph=""><p data-ft="">Full title of an earlier paper, exactly as published</p><button type="button" data-x="" aria-label="Close details"><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M1.8 1.9c2.1 2 4.2 4.1 6.3 6.3M8.2 1.7c-2.1 2.1-4.2 4.3-6.4 6.5"></path></svg></button></div><p data-au=""><span><b>Example JQ</b></span>, <span>Author B</span>, <span>Senior Author</span></p><p data-sum="">Keep summaries short; the link below takes readers to the full paper.</p><a data-read="" href="https://doi.org/10.xxxx/example2">Read the paper<svg viewBox="0 0 10 10" aria-hidden="true"><path d="M2.2 7.9c1.8-1.9 3.7-3.7 5.6-5.6M3.6 2.1c1.4-.1 2.8-.1 4.3 0c.1 1.4 .1 2.8 0 4.2"></path></svg></a></div>
+<li data-item="" data-k="pub2" data-side="r" data-state="rest">
+<h3 data-h=""><button type="button" id="zl8p-f-pub2" data-face="" tabindex="0" aria-expanded="false" aria-controls="zl8p-d-pub2"><span data-faceinner=""><svg viewBox="0 0 360 225" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><path d="M34.0 208.0Q180.6 207.5 326.0 208.0" style="stroke: var(--sk-ink-soft); fill: none; stroke-linecap: round; stroke-width: 1.1"></path><path d="M80.0 120.0Q110.2 99.6 140.0 80.0" style="stroke: var(--sk-ink-soft); fill: none; stroke-linecap: round; stroke-width: 1.1"></path><path d="M80.0 120.0Q114.9 140.0 150.0 160.0" style="stroke: var(--sk-ink-soft); fill: none; stroke-linecap: round; stroke-width: 1.1"></path><path d="M140.0 80.0Q176.6 96.3 214.0 112.0" style="stroke: var(--sk-ink-soft); fill: none; stroke-linecap: round; stroke-width: 1.1"></path><path d="M150.0 160.0Q181.3 136.6 214.0 112.0" style="stroke: var(--sk-ink-soft); fill: none; stroke-linecap: round; stroke-width: 1.1"></path><path d="M214.0 112.0Q241.2 91.8 270.0 70.0" style="stroke: var(--sk-ink-soft); fill: none; stroke-linecap: round; stroke-width: 1.1"></path><path d="M214.0 112.0Q247.2 137.8 282.0 162.0" style="stroke: var(--sk-ink-soft); fill: none; stroke-linecap: round; stroke-width: 1.1"></path><path d="M150.0 160.0Q177.4 173.7 206.0 186.0" style="stroke: var(--sk-ink-soft); fill: none; stroke-linecap: round; stroke-width: 1.1"></path><path d="M206.0 186.0Q243.6 174.5 282.0 162.0" style="stroke: var(--sk-ink-soft); fill: none; stroke-linecap: round; stroke-width: 1.1"></path><path d="M140.0 80.0Q205.0 75.2 270.0 70.0" style="stroke: var(--sk-ink-soft); fill: none; stroke-linecap: round; stroke-width: 1.1"></path><g data-anim="" style="animation: zl8p-tpl-pop 3.5s ease-in-out 0.00s infinite; transform-box: fill-box; transform-origin: center"><path d="M90.0 120.0C90.0 125.5 85.7 130.3 80.0 130.3C74.3 130.3 70.1 125.5 70.1 120.0C70.1 114.5 74.7 110.3 80.0 110.3C85.3 110.3 90.0 114.5 90.0 120.0Z" style="fill: var(--sk-sage); stroke: var(--sk-ink); stroke-width: 1.5"></path></g><g data-anim="" style="animation: zl8p-tpl-pop 3.5s ease-in-out 0.35s infinite; transform-box: fill-box; transform-origin: center"><path d="M150.0 80.0C150.0 85.5 145.3 89.7 140.0 89.7C134.7 89.7 129.9 85.6 129.9 80.0C129.9 74.4 134.3 69.7 140.0 69.7C145.7 69.7 150.0 74.5 150.0 80.0Z" style="fill: var(--sk-gold); stroke: var(--sk-ink); stroke-width: 1.5"></path></g><g data-anim="" style="animation: zl8p-tpl-pop 3.5s ease-in-out 0.70s infinite; transform-box: fill-box; transform-origin: center"><path d="M160.0 160.0C160.0 165.5 155.7 170.3 150.0 170.3C144.3 170.3 140.1 165.5 140.1 160.0C140.1 154.5 144.7 150.3 150.0 150.3C155.3 150.3 160.0 154.5 160.0 160.0Z" style="fill: var(--sk-sky); stroke: var(--sk-ink); stroke-width: 1.5"></path></g><g data-anim="" style="animation: zl8p-tpl-pop 3.5s ease-in-out 1.05s infinite; transform-box: fill-box; transform-origin: center"><path d="M227.1 112.0C227.1 119.2 220.9 124.5 214.0 124.5C207.1 124.5 200.9 119.2 200.9 112.0C200.9 104.8 206.6 98.6 214.0 98.6C221.4 98.6 227.1 104.8 227.1 112.0Z" style="fill: var(--sk-clay); stroke: var(--sk-ink); stroke-width: 1.5"></path></g><g data-anim="" style="animation: zl8p-tpl-pop 3.5s ease-in-out 1.40s infinite; transform-box: fill-box; transform-origin: center"><path d="M279.9 70.0C279.9 75.5 275.7 80.3 270.0 80.3C264.3 80.3 260.0 75.5 260.0 70.0C260.0 64.5 264.7 60.3 270.0 60.3C275.3 60.3 279.9 64.5 279.9 70.0Z" style="fill: var(--sk-sage); stroke: var(--sk-ink); stroke-width: 1.5"></path></g><g data-anim="" style="animation: zl8p-tpl-pop 3.5s ease-in-out 2.10s infinite; transform-box: fill-box; transform-origin: center"><path d="M292.1 162.0C292.1 167.6 287.3 171.7 282.0 171.7C276.7 171.7 272.0 167.5 272.0 162.0C272.0 156.5 276.3 151.7 282.0 151.7C287.7 151.7 292.1 156.4 292.1 162.0Z" style="fill: var(--sk-rose); stroke: var(--sk-ink); stroke-width: 1.5"></path></g><g data-anim="" style="animation: zl8p-tpl-pop 3.5s ease-in-out 1.75s infinite; transform-box: fill-box; transform-origin: center"><path d="M215.9 186.0C215.9 191.5 211.7 196.3 206.0 196.3C200.3 196.3 196.0 191.5 196.0 186.0C196.0 180.5 200.7 176.3 206.0 176.3C211.3 176.3 215.9 180.5 215.9 186.0Z" style="fill: var(--sk-gold); stroke: var(--sk-ink); stroke-width: 1.5"></path></g></svg><span data-cap=""><span data-t="" id="zl8p-t-pub2">What this paper showed, in a few words</span><span data-jy=""><span><i>Another Journal</i> · 2024</span><span data-chev="" aria-hidden="true"><svg viewBox="0 0 12 12"><path d="M1.4 6.2c2.9-.3 5.8-.3 8.7-.1M7 3.1c1.1 1 2.2 2 3.2 3c-1 1-2.1 2-3.2 3.1"></path></svg></span></span></span></span><span data-spine="" aria-hidden="true"><span data-sdot=""></span><em><i>Another Journal</i> · 2024</em></span></button></h3>
+<div data-page="" id="zl8p-d-pub2" role="region" aria-labelledby="zl8p-t-pub2"><div data-ph=""><p data-ft="">Full title of an earlier paper, exactly as published</p><button type="button" data-x="" aria-label="Close details"><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M1.8 1.9c2.1 2 4.2 4.1 6.3 6.3M8.2 1.7c-2.1 2.1-4.2 4.3-6.4 6.5"></path></svg></button></div><p data-au=""><span><b>Example JQ</b></span>, <span>Author B</span>, <span>Senior Author</span></p><p data-sum="">Keep summaries short; the link below takes readers to the full paper.</p><a data-read="" href="https://doi.org/10.xxxx/example2" target="_blank" rel="noopener">Read the paper<svg viewBox="0 0 10 10" aria-hidden="true"><path d="M2.2 7.9c1.8-1.9 3.7-3.7 5.6-5.6M3.6 2.1c1.4-.1 2.8-.1 4.3 0c.1 1.4 .1 2.8 0 4.2"></path></svg></a></div>
 
 </li>
-<li data-item="" data-k="pub3" data-side="l" data-state="rest" data-play="">
-<h3 data-h=""><button type="button" id="zl8p-f-pub3" data-face="" tabindex="0" aria-expanded="false" aria-controls="zl8p-d-pub3"><span data-faceinner=""><svg viewBox="0 0 360 225" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><path d="M34.0 208.0Q180.6 207.5 326.0 208.0" style="stroke: var(--sk-ink-soft); fill: none; stroke-linecap: round; stroke-width: 1.1"></path><path d="M70.0 190.0Q180.9 190.0 292.0 190.0" style="stroke: var(--sk-ink); fill: none; stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.7"></path><path d="M90.0 126.0Q105.2 125.6 120.0 126.0Q119.6 158.0 120.0 190.0Q105.0 189.3 90.0 190.0Q89.2 158.0 90.0 126.0Z" style="fill: var(--sk-sage); fill-opacity: .7; stroke: var(--sk-ink); stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.4"></path><path d="M105.0 110.0Q105.2 117.6 105.0 126.0M99.0 110.0Q104.6 110.3 111.0 110.0" style="stroke: var(--sk-ink); fill: none; stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.2"></path><path d="M140.0 86.0Q154.3 86.6 170.0 86.0Q169.2 138.0 170.0 190.0Q155.0 189.4 140.0 190.0Q139.6 138.0 140.0 86.0Z" style="fill: var(--sk-gold); fill-opacity: .7; stroke: var(--sk-ink); stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.4"></path><path d="M155.0 70.0Q154.9 78.0 155.0 86.0M149.0 70.0Q154.3 70.6 161.0 70.0" style="stroke: var(--sk-ink); fill: none; stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.2"></path><path d="M190.0 106.0Q204.4 106.7 220.0 106.0Q220.0 148.0 220.0 190.0Q205.0 190.3 190.0 190.0Q190.6 148.0 190.0 106.0Z" style="fill: var(--sk-sky); fill-opacity: .7; stroke: var(--sk-ink); stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.4"></path><path d="M205.0 90.0Q204.6 98.3 205.0 106.0M199.0 90.0Q204.2 90.8 211.0 90.0" style="stroke: var(--sk-ink); fill: none; stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.2"></path><path d="M240.0 64.0Q255.3 63.9 270.0 64.0Q270.8 127.0 270.0 190.0Q255.0 190.8 240.0 190.0Q240.7 127.0 240.0 64.0Z" style="fill: var(--sk-clay); fill-opacity: .7; stroke: var(--sk-ink); stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.4"></path><path d="M255.0 48.0Q254.3 56.6 255.0 64.0M249.0 48.0Q254.2 48.8 261.0 48.0" style="stroke: var(--sk-ink); fill: none; stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.2"></path></svg><span data-cap=""><span data-t="" id="zl8p-t-pub3">Face titles work best at two lines or less</span><span data-jy=""><span><i>Journal Name</i> · 2022</span><span data-chev="" aria-hidden="true"><svg viewBox="0 0 12 12"><path d="M1.4 6.2c2.9-.3 5.8-.3 8.7-.1M7 3.1c1.1 1 2.2 2 3.2 3c-1 1-2.1 2-3.2 3.1"></path></svg></span></span></span></span><span data-spine="" aria-hidden="true"><span data-sdot=""></span><em><i>Journal Name</i> · 2022</em></span></button></h3>
-<div data-page="" id="zl8p-d-pub3" role="region" aria-labelledby="zl8p-t-pub3"><div data-ph=""><p data-ft="">Full title of a third paper, exactly as published</p><button type="button" data-x="" aria-label="Close details"><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M1.8 1.9c2.1 2 4.2 4.1 6.3 6.3M8.2 1.7c-2.1 2.1-4.2 4.3-6.4 6.5"></path></svg></button></div><p data-au=""><span>Author A</span>, <span><b>Example JQ</b></span>, <span>Author C</span>, <span>Senior Author</span></p><p data-sum="">Write the face title for a general reader and keep the exact title here.</p><a data-read="" href="https://doi.org/10.xxxx/example3">Read the paper<svg viewBox="0 0 10 10" aria-hidden="true"><path d="M2.2 7.9c1.8-1.9 3.7-3.7 5.6-5.6M3.6 2.1c1.4-.1 2.8-.1 4.3 0c.1 1.4 .1 2.8 0 4.2"></path></svg></a></div>
+<li data-item="" data-k="pub3" data-side="l" data-state="rest">
+<h3 data-h=""><button type="button" id="zl8p-f-pub3" data-face="" tabindex="0" aria-expanded="false" aria-controls="zl8p-d-pub3"><span data-faceinner=""><svg viewBox="0 0 360 225" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><path d="M34.0 208.0Q180.6 207.5 326.0 208.0" style="stroke: var(--sk-ink-soft); fill: none; stroke-linecap: round; stroke-width: 1.1"></path><path d="M70.0 190.0Q180.9 190.0 292.0 190.0" style="stroke: var(--sk-ink); fill: none; stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.7"></path><g data-anim="" style="animation: zl8p-tpl-breathe 2.6s ease-in-out 0.0s infinite; transform-box: fill-box; transform-origin: 50% 100%"><path d="M90.0 126.0Q105.2 125.6 120.0 126.0Q119.6 158.0 120.0 190.0Q105.0 189.3 90.0 190.0Q89.2 158.0 90.0 126.0Z" style="fill: var(--sk-sage); fill-opacity: .7; stroke: var(--sk-ink); stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.4"></path><path d="M105.0 110.0Q105.2 117.6 105.0 126.0M99.0 110.0Q104.6 110.3 111.0 110.0" style="stroke: var(--sk-ink); fill: none; stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.2"></path></g><g data-anim="" style="animation: zl8p-tpl-breathe 2.9s ease-in-out 0.5s infinite; transform-box: fill-box; transform-origin: 50% 100%"><path d="M140.0 86.0Q154.3 86.6 170.0 86.0Q169.2 138.0 170.0 190.0Q155.0 189.4 140.0 190.0Q139.6 138.0 140.0 86.0Z" style="fill: var(--sk-gold); fill-opacity: .7; stroke: var(--sk-ink); stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.4"></path><path d="M155.0 70.0Q154.9 78.0 155.0 86.0M149.0 70.0Q154.3 70.6 161.0 70.0" style="stroke: var(--sk-ink); fill: none; stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.2"></path></g><g data-anim="" style="animation: zl8p-tpl-breathe 3.2s ease-in-out 1.0s infinite; transform-box: fill-box; transform-origin: 50% 100%"><path d="M190.0 106.0Q204.4 106.7 220.0 106.0Q220.0 148.0 220.0 190.0Q205.0 190.3 190.0 190.0Q190.6 148.0 190.0 106.0Z" style="fill: var(--sk-sky); fill-opacity: .7; stroke: var(--sk-ink); stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.4"></path><path d="M205.0 90.0Q204.6 98.3 205.0 106.0M199.0 90.0Q204.2 90.8 211.0 90.0" style="stroke: var(--sk-ink); fill: none; stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.2"></path></g><g data-anim="" style="animation: zl8p-tpl-breathe 3.5s ease-in-out 1.5s infinite; transform-box: fill-box; transform-origin: 50% 100%"><path d="M240.0 64.0Q255.3 63.9 270.0 64.0Q270.8 127.0 270.0 190.0Q255.0 190.8 240.0 190.0Q240.7 127.0 240.0 64.0Z" style="fill: var(--sk-clay); fill-opacity: .7; stroke: var(--sk-ink); stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.4"></path><path d="M255.0 48.0Q254.3 56.6 255.0 64.0M249.0 48.0Q254.2 48.8 261.0 48.0" style="stroke: var(--sk-ink); fill: none; stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.2"></path></g></svg><span data-cap=""><span data-t="" id="zl8p-t-pub3">Face titles work best at two lines or less</span><span data-jy=""><span><i>Journal Name</i> · 2022</span><span data-chev="" aria-hidden="true"><svg viewBox="0 0 12 12"><path d="M1.4 6.2c2.9-.3 5.8-.3 8.7-.1M7 3.1c1.1 1 2.2 2 3.2 3c-1 1-2.1 2-3.2 3.1"></path></svg></span></span></span></span><span data-spine="" aria-hidden="true"><span data-sdot=""></span><em><i>Journal Name</i> · 2022</em></span></button></h3>
+<div data-page="" id="zl8p-d-pub3" role="region" aria-labelledby="zl8p-t-pub3"><div data-ph=""><p data-ft="">Full title of a third paper, exactly as published</p><button type="button" data-x="" aria-label="Close details"><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M1.8 1.9c2.1 2 4.2 4.1 6.3 6.3M8.2 1.7c-2.1 2.1-4.2 4.3-6.4 6.5"></path></svg></button></div><p data-au=""><span>Author A</span>, <span><b>Example JQ</b></span>, <span>Author C</span>, <span>Senior Author</span></p><p data-sum="">Write the face title for a general reader and keep the exact title here.</p><a data-read="" href="https://doi.org/10.xxxx/example3" target="_blank" rel="noopener">Read the paper<svg viewBox="0 0 10 10" aria-hidden="true"><path d="M2.2 7.9c1.8-1.9 3.7-3.7 5.6-5.6M3.6 2.1c1.4-.1 2.8-.1 4.3 0c.1 1.4 .1 2.8 0 4.2"></path></svg></a></div>
 
 </li>
-<li data-item="" data-k="pub4" data-side="l" data-state="rest" data-play="">
-<h3 data-h=""><button type="button" id="zl8p-f-pub4" data-face="" tabindex="0" aria-expanded="false" aria-controls="zl8p-d-pub4"><span data-faceinner=""><svg viewBox="0 0 360 225" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><path d="M34.0 208.0Q180.6 207.5 326.0 208.0" style="stroke: var(--sk-ink-soft); fill: none; stroke-linecap: round; stroke-width: 1.1"></path><path d="M120.0 150.0C120.0 163.3 109.7 174.8 96.0 174.8C82.3 174.8 72.2 163.1 72.2 150.0C72.2 136.9 83.2 126.8 96.0 126.8C108.8 126.8 120.0 136.7 120.0 150.0Z" style="fill: var(--sk-sage); fill-opacity: .55; stroke: var(--sk-ink); stroke-width: 1.5"></path><path d="M106.7 149.0C106.7 153.8 102.6 157.3 98.0 157.3C93.4 157.3 89.3 153.8 89.3 149.0C89.3 144.2 93.1 140.1 98.0 140.1C102.9 140.1 106.7 144.2 106.7 149.0Z" style="fill: var(--sk-paper); stroke: var(--sk-ink); stroke-width: 1.2"></path><path d="M166.0 128.0C166.0 142.4 153.9 153.1 140.0 153.1C126.1 153.1 113.8 142.5 113.8 128.0C113.8 113.5 125.2 101.1 140.0 101.1C154.8 101.1 166.0 113.6 166.0 128.0Z" style="fill: var(--sk-sage); fill-opacity: .55; stroke: var(--sk-ink); stroke-width: 1.5"></path><path d="M151.3 127.0C151.3 132.1 147.4 136.7 142.0 136.7C136.6 136.7 132.7 132.2 132.7 127.0C132.7 121.8 137.0 118.0 142.0 118.0C147.0 118.0 151.3 121.9 151.3 127.0Z" style="fill: var(--sk-paper); stroke: var(--sk-ink); stroke-width: 1.2"></path><path d="M210.9 150.0C210.9 163.8 200.3 175.9 186.0 175.9C171.7 175.9 161.2 163.7 161.2 150.0C161.2 136.3 172.7 125.8 186.0 125.8C199.3 125.8 210.9 136.2 210.9 150.0Z" style="fill: var(--sk-sage); fill-opacity: .55; stroke: var(--sk-ink); stroke-width: 1.5"></path><path d="M197.1 149.0C197.1 154.0 192.8 157.7 188.0 157.7C183.2 157.7 179.0 154.0 179.0 149.0C179.0 144.0 182.9 139.7 188.0 139.7C193.1 139.7 197.1 144.0 197.1 149.0Z" style="fill: var(--sk-paper); stroke: var(--sk-ink); stroke-width: 1.2"></path><path d="M254.1 126.0C254.1 139.3 242.8 149.2 230.0 149.2C217.2 149.2 205.9 139.3 205.9 126.0C205.9 112.7 216.3 101.2 230.0 101.2C243.7 101.2 254.1 112.7 254.1 126.0Z" style="fill: var(--sk-clay); fill-opacity: .55; stroke: var(--sk-ink); stroke-width: 1.5"></path><path d="M240.6 125.0C240.6 129.7 236.9 133.9 232.0 133.9C227.1 133.9 223.4 129.8 223.4 125.0C223.4 120.2 227.4 116.7 232.0 116.7C236.6 116.7 240.6 120.3 240.6 125.0Z" style="fill: var(--sk-paper); stroke: var(--sk-ink); stroke-width: 1.2"></path><path d="M294.9 152.0C294.9 164.6 285.1 175.8 272.0 175.8C258.9 175.8 249.1 164.7 249.1 152.0C249.1 139.3 259.7 129.8 272.0 129.8C284.3 129.8 294.9 139.4 294.9 152.0Z" style="fill: var(--sk-sage); fill-opacity: .55; stroke: var(--sk-ink); stroke-width: 1.5"></path><path d="M282.4 151.0C282.4 155.6 278.4 159.0 274.0 159.0C269.6 159.0 265.7 155.6 265.7 151.0C265.7 146.4 269.3 142.4 274.0 142.4C278.7 142.4 282.4 146.4 282.4 151.0Z" style="fill: var(--sk-paper); stroke: var(--sk-ink); stroke-width: 1.2"></path><path d="M138.1 176.0C138.1 187.1 128.7 195.3 118.0 195.3C107.3 195.3 98.0 187.1 98.0 176.0C98.0 164.9 106.6 155.3 118.0 155.3C129.4 155.3 138.1 164.9 138.1 176.0Z" style="fill: var(--sk-sage); fill-opacity: .55; stroke: var(--sk-ink); stroke-width: 1.5"></path><path d="M127.1 175.0C127.1 178.9 124.1 182.4 120.0 182.4C115.9 182.4 112.8 179.0 112.8 175.0C112.8 171.0 116.2 168.1 120.0 168.1C123.8 168.1 127.1 171.1 127.1 175.0Z" style="fill: var(--sk-paper); stroke: var(--sk-ink); stroke-width: 1.2"></path><path d="M228.8 180.0C228.8 191.5 220.0 201.7 208.0 201.7C196.0 201.7 187.0 191.6 187.0 180.0C187.0 168.4 196.8 159.7 208.0 159.7C219.2 159.7 228.8 168.5 228.8 180.0Z" style="fill: var(--sk-sage); fill-opacity: .55; stroke: var(--sk-ink); stroke-width: 1.5"></path><path d="M217.7 179.0C217.7 183.2 214.0 186.3 210.0 186.3C206.0 186.3 202.5 183.2 202.5 179.0C202.5 174.8 205.7 171.2 210.0 171.2C214.3 171.2 217.7 174.8 217.7 179.0Z" style="fill: var(--sk-paper); stroke: var(--sk-ink); stroke-width: 1.2"></path><path d="M271.2 184.0C271.2 194.6 262.1 202.3 252.0 202.3C241.9 202.3 233.0 194.5 233.0 184.0C233.0 173.5 241.1 164.3 252.0 164.3C262.9 164.3 271.2 173.4 271.2 184.0Z" style="fill: var(--sk-sage); fill-opacity: .55; stroke: var(--sk-ink); stroke-width: 1.5"></path><path d="M260.7 183.0C260.7 186.7 257.9 190.1 254.0 190.1C250.1 190.1 247.1 186.8 247.1 183.0C247.1 179.2 250.4 176.4 254.0 176.4C257.6 176.4 260.7 179.3 260.7 183.0Z" style="fill: var(--sk-paper); stroke: var(--sk-ink); stroke-width: 1.2"></path><path d="M183.8 98.0C183.8 108.9 175.4 118.7 164.0 118.7C152.6 118.7 143.9 109.1 143.9 98.0C143.9 86.9 153.3 78.7 164.0 78.7C174.7 78.7 183.8 87.1 183.8 98.0Z" style="fill: var(--sk-sage); fill-opacity: .55; stroke: var(--sk-ink); stroke-width: 1.5"></path><path d="M173.3 97.0C173.3 101.0 169.8 104.0 166.0 104.0C162.2 104.0 158.8 100.9 158.8 97.0C158.8 93.1 161.9 89.5 166.0 89.5C170.1 89.5 173.3 93.0 173.3 97.0Z" style="fill: var(--sk-paper); stroke: var(--sk-ink); stroke-width: 1.2"></path></svg><span data-cap=""><span data-t="" id="zl8p-t-pub4">A fourth card fills out the row</span><span data-jy=""><span><i>Conference Proceedings</i> · 2020</span><span data-chev="" aria-hidden="true"><svg viewBox="0 0 12 12"><path d="M1.4 6.2c2.9-.3 5.8-.3 8.7-.1M7 3.1c1.1 1 2.2 2 3.2 3c-1 1-2.1 2-3.2 3.1"></path></svg></span></span></span></span><span data-spine="" aria-hidden="true"><span data-sdot=""></span><em><i>Conference Proceedings</i> · 2020</em></span></button></h3>
-<div data-page="" id="zl8p-d-pub4" role="region" aria-labelledby="zl8p-t-pub4"><div data-ph=""><p data-ft="">Full title of a fourth paper, exactly as published</p><button type="button" data-x="" aria-label="Close details"><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M1.8 1.9c2.1 2 4.2 4.1 6.3 6.3M8.2 1.7c-2.1 2.1-4.2 4.3-6.4 6.5"></path></svg></button></div><p data-au=""><span>Author A</span>, <span>Author B</span>, <span><b>Example JQ</b></span></p><p data-sum="">Add or remove cards by copying a whole card block (see README).</p><a data-read="" href="https://doi.org/10.xxxx/example4">Read the paper<svg viewBox="0 0 10 10" aria-hidden="true"><path d="M2.2 7.9c1.8-1.9 3.7-3.7 5.6-5.6M3.6 2.1c1.4-.1 2.8-.1 4.3 0c.1 1.4 .1 2.8 0 4.2"></path></svg></a></div>
+<li data-item="" data-k="pub4" data-side="l" data-state="rest">
+<h3 data-h=""><button type="button" id="zl8p-f-pub4" data-face="" tabindex="0" aria-expanded="false" aria-controls="zl8p-d-pub4"><span data-faceinner=""><svg viewBox="0 0 360 225" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><path d="M34.0 208.0Q180.6 207.5 326.0 208.0" style="stroke: var(--sk-ink-soft); fill: none; stroke-linecap: round; stroke-width: 1.1"></path><g data-anim="" style="animation: zl8p-tpl-jostle 2.40s ease-in-out -0.00s infinite; transform-box: fill-box; transform-origin: center"><path d="M120.0 150.0C120.0 163.3 109.7 174.8 96.0 174.8C82.3 174.8 72.2 163.1 72.2 150.0C72.2 136.9 83.2 126.8 96.0 126.8C108.8 126.8 120.0 136.7 120.0 150.0Z" style="fill: var(--sk-sage); fill-opacity: .55; stroke: var(--sk-ink); stroke-width: 1.5"></path><path d="M106.7 149.0C106.7 153.8 102.6 157.3 98.0 157.3C93.4 157.3 89.3 153.8 89.3 149.0C89.3 144.2 93.1 140.1 98.0 140.1C102.9 140.1 106.7 144.2 106.7 149.0Z" style="fill: var(--sk-paper); stroke: var(--sk-ink); stroke-width: 1.2"></path></g><g data-anim="" style="animation: zl8p-tpl-jostle 2.53s ease-in-out -0.37s infinite; transform-box: fill-box; transform-origin: center"><path d="M166.0 128.0C166.0 142.4 153.9 153.1 140.0 153.1C126.1 153.1 113.8 142.5 113.8 128.0C113.8 113.5 125.2 101.1 140.0 101.1C154.8 101.1 166.0 113.6 166.0 128.0Z" style="fill: var(--sk-sage); fill-opacity: .55; stroke: var(--sk-ink); stroke-width: 1.5"></path><path d="M151.3 127.0C151.3 132.1 147.4 136.7 142.0 136.7C136.6 136.7 132.7 132.2 132.7 127.0C132.7 121.8 137.0 118.0 142.0 118.0C147.0 118.0 151.3 121.9 151.3 127.0Z" style="fill: var(--sk-paper); stroke: var(--sk-ink); stroke-width: 1.2"></path></g><g data-anim="" style="animation: zl8p-tpl-jostle 2.66s ease-in-out -0.74s infinite; transform-box: fill-box; transform-origin: center"><path d="M210.9 150.0C210.9 163.8 200.3 175.9 186.0 175.9C171.7 175.9 161.2 163.7 161.2 150.0C161.2 136.3 172.7 125.8 186.0 125.8C199.3 125.8 210.9 136.2 210.9 150.0Z" style="fill: var(--sk-sage); fill-opacity: .55; stroke: var(--sk-ink); stroke-width: 1.5"></path><path d="M197.1 149.0C197.1 154.0 192.8 157.7 188.0 157.7C183.2 157.7 179.0 154.0 179.0 149.0C179.0 144.0 182.9 139.7 188.0 139.7C193.1 139.7 197.1 144.0 197.1 149.0Z" style="fill: var(--sk-paper); stroke: var(--sk-ink); stroke-width: 1.2"></path></g><g data-anim="" style="animation: zl8p-tpl-jostle 2.79s ease-in-out -1.11s infinite; transform-box: fill-box; transform-origin: center"><path d="M254.1 126.0C254.1 139.3 242.8 149.2 230.0 149.2C217.2 149.2 205.9 139.3 205.9 126.0C205.9 112.7 216.3 101.2 230.0 101.2C243.7 101.2 254.1 112.7 254.1 126.0Z" style="fill: var(--sk-clay); fill-opacity: .55; stroke: var(--sk-ink); stroke-width: 1.5"></path><g data-anim="" style="animation: zl8p-tpl-pop 2.4s ease-in-out infinite; transform-box: fill-box; transform-origin: center"><path d="M240.6 125.0C240.6 129.7 236.9 133.9 232.0 133.9C227.1 133.9 223.4 129.8 223.4 125.0C223.4 120.2 227.4 116.7 232.0 116.7C236.6 116.7 240.6 120.3 240.6 125.0Z" style="fill: var(--sk-paper); stroke: var(--sk-ink); stroke-width: 1.2"></path></g></g><g data-anim="" style="animation: zl8p-tpl-jostle 2.92s ease-in-out -1.48s infinite; transform-box: fill-box; transform-origin: center"><path d="M294.9 152.0C294.9 164.6 285.1 175.8 272.0 175.8C258.9 175.8 249.1 164.7 249.1 152.0C249.1 139.3 259.7 129.8 272.0 129.8C284.3 129.8 294.9 139.4 294.9 152.0Z" style="fill: var(--sk-sage); fill-opacity: .55; stroke: var(--sk-ink); stroke-width: 1.5"></path><path d="M282.4 151.0C282.4 155.6 278.4 159.0 274.0 159.0C269.6 159.0 265.7 155.6 265.7 151.0C265.7 146.4 269.3 142.4 274.0 142.4C278.7 142.4 282.4 146.4 282.4 151.0Z" style="fill: var(--sk-paper); stroke: var(--sk-ink); stroke-width: 1.2"></path></g><g data-anim="" style="animation: zl8p-tpl-jostle 3.05s ease-in-out -1.85s infinite; transform-box: fill-box; transform-origin: center"><path d="M138.1 176.0C138.1 187.1 128.7 195.3 118.0 195.3C107.3 195.3 98.0 187.1 98.0 176.0C98.0 164.9 106.6 155.3 118.0 155.3C129.4 155.3 138.1 164.9 138.1 176.0Z" style="fill: var(--sk-sage); fill-opacity: .55; stroke: var(--sk-ink); stroke-width: 1.5"></path><path d="M127.1 175.0C127.1 178.9 124.1 182.4 120.0 182.4C115.9 182.4 112.8 179.0 112.8 175.0C112.8 171.0 116.2 168.1 120.0 168.1C123.8 168.1 127.1 171.1 127.1 175.0Z" style="fill: var(--sk-paper); stroke: var(--sk-ink); stroke-width: 1.2"></path></g><g data-anim="" style="animation: zl8p-tpl-jostle 3.18s ease-in-out -2.22s infinite; transform-box: fill-box; transform-origin: center"><path d="M228.8 180.0C228.8 191.5 220.0 201.7 208.0 201.7C196.0 201.7 187.0 191.6 187.0 180.0C187.0 168.4 196.8 159.7 208.0 159.7C219.2 159.7 228.8 168.5 228.8 180.0Z" style="fill: var(--sk-sage); fill-opacity: .55; stroke: var(--sk-ink); stroke-width: 1.5"></path><path d="M217.7 179.0C217.7 183.2 214.0 186.3 210.0 186.3C206.0 186.3 202.5 183.2 202.5 179.0C202.5 174.8 205.7 171.2 210.0 171.2C214.3 171.2 217.7 174.8 217.7 179.0Z" style="fill: var(--sk-paper); stroke: var(--sk-ink); stroke-width: 1.2"></path></g><g data-anim="" style="animation: zl8p-tpl-jostle 3.31s ease-in-out -2.59s infinite; transform-box: fill-box; transform-origin: center"><path d="M271.2 184.0C271.2 194.6 262.1 202.3 252.0 202.3C241.9 202.3 233.0 194.5 233.0 184.0C233.0 173.5 241.1 164.3 252.0 164.3C262.9 164.3 271.2 173.4 271.2 184.0Z" style="fill: var(--sk-sage); fill-opacity: .55; stroke: var(--sk-ink); stroke-width: 1.5"></path><path d="M260.7 183.0C260.7 186.7 257.9 190.1 254.0 190.1C250.1 190.1 247.1 186.8 247.1 183.0C247.1 179.2 250.4 176.4 254.0 176.4C257.6 176.4 260.7 179.3 260.7 183.0Z" style="fill: var(--sk-paper); stroke: var(--sk-ink); stroke-width: 1.2"></path></g><g data-anim="" style="animation: zl8p-tpl-jostle 3.44s ease-in-out -2.96s infinite; transform-box: fill-box; transform-origin: center"><path d="M183.8 98.0C183.8 108.9 175.4 118.7 164.0 118.7C152.6 118.7 143.9 109.1 143.9 98.0C143.9 86.9 153.3 78.7 164.0 78.7C174.7 78.7 183.8 87.1 183.8 98.0Z" style="fill: var(--sk-sage); fill-opacity: .55; stroke: var(--sk-ink); stroke-width: 1.5"></path><path d="M173.3 97.0C173.3 101.0 169.8 104.0 166.0 104.0C162.2 104.0 158.8 100.9 158.8 97.0C158.8 93.1 161.9 89.5 166.0 89.5C170.1 89.5 173.3 93.0 173.3 97.0Z" style="fill: var(--sk-paper); stroke: var(--sk-ink); stroke-width: 1.2"></path></g></svg><span data-cap=""><span data-t="" id="zl8p-t-pub4">A fourth card fills out the row</span><span data-jy=""><span><i>Conference Proceedings</i> · 2020</span><span data-chev="" aria-hidden="true"><svg viewBox="0 0 12 12"><path d="M1.4 6.2c2.9-.3 5.8-.3 8.7-.1M7 3.1c1.1 1 2.2 2 3.2 3c-1 1-2.1 2-3.2 3.1"></path></svg></span></span></span></span><span data-spine="" aria-hidden="true"><span data-sdot=""></span><em><i>Conference Proceedings</i> · 2020</em></span></button></h3>
+<div data-page="" id="zl8p-d-pub4" role="region" aria-labelledby="zl8p-t-pub4"><div data-ph=""><p data-ft="">Full title of a fourth paper, exactly as published</p><button type="button" data-x="" aria-label="Close details"><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M1.8 1.9c2.1 2 4.2 4.1 6.3 6.3M8.2 1.7c-2.1 2.1-4.2 4.3-6.4 6.5"></path></svg></button></div><p data-au=""><span>Author A</span>, <span>Author B</span>, <span><b>Example JQ</b></span></p><p data-sum="">Add or remove cards by copying a whole card block (see README).</p><a data-read="" href="https://doi.org/10.xxxx/example4" target="_blank" rel="noopener">Read the paper<svg viewBox="0 0 10 10" aria-hidden="true"><path d="M2.2 7.9c1.8-1.9 3.7-3.7 5.6-5.6M3.6 2.1c1.4-.1 2.8-.1 4.3 0c.1 1.4 .1 2.8 0 4.2"></path></svg></a></div>
 
 </li>
 </ul>
 </section>
+</main>
 
 <footer data-z="" style="flex:none;padding:20px 72px 14px;display:flex;flex-direction:column;align-items:flex-start;gap:2px">
-<a data-fl="" href="/assets/your-cv.pdf">Download CV<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M6.1 1.3c-.2 2.8-.1 5.5 .1 8.3M2.6 6.5c1.2 1.1 2.3 2.2 3.5 3.3c1.1-1.2 2.3-2.3 3.4-3.4"></path></svg></a>
 <span data-copy="">© 2026 Jane Q. Example</span>
 </footer>
-<button type="button" data-themesw="" aria-label="Dark mode" aria-pressed="false"><svg data-swring="" viewBox="0 0 40 40" aria-hidden="true"><path d="M20.0 1.0C30.5 1.0 37.8 10.2 37.8 20.0C37.8 29.8 30.6 39.2 20.0 39.2C9.4 39.2 0.6 30.7 0.6 20.0C0.6 9.3 9.5 1.0 20.0 1.0"></path></svg><svg data-sun="" viewBox="0 0 24 24" aria-hidden="true"><path d="M12.0 8.0C14.2 8.0 16.3 9.6 16.3 12.0C16.3 14.4 14.4 16.3 12.0 16.3C9.6 16.3 8.1 14.2 8.1 12.0C8.1 9.8 9.8 8.0 12.0 8.0"></path><path d="M19.1 11.8Q20.4 11.5 21.8 11.7M16.4 16.9Q17.5 17.8 18.3 19.0M12.2 19.0Q12.5 20.4 12.3 21.9M7.0 16.5Q6.3 17.5 5.2 18.1M4.8 12.3Q3.6 12.5 2.4 12.3M7.4 6.9Q6.2 5.9 5.3 4.6M11.8 5.5Q11.5 4.1 11.7 2.7M17.3 7.2Q18.0 6.3 19.1 5.6"></path></svg><svg data-moon="" viewBox="0 0 24 24" aria-hidden="true"><path d="M19.6 14.6c-1.2 3.3-4.4 5.6-8 5.5c-4.6-.1-8.2-3.9-8.1-8.5c.1-3.6 2.5-6.6 5.8-7.6c-.9 1.3-1.4 2.9-1.3 4.5c.1 4.2 3.6 7.5 7.8 7.4c1.4 0 2.7-.5 3.8-1.3z"></path><path d="M17.1 4.2c.1 .9 .1 1.8 0 2.7M15.8 5.6c.9-.1 1.8-.1 2.7 0"></path></svg></button>
+<button type="button" data-themesw="" aria-label="Dark mode" aria-pressed="false"><svg data-swring="" viewBox="0 0 40 40" aria-hidden="true"><path d="M20.0 1.0C30.5 1.0 37.8 10.2 37.8 20.0C37.8 29.8 30.6 39.2 20.0 39.2C9.4 39.2 0.6 30.7 0.6 20.0C0.6 9.3 9.5 1.0 20.0 1.0"></path></svg><svg data-sun="" viewBox="0 0 24 24" aria-hidden="true"><path d="M12.0 7.2C14.6 7.2 16.9 9.3 16.9 12.0C16.9 14.7 14.7 16.9 12.0 16.9C9.3 16.9 7.3 14.6 7.3 12.0C7.3 9.4 9.4 7.2 12.0 7.2"></path><path d="M19.8 12.0Q20.8 11.9 21.8 12.0M17.5 17.5Q18.3 18.2 18.9 18.9M12.0 19.8Q12.1 20.8 12.0 21.8M6.5 17.5Q5.8 18.3 5.1 18.9M4.2 12.0Q3.2 12.1 2.2 12.0M6.5 6.5Q5.7 5.8 5.1 5.1M12.0 4.2Q11.9 3.2 12.0 2.2M17.5 6.5Q18.2 5.7 18.9 5.1"></path></svg><svg data-moon="" viewBox="0 0 24 24" aria-hidden="true"><path d="M19.6 14.6c-1.2 3.3-4.4 5.6-8 5.5c-4.6-.1-8.2-3.9-8.1-8.5c.1-3.6 2.5-6.6 5.8-7.6c-.9 1.3-1.4 2.9-1.3 4.5c.1 4.2 3.6 7.5 7.8 7.4c1.4 0 2.7-.5 3.8-1.3z"></path><path d="M17.1 4.2c.1 .9 .1 1.8 0 2.7M15.8 5.6c.9-.1 1.8-.1 2.7 0"></path></svg></button>
 
 </div>
 <script>
 (() => {
-  const R = document.querySelector('.zl8p');
+  const R = document.querySelector('.zl8p'), sw = R.querySelector('[data-themesw]');
   const SHELVES = {now: ['now1', 'now2', 'now3'], pub: ['pub1', 'pub2', 'pub3', 'pub4']};
   const cur = {now: 'none', pub: 'none'};
   const RM = matchMedia('(prefers-reduced-motion: reduce)');
+  // no motion (no View Transitions, instant scrolls) while the page is still: reduced motion sets the root's data-motion
+  // to 'off' (before first paint, and again if the OS setting changes mid-visit)
+  const still = () => R.dataset.motion === 'off';
+  // View Transitions that can't freeze the page: Chromium can get into a state where it never captures the old view
+  // and stops rendering until the transition times out 4 s later (seen after a card opened or closed on a still page
+  // while a hover transition was running; the CSS keeps the cards' transitions off while the page is still). If the
+  // update hasn't run within 400 ms (it normally runs within ~150 ms), the transition is skipped, so the change applies
+  // at once, and the page stops using View Transitions (a stuck browser stays stuck: each later one would stall and be
+  // skipped too).
+  let vtOk = !!document.startViewTransition, running = null;   // running: the View Transition in progress, if any
+  const animate = () => vtOk && !still();
+  const vt = cb => {
+    let ran = false;
+    const t = document.startViewTransition(() => { ran = true; return cb(); });
+    const wd = setTimeout(() => { if (!ran) { vtOk = false; t.skipTransition(); } }, 400);
+    const clr = () => clearTimeout(wd); t.updateCallbackDone.then(clr, clr);
+    running = t; const end = () => { if (running === t) running = null; }; t.finished.then(end, end);
+    return t;
+  };
+  // while a View Transition runs, Chromium hit-tests its overlay, so a click or tap lands on <html>: it would be lost,
+  // and focus would leave the card that had just opened. Instead, a press during a transition ends the transition at
+  // once and keeps focus where it is; its click then goes to the card face, close button or theme switch under the
+  // pointer (never to a link: the layout it lands on may have moved under the pointer).
+  let replay = false;
+  document.addEventListener('pointerdown', e => {
+    replay = !!running;
+    if (running) { e.preventDefault(); running.skipTransition(); }
+  }, true);
+  document.addEventListener('click', e => {
+    if (!replay || e.target !== document.documentElement) return;
+    replay = false;
+    const el = document.elementFromPoint(e.clientX, e.clientY), c = el && el.closest('[data-face],[data-x],[data-themesw]');
+    if (c && R.contains(c) && !c.closest('[inert]')) { c.focus({preventScroll: true}); c.click(); }
+  });
   const item = k => R.querySelector('[data-item][data-k="' + k + '"]');
   const shelfOf = sh => R.querySelector('[data-shelf="' + sh + '"]');
   const spread = sh => getComputedStyle(shelfOf(sh)).display === 'flex';   // else drawer mode (a grid)
+  // what render() lays out by: spread mode, or the drawer grid's column count (which row the drawer goes under)
+  const layout = sh => spread(sh) ? 'spread' : colsOf(sh);
+  const lay = {};   // each shelf's layout when it was last rendered
+  // the theme switch sits on the copyright line at the end of the page (responsive layer: the footer's bottom padding
+  // reaches up to the switch's middle). Where the page is shorter than the window, the footer ends above the window's
+  // bottom, so the switch is lifted by that gap and stays on the line. Layout offsets, so the load intro's rise (a
+  // translate) doesn't count
+  const foot = R.querySelector(':scope > footer');
+  const lift = () => sw.style.setProperty('--sw-lift', Math.max(0, R.offsetHeight - foot.offsetTop - foot.offsetHeight) + 'px');
   const render = sh => {
     const sp = spread(sh);
+    lay[sh] = sp ? 'spread' : colsOf(sh);
     SHELVES[sh].forEach(k => {
       const li = item(k);
       li.dataset.state = cur[sh] === 'none' ? 'rest' : cur[sh] === k ? 'open' : sp ? 'spine' : 'rest';
@@ -636,12 +890,17 @@ body{margin:0}
     });
     // drawer mode: the open card's details sit in the grid row right under the card's row (cards per row depends on the window)
     if (cur[sh] !== 'none' && !sp) drawer(cur[sh]).style.gridRow = String(rowOf(sh, cur[sh]) + 2);
+    lift();   // at once, so fit() finds the switch where the new layout puts it
   };
-  // how far to scroll so the opened card and its drawer are on screen (the card's top is never pushed off)
+  // how far to scroll so the opened card and its drawer are on screen (the card's top is never pushed off). Where the
+  // theme switch (fixed in the window's bottom-right corner) sits over the shelf's column (phones and tablets), the
+  // drawer stops 8px above the switch, so the switch doesn't cover its last line
   const fit = k => {
-    const f = item(k).querySelector('[data-h]').getBoundingClientRect(), p = item(k).querySelector('[data-page]').getBoundingClientRect();
-    const pad = 16; let dy = 0;
-    if (p.bottom > innerHeight - pad) dy = Math.min(p.bottom - (innerHeight - pad), f.top - pad);
+    const li = item(k), f = li.querySelector('[data-h]').getBoundingClientRect(), p = li.querySelector('[data-page]').getBoundingClientRect();
+    const col = li.closest('[data-shelf]').getBoundingClientRect(), s = sw.getBoundingClientRect();
+    const pad = 16, padB = s.height && s.left < col.right && s.right > col.left ? Math.max(pad, innerHeight - s.top + 8) : pad;
+    let dy = 0;
+    if (p.bottom > innerHeight - padB) dy = Math.min(p.bottom - (innerHeight - padB), f.top - pad);
     if (f.top - dy < pad) dy = f.top - pad;
     return Math.round(dy);
   };
@@ -662,12 +921,14 @@ body{margin:0}
   const seq = {now: 0, pub: 0};   // the latest transition per shelf; an interrupted one must not clean up after its successor
   const cleanup = sh => SHELVES[sh].forEach(kk => { seed(sh, kk, false); drawer(kk).style.viewTransitionName = ''; });
   const scrollTo_ = (k, instant) => { if (k === 'none') return; const dy = fit(k); if (dy) scrollBy({top: dy, behavior: instant ? 'instant' : 'smooth'}); };
+  const opened = {now: 0, pub: 0}; let clock = 0;   // when each shelf last opened a card (Escape closes the latest)
   const set = (sh, k) => {
     const prev = cur[sh], tok = ++seq[sh];
+    if (k !== 'none') opened[sh] = ++clock;
     cleanup(sh);   // drop an interrupted transition's seeds and names before setting up this one
     // spread mode: the row keeps its size and place, the CSS transitions animate it; just bring it into view
-    if (spread(sh) || !(document.startViewTransition && !RM.matches && R.dataset.motion !== 'off')) {
-      cur[sh] = k; render(sh); scrollTo_(k, RM.matches || R.dataset.motion === 'off'); return;
+    if (spread(sh) || !animate()) {
+      cur[sh] = k; render(sh); scrollTo_(k, still()); return;
     }
     // same row: one drawer, its content cross-fades in place; otherwise the old drawer folds up where it is
     // and the new one grows under its own card, each travelling with the page.
@@ -675,7 +936,7 @@ body{margin:0}
     const nOld = same ? 'zl-d-' + sh : 'zl-dk-' + prev, nNew = same ? 'zl-d-' + sh : 'zl-dk-' + k;
     if (prev !== 'none') drawer(prev).style.viewTransitionName = nOld;
     if (k !== 'none' && !same) { seed(sh, k, true); drawer(k).style.viewTransitionName = nNew; }
-    const t = document.startViewTransition(() => {
+    const t = vt(() => {
       if (k !== 'none') seed(sh, k, false);
       cur[sh] = k; render(sh);
       if (prev !== 'none' && prev !== k) {
@@ -694,37 +955,77 @@ body{margin:0}
       item(k).querySelector('[data-face]').addEventListener('click', () => set(sh, cur[sh] === k ? 'none' : k));
       item(k).querySelector('[data-x]').addEventListener('click', () => { const was = cur[sh]; set(sh, 'none'); back(was); });
     });
-    R.querySelector('[data-shelf="' + sh + '"]').addEventListener('keydown', e => {
-      if (e.key === 'Escape' && cur[sh] !== 'none') { const was = cur[sh]; set(sh, 'none'); back(was); }
-    });
     render(sh);
+  });
+  // Escape closes the open card of the shelf that holds focus, else the card opened last: focus may be elsewhere, e.g.
+  // on <body> after a click into a drawer's text, or in Safari, which doesn't focus a button on click. Focus returns to
+  // the card's face when it was in that shelf or nowhere in particular; focus on another control stays put.
+  document.addEventListener('keydown', e => {
+    if (e.key !== 'Escape' || e.defaultPrevented) return;
+    const a = document.activeElement, s = a && a.closest ? a.closest('[data-shelf]') : null;
+    const open = Object.keys(SHELVES).filter(sh => cur[sh] !== 'none').sort((x, y) => opened[y] - opened[x]);
+    const sh = s && open.includes(s.dataset.shelf) ? s.dataset.shelf : open[0];
+    if (!sh) return;
+    const was = cur[sh]; set(sh, 'none');
+    if ((s && s.dataset.shelf === sh) || !a || a === document.body || a === document.documentElement) back(was);
   });
   // theme switch (the current site's behavior): flips light/dark; the choice is saved only while it differs from the OS,
   // so switching back to match the OS returns the page to following it. Cross-fades with a View Transition.
-  const H = document.documentElement, OS = matchMedia('(prefers-color-scheme: dark)'), sw = R.querySelector('[data-themesw]');
+  const H = document.documentElement, OS = matchMedia('(prefers-color-scheme: dark)');
   const isDark = () => { const t = R.dataset.theme; return t === 'dark' || (t !== 'light' && OS.matches); };
-  const syncSw = () => sw.setAttribute('aria-pressed', String(isDark()));
+  // aria-pressed says whether dark mode is on; the tooltip says what a click will do
+  const syncSw = () => { const d = isDark(); sw.setAttribute('aria-pressed', String(d)); sw.title = d ? 'Switch to light mode' : 'Switch to dark mode'; };
+  // the browser's toolbar color (theme-color) follows the switch: while a choice is saved, both metas (one per OS
+  // scheme) carry that theme's color; following the OS, each has its own again (kept in data-c: the pre-paint script
+  // may have recolored them already)
+  const TC = [...document.querySelectorAll('meta[name="theme-color"][media]')];
+  TC.forEach(m => { if (!m.hasAttribute('data-c')) m.setAttribute('data-c', m.content); });
+  const tint = t => { const own = t && TC.find(m => m.getAttribute('media').includes(t)); TC.forEach(m => { m.content = (own || m).getAttribute('data-c'); }); };
   const applyTheme = next => {
     if ((next === 'dark') === OS.matches) { H.removeAttribute('data-theme'); R.dataset.theme = 'system'; try { localStorage.removeItem('theme'); } catch (e) {} }
     else { H.dataset.theme = next; R.dataset.theme = next; try { localStorage.setItem('theme', next); } catch (e) {} }
-    syncSw();
+    tint(H.dataset.theme); syncSw();
   };
+  // each press flips the theme it finds when its update runs, so two quick presses always end where they started
+  const flip = () => applyTheme(isDark() ? 'light' : 'dark');
   sw.addEventListener('click', () => {
-    const next = isDark() ? 'light' : 'dark';
-    if (!(document.startViewTransition && !RM.matches && R.dataset.motion !== 'off')) { applyTheme(next); return; }
+    if (!animate()) { flip(); return; }
     H.classList.add('zl-vt-theme');
     const done = () => H.classList.remove('zl-vt-theme');
-    document.startViewTransition(() => applyTheme(next)).finished.then(done, done);
+    vt(flip).finished.then(done, done);
   });
   OS.addEventListener('change', syncSw); syncSw();
+  // reduced motion switched in the OS mid-visit: the page stills or moves with it. Reduced motion takes the ink
+  // dividers' draw-in off, so when it ends the draw-in starts over, from blank and after its load delay: it is finished
+  // at once instead, and the dividers stay drawn
+  RM.addEventListener('change', () => {
+    R.dataset.motion = RM.matches ? 'off' : 'on';
+    if (!RM.matches) R.querySelectorAll('[data-draw]').forEach(el => el.getAnimations().forEach(a => { try { a.finish(); } catch (e) {} }));
+  });
   // the load intro runs once: when its animations end, mark it done so a later layout change (e.g. rotating a tablet
   // into drawer mode, which moves the rise onto the card faces) can't replay it
   Promise.all(document.getAnimations().filter(a => /-(rise|rule)$/.test(a.animationName || '')).map(a => a.finished.catch(() => {})))
     .then(() => { R.dataset.intro = 'done'; });
-  // CV downloads are counted by the Worker from this beacon (direct PDF requests never reach it)
-  const cv = R.querySelector('[data-fl]');
-  if (cv && 'sendBeacon' in navigator) cv.addEventListener('click', () => { try { navigator.sendBeacon('/api/cv-download'); } catch (e) {} });
-  let t; addEventListener('resize', () => { clearTimeout(t); t = setTimeout(() => Object.keys(SHELVES).forEach(render), 80); });
+  // CV downloads are counted by the Worker from this beacon (direct PDF requests never reach it); every CV link
+  // (data-cv: the header's) sends it
+  if ('sendBeacon' in navigator) R.querySelectorAll('[data-cv]').forEach(cv => cv.addEventListener('click', () => { try { navigator.sendBeacon('/api/cv-download'); } catch (e) {} }));
+  // a change of window width lays the cards out again at once. While the resize lasts, the cards' own transitions are
+  // off, so they don't trail the window (a row running past its edge); a shelf that moves between spread and drawer
+  // mode, or whose drawer grid changes its column count, is rendered again right away (not after the resize ends), so
+  // an open card's siblings and drawer row never show the old layout. Height-only resizes (a phone's toolbars
+  // sliding away) leave the cards alone.
+  const SNAP = '[data-item],[data-page],[data-spine],[data-faceinner],[data-chev],[data-corner]';   // as the still page's CSS
+  let snap = 0, width = innerWidth;
+  addEventListener('resize', () => {
+    if (innerWidth === width) return;
+    width = innerWidth;
+    if (!snap) R.querySelectorAll(SNAP).forEach(el => { el.style.transition = 'none'; });
+    clearTimeout(snap); snap = setTimeout(() => { snap = 0; R.querySelectorAll(SNAP).forEach(el => { el.style.transition = ''; }); }, 150);
+    Object.keys(SHELVES).forEach(sh => { if (layout(sh) !== lay[sh]) render(sh); });
+  });
+  // the switch's lift follows any change in the height of the page or of its blocks (a card opening, the fonts
+  // arriving, a resize); the first call comes as soon as the page is laid out
+  if (window.ResizeObserver) { const ro = new ResizeObserver(lift); [R, ...R.querySelectorAll(':scope > header, :scope > main > *, :scope > footer')].forEach(el => ro.observe(el)); }
 })();
 </script>
 </body>
