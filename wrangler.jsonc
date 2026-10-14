@@ -14,7 +14,10 @@
   "assets": {
     "directory": "./",
     "binding": "ASSETS",
-    "run_worker_first": true
+    "run_worker_first": true,
+    // an address the site doesn't have gets /404.html (the notebook-paper "page not found") with a 404 status,
+    // instead of an empty response that browsers show as their own error page
+    "not_found_handling": "404-page"
   },
 
   "observability": { "enabled": true }
